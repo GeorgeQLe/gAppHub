@@ -72,7 +72,7 @@
   - Verify vertical centering with offset for logo above and legend space below
 
 ### Green
-- [ ] Step 1.8: Write smoke tests covering acceptance criteria
+- [x] Step 1.8: Write smoke tests covering acceptance criteria
   - Files: create `src/__tests__/PhoneFrame.test.tsx`, create `vitest.config.ts`, install test dependencies
   - Set up testing framework (Vitest + React Testing Library)
   - Test: PhoneFrame component renders without crashing
@@ -81,49 +81,7 @@
   - Test: Dynamic Island renders
   - Test: Page renders logo text and tagline text
 
-  #### Implementation Plan (Step 1.8)
-
-  **Context:** All visual components (PhoneFrame, DynamicIsland, StatusBar, HomeIndicator) are built and composed in `page.tsx`. No test framework exists yet. This step sets up Vitest + React Testing Library and writes smoke tests for every component.
-
-  **What to build:**
-  1. Install test dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`
-  2. Create `vitest.config.ts` at project root — configure jsdom environment, path aliases (`@/` → `src/`)
-  3. Add `"test": "vitest run"` script to `package.json`
-  4. Create `src/__tests__/PhoneFrame.test.tsx` with these smoke tests:
-     - PhoneFrame renders children
-     - StatusBar displays time matching `h:mm` pattern (mock timers or regex match)
-     - DynamicIsland renders (check for its element)
-     - HomeIndicator renders (check for the capsule element)
-     - Page renders "LEXCORP" text and "Made in Boston, Building in Public" tagline
-
-  **Files to create/modify:**
-  - **Modify** `package.json` — add test script and dev dependencies
-  - **Create** `vitest.config.ts` — Vitest configuration with jsdom and path aliases
-  - **Create** `src/__tests__/PhoneFrame.test.tsx` — smoke tests
-
-  **Technical notes:**
-  - StatusBar is a `"use client"` component with `useEffect`/`setInterval` — tests should use `vi.useFakeTimers()` or match the initial render time
-  - Next.js path alias `@/` maps to `src/` — configure in vitest via `resolve.alias`
-  - Use `@testing-library/jest-dom` matchers for `toBeInTheDocument()`
-  - Components use Tailwind classes — no need to test visual styles, just DOM presence
-
-  **Conventions from prior steps:**
-  - Tailwind v4 with CSS `@theme` config
-  - Next.js 16 with App Router
-  - Components: PhoneFrame (server), DynamicIsland (server), StatusBar (client), HomeIndicator (server)
-
-  **Execution Profile:**
-  - Parallel mode: serial
-  - Integration owner: main agent
-
-  **Verification:**
-  - `npm run test` passes (all smoke tests green)
-  - `npm run build` still succeeds
-  - `npm run lint` clean
-
-  **Handoff:** Implement only this step, validate it, then run `/ship` when done.
-
-- [ ] Step 1.9: Run all tests, verify they pass, build succeeds with `npm run build`
+- [x] Step 1.9: Run all tests, verify they pass, build succeeds with `npm run build` _(no-op: all 6 tests pass, build succeeds, lint clean — verified during Step 1.8)_
 
 ### Milestone: Phase 1 — Scaffold & Frame
 **Acceptance Criteria:**
@@ -135,5 +93,5 @@
 - [ ] Lexcorp placeholder logo and tagline are visible above the phone
 - [ ] Page background is the specified silver-to-white gradient
 - [ ] App deploys to Vercel successfully
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests

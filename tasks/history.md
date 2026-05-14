@@ -50,6 +50,23 @@
 - No z-index needed — Dynamic Island's `z-10` naturally overlaps the center
 - Verified: `npm run build` passes, `npm run lint` clean
 
+## 2026-05-14 — Phase 1, Steps 1.8–1.9: Smoke tests
+
+- Set up Vitest + React Testing Library + jsdom test environment
+- Created `vitest.config.ts` with jsdom environment, react plugin, and `@/` path alias
+- Added `"test": "vitest run"` script to `package.json`
+- Installed dev deps: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`, `@vitejs/plugin-react`
+- Created `src/__tests__/PhoneFrame.test.tsx` with 6 smoke tests:
+  - PhoneFrame renders children
+  - StatusBar displays time matching `h:mm` pattern (using `vi.useFakeTimers()`)
+  - DynamicIsland renders
+  - HomeIndicator renders
+  - Home page renders LEXCORP SVG (via `aria-label`)
+  - Home page renders tagline text
+- All 6 tests pass, `npm run build` succeeds, `npm run lint` clean
+- Step 1.9 (verification) marked no-op — all checks passed during 1.8
+- Phase 1 implementation steps all complete; phase milestone blocked by manual task (Vercel project setup)
+
 ## 2026-05-14 — Phase 1, Step 1.6: Home indicator component
 
 - Created `src/components/HomeIndicator.tsx` — iOS-style swipe-up capsule (134×5px, `rounded-full`, `bg-[#1d1d1f] opacity-30`)
