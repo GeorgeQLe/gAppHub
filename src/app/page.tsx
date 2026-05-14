@@ -1,4 +1,5 @@
 import DynamicIsland from "@/components/DynamicIsland";
+import HomeIndicator from "@/components/HomeIndicator";
 import PhoneFrame from "@/components/PhoneFrame";
 import StatusBar from "@/components/StatusBar";
 
@@ -35,6 +36,7 @@ export default function Home() {
         <PhoneFrame>
           <StatusBar />
           <DynamicIsland />
+          <HomeIndicator />
         </PhoneFrame>
       </div>
     </main>
