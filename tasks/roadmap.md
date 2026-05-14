@@ -119,18 +119,18 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 - Step 1.9: Run all tests, verify they pass, build succeeds with `npm run build`
 
-### Milestone: Phase 1 — Scaffold & Frame
+### Milestone: Phase 1 — Scaffold & Frame ✓ (completed 2026-05-14)
 **Acceptance Criteria:**
-- [ ] Next.js app builds and runs locally with `npm run dev`
-- [ ] Phone frame renders at correct proportions (~375×812 screen area) with visible Dynamic Island, bezel, and 3D shadow
-- [ ] Status bar displays current real-world time on the left
-- [ ] Wallpaper gradient is visible behind the (empty) screen area
-- [ ] Home indicator renders at the bottom of the screen area
-- [ ] Lexcorp placeholder logo and tagline are visible above the phone
-- [ ] Page background is the specified silver-to-white gradient
-- [ ] App deploys to Vercel successfully
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Next.js app builds and runs locally with `npm run dev`
+- [x] Phone frame renders at correct proportions (~375×812 screen area) with visible Dynamic Island, bezel, and 3D shadow
+- [x] Status bar displays current real-world time on the left
+- [x] Wallpaper gradient is visible behind the (empty) screen area
+- [x] Home indicator renders at the bottom of the screen area
+- [x] Lexcorp placeholder logo and tagline are visible above the phone
+- [x] Page background is the specified silver-to-white gradient
+- [x] App deploys to Vercel successfully
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
 - Deviations from plan:
@@ -163,6 +163,45 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 **Parallelization:** serial
 
 **Coordination Notes:** Depends on the phone frame shell from Phase 1 for correct positioning within the screen area.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** low
+**Review gates:** none
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 2.1: Define the product data schema and create static `products.json`
+  - Files: create `public/data/products.json`, create `src/types/product.ts`
+- Step 2.2: Build the data fetch layer with static fallback
+  - Files: create `src/lib/products.ts`
+- Step 2.3: Create placeholder icon SVGs
+  - Files: create `public/icons/placeholder.svg`
+- Step 2.4: Build the AppIcon component
+  - Files: create `src/components/AppIcon.tsx`
+- Step 2.5: Build the IconGrid component and integrate into the page
+  - Files: create `src/components/IconGrid.tsx`, modify `src/app/page.tsx`
+
+### Green
+- Step 2.6: Write regression tests covering acceptance criteria
+  - Files: create `src/__tests__/IconGrid.test.tsx`
+- Step 2.7: Run all tests, verify they pass, build succeeds
+
+### Milestone: Phase 2 — Icon Grid & Data Layer
+**Acceptance Criteria:**
+- [ ] Grid renders 24 icons correctly inside the phone frame with proper spacing
+- [ ] Icons display placeholder artwork, product name, and truncate long names with ellipsis
+- [ ] Clicking an icon opens the product URL in a new tab
+- [ ] Products sort according to the priority layout rules
+- [ ] Data fetches from configured URL when available
+- [ ] App gracefully falls back to `products.json` when fetch fails (no error visible to user)
+- [ ] Deprecated products render at the end of the sort order
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
 
 **On Completion:**
 - Deviations from plan:
