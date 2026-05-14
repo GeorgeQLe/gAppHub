@@ -42,40 +42,40 @@
   - Lexcorp placeholder logo (inline SVG or text wordmark, ~120–160px wide, charcoal color)
   - Tagline "Made in Boston, Building in Public" below logo (13px, uppercase tracking, medium gray `#86868b`)
 
-- [ ] Step 1.3: Build the phone frame shell component
+- [x] Step 1.3: Build the phone frame shell component
   - Files: create `src/components/PhoneFrame.tsx`
   - Outer frame: rounded rectangle (~423×860px including frame), metallic border gradient, corner radius ~50px
   - Inner bezel: ~12px dark border (`#1c1c1e`), corner radius ~38px
   - 3D shadow: multi-layer `box-shadow` (primary `0 20px 60px rgba(0,0,0,0.15)`, secondary `0 2px 8px rgba(0,0,0,0.08)`, edge highlight `inset 0 1px 0 rgba(255,255,255,0.3)`)
   - Screen area: 375×812px, contains wallpaper gradient (`#e8ecf4` → `#f5f0f6`), overflow hidden
 
-  #### Implementation Plan (Step 1.3)
+- [ ] Step 1.4: Build the Dynamic Island component
+  - Files: create `src/components/DynamicIsland.tsx`
+  - Pill-shaped black cutout (`#000`), ~120×36px, centered horizontally, ~12px below top of screen area
+  - Positioned absolutely within the screen area
 
-  **Context:** Step 1.2 established the page layout with centered flex column, gradient background, LEXCORP logo, and tagline. The spacer `div.mt-12` in `src/app/page.tsx` is where the phone frame will be placed.
+  #### Implementation Plan (Step 1.4)
+
+  **Context:** Step 1.3 created `PhoneFrame.tsx` with a `children` prop. The screen area div is `relative` and `overflow-hidden`, so absolutely positioned children will be contained within it. `page.tsx` renders `<PhoneFrame />` inside a `div.mt-12`.
 
   **What to build:**
-  Create a `PhoneFrame` component that renders a realistic iPhone 15 Pro frame with:
-  1. Outer metallic border with gradient (simulating stainless steel edge)
-  2. Inner dark bezel layer
-  3. Screen area with wallpaper gradient
-  4. `children` prop for future inner components (Dynamic Island, StatusBar, etc.)
+  Create a `DynamicIsland` component — a pill-shaped black cutout that sits at the top-center of the phone screen, mimicking the iPhone 15 Pro's Dynamic Island.
 
   **Files to create/modify:**
-  - Create `src/components/PhoneFrame.tsx` — the frame component
-  - Modify `src/app/page.tsx` — replace spacer div with `<PhoneFrame />`, import the component
+  - **Create** `src/components/DynamicIsland.tsx` — the Dynamic Island pill
+  - **Modify** `src/app/page.tsx` — add `<DynamicIsland />` as a child of `<PhoneFrame>`
 
   **Technical approach:**
-  - Use nested divs: outer frame (metallic gradient border via `background: linear-gradient(...)` + padding trick or border-image) → inner bezel (`bg-[#1c1c1e]`, rounded-[38px], ~12px padding) → screen area (375×812px, `bg-gradient-to-b from-[#e8ecf4] to-[#f5f0f6]`, `overflow-hidden`, `relative` for absolute children)
-  - 3D shadow on outer frame: `shadow-[0_20px_60px_rgba(0,0,0,0.15),0_2px_8px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.3)]`
-  - Metallic border gradient: `linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0)` on the outermost div, with the bezel inset to create the "frame" appearance
-  - Corner radius: ~50px outer, ~38px inner (bezel)
-  - Accept `children` prop so Dynamic Island, StatusBar, HomeIndicator can be composed inside later
+  - Single div, absolutely positioned: `absolute top-3 left-1/2 -translate-x-1/2`
+  - Dimensions: `w-[120px] h-[36px]`
+  - Styling: `bg-black rounded-full` (full pill shape)
+  - z-index high enough to sit above status bar content (z-10 or similar)
 
   **Conventions from prior steps:**
   - Tailwind v4 with CSS `@theme` config (no `tailwind.config.ts`)
-  - System font stack already configured
   - Light-only design (no dark mode)
-  - Inline styles acceptable for complex gradients/shadows that Tailwind can't express cleanly
+  - Inline styles acceptable for complex values, but this component is simple enough for pure Tailwind classes
+  - PhoneFrame screen area is `relative overflow-hidden rounded-[38px]`
 
   **Execution Profile:**
   - Parallel mode: serial
@@ -84,15 +84,10 @@
   **Verification:**
   - `npm run build` succeeds
   - `npm run lint` clean
-  - `npm run dev` — phone frame visible, centered below tagline, with metallic border, dark bezel, wallpaper gradient, and 3D shadow
-  - Frame dimensions roughly match spec (~423×860 outer, ~375×812 screen)
+  - Dev server shows black pill centered at top of phone screen, ~12px below top edge
+  - Pill dimensions ~120×36px with fully rounded corners
 
   **Handoff:** Implement only this step, validate it, then run `/ship` when done.
-
-- [ ] Step 1.4: Build the Dynamic Island component
-  - Files: create `src/components/DynamicIsland.tsx`
-  - Pill-shaped black cutout (`#000`), ~120×36px, centered horizontally, ~12px below top of screen area
-  - Positioned absolutely within the screen area
 
 - [ ] Step 1.5: Build the status bar component with live easter eggs
   - Files: create `src/components/StatusBar.tsx`

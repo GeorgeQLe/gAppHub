@@ -19,3 +19,14 @@
 - Added tagline "Made in Boston, Building in Public" (13px, uppercase, `tracking-widest`, gray `#86868b`)
 - Added spacer div below tagline for phone frame placement in Step 1.3
 - Verified: `npm run build` passes, `npm run lint` clean, dev server renders correctly
+
+## 2026-05-14 — Phase 1, Step 1.3: Phone frame shell component
+
+- Created `src/components/PhoneFrame.tsx` with realistic iPhone 15 Pro frame
+- Outer metallic gradient border (`linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0)`), rounded-[50px], 3px padding
+- Inner dark bezel (`#1c1c1e`, rounded-[48px], 12px padding)
+- Screen area: 375×812px, wallpaper gradient (`#e8ecf4` → `#f5f0f6`), overflow-hidden, relative
+- 3D multi-layer box-shadow on outer frame
+- Accepts `children` prop for Dynamic Island, StatusBar, HomeIndicator composition
+- Updated `src/app/page.tsx`: imported PhoneFrame, replaced spacer div content with `<PhoneFrame />`
+- Verified: `npm run build` passes, `npm run lint` clean, dev server renders phone frame correctly
