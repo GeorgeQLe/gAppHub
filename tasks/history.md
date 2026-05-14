@@ -30,3 +30,11 @@
 - Accepts `children` prop for Dynamic Island, StatusBar, HomeIndicator composition
 - Updated `src/app/page.tsx`: imported PhoneFrame, replaced spacer div content with `<PhoneFrame />`
 - Verified: `npm run build` passes, `npm run lint` clean, dev server renders phone frame correctly
+
+## 2026-05-14 — Phase 1, Step 1.4: Dynamic Island component
+
+- Created `src/components/DynamicIsland.tsx` — pill-shaped black cutout (120×36px, `rounded-full`, `bg-black`)
+- Absolutely positioned: `top-3 left-1/2 -translate-x-1/2 z-10` within PhoneFrame's screen area
+- Updated `src/app/page.tsx`: imported DynamicIsland, passed as child of `<PhoneFrame>`
+- Pure Tailwind classes, no inline styles needed
+- Verified: `npm run build` passes, `npm run lint` clean

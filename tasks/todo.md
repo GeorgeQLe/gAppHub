@@ -49,32 +49,47 @@
   - 3D shadow: multi-layer `box-shadow` (primary `0 20px 60px rgba(0,0,0,0.15)`, secondary `0 2px 8px rgba(0,0,0,0.08)`, edge highlight `inset 0 1px 0 rgba(255,255,255,0.3)`)
   - Screen area: 375×812px, contains wallpaper gradient (`#e8ecf4` → `#f5f0f6`), overflow hidden
 
-- [ ] Step 1.4: Build the Dynamic Island component
-  - Files: create `src/components/DynamicIsland.tsx`
+- [x] Step 1.4: Build the Dynamic Island component
+  - Files: create `src/components/DynamicIsland.tsx`, modify `src/app/page.tsx`
   - Pill-shaped black cutout (`#000`), ~120×36px, centered horizontally, ~12px below top of screen area
   - Positioned absolutely within the screen area
 
-  #### Implementation Plan (Step 1.4)
+- [ ] Step 1.5: Build the status bar component with live easter eggs
+  - Files: create `src/components/StatusBar.tsx`
+  - Height: ~44px, positioned at top of screen area, flanking the Dynamic Island
+  - Left side: current real-world time in `h:mm` format (updates every minute via `useEffect` + `setInterval`)
+  - Right side: signal bars (placeholder static for now — will be driven by product data in Phase 2), Wi-Fi icon (always full, decorative SVG), battery icon with percentage (placeholder static for now)
+  - Typography: system sans-serif, 12px, semibold, dark text on light wallpaper
 
-  **Context:** Step 1.3 created `PhoneFrame.tsx` with a `children` prop. The screen area div is `relative` and `overflow-hidden`, so absolutely positioned children will be contained within it. `page.tsx` renders `<PhoneFrame />` inside a `div.mt-12`.
+  #### Implementation Plan (Step 1.5)
+
+  **Context:** The phone screen area (`PhoneFrame.tsx`) is a `relative overflow-hidden rounded-[38px]` div (375×812px). `DynamicIsland.tsx` sits at `absolute top-3 left-1/2 -translate-x-1/2 z-10` as a 120×36px black pill. `page.tsx` composes `<DynamicIsland />` as a child of `<PhoneFrame>`. The status bar needs to flank the Dynamic Island on both sides.
 
   **What to build:**
-  Create a `DynamicIsland` component — a pill-shaped black cutout that sits at the top-center of the phone screen, mimicking the iPhone 15 Pro's Dynamic Island.
+  Create a `StatusBar` client component that renders the iOS-style status bar at the top of the phone screen. It has two sections flanking the Dynamic Island:
+  - **Left cluster** (time): real-world clock in `h:mm` format, updating every minute
+  - **Right cluster** (indicators): signal bars icon (4 bars, static placeholder), Wi-Fi icon (static SVG), battery icon with "100%" text (static placeholder)
 
   **Files to create/modify:**
-  - **Create** `src/components/DynamicIsland.tsx` — the Dynamic Island pill
-  - **Modify** `src/app/page.tsx` — add `<DynamicIsland />` as a child of `<PhoneFrame>`
+  - **Create** `src/components/StatusBar.tsx` — the status bar with time + indicators
+  - **Modify** `src/app/page.tsx` — add `<StatusBar />` as a child of `<PhoneFrame>`, alongside `<DynamicIsland />`
 
   **Technical approach:**
-  - Single div, absolutely positioned: `absolute top-3 left-1/2 -translate-x-1/2`
-  - Dimensions: `w-[120px] h-[36px]`
-  - Styling: `bg-black rounded-full` (full pill shape)
-  - z-index high enough to sit above status bar content (z-10 or similar)
+  - `"use client"` directive (needs `useEffect` + `useState` for live clock)
+  - Container: `absolute top-0 left-0 right-0 h-[44px] flex items-center justify-between px-6`
+  - Left side: `<span>` showing time via `new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })`
+  - Right side: flex row with inline SVG icons for signal bars, Wi-Fi, and battery + percentage text
+  - Typography: `text-xs font-semibold text-[#1d1d1f]`
+  - z-index: lower than Dynamic Island (no z-index needed, or z-0) — the island overlaps the center naturally
+  - Clock update: `useEffect` with `setInterval(60000)` and cleanup, initial state from `useState`
+  - Signal bars: 4 rounded rectangles of increasing height (inline SVG, ~16×12px)
+  - Wi-Fi icon: simple inline SVG arc icon (~14×12px)
+  - Battery icon: inline SVG rectangle with fill level + "100%" text beside it (~28×12px icon)
 
   **Conventions from prior steps:**
   - Tailwind v4 with CSS `@theme` config (no `tailwind.config.ts`)
   - Light-only design (no dark mode)
-  - Inline styles acceptable for complex values, but this component is simple enough for pure Tailwind classes
+  - Pure Tailwind classes preferred; inline styles for complex SVG viewBox values
   - PhoneFrame screen area is `relative overflow-hidden rounded-[38px]`
 
   **Execution Profile:**
@@ -84,17 +99,10 @@
   **Verification:**
   - `npm run build` succeeds
   - `npm run lint` clean
-  - Dev server shows black pill centered at top of phone screen, ~12px below top edge
-  - Pill dimensions ~120×36px with fully rounded corners
+  - Dev server shows time on left side, signal/Wi-Fi/battery on right side, flanking the Dynamic Island
+  - Time updates when the minute changes (can test by setting system clock or waiting)
 
   **Handoff:** Implement only this step, validate it, then run `/ship` when done.
-
-- [ ] Step 1.5: Build the status bar component with live easter eggs
-  - Files: create `src/components/StatusBar.tsx`
-  - Height: ~44px, positioned at top of screen area, flanking the Dynamic Island
-  - Left side: current real-world time in `h:mm` format (updates every minute via `useEffect` + `setInterval`)
-  - Right side: signal bars (placeholder static for now — will be driven by product data in Phase 2), Wi-Fi icon (always full, decorative SVG), battery icon with percentage (placeholder static for now)
-  - Typography: system sans-serif, 12px, semibold, dark text on light wallpaper
 
 - [ ] Step 1.6: Build the home indicator component
   - Files: create `src/components/HomeIndicator.tsx`
