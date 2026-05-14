@@ -38,3 +38,14 @@
 - Updated `src/app/page.tsx`: imported DynamicIsland, passed as child of `<PhoneFrame>`
 - Pure Tailwind classes, no inline styles needed
 - Verified: `npm run build` passes, `npm run lint` clean
+
+## 2026-05-14 — Phase 1, Step 1.5: Status bar component with live easter eggs
+
+- Created `src/components/StatusBar.tsx` — client component with live clock and indicator icons
+- Left cluster: real-world time via `toLocaleTimeString`, updates every 60s via `useEffect`/`setInterval`
+- Right cluster: signal bars (4-bar SVG), Wi-Fi (3-arc SVG), battery icon + "100%" text
+- Container: `absolute top-0 left-0 right-0 h-[44px] flex items-center justify-between px-6`
+- Typography: `text-xs font-semibold text-[#1d1d1f]`
+- Updated `src/app/page.tsx`: imported StatusBar, added as child of `<PhoneFrame>` alongside DynamicIsland
+- No z-index needed — Dynamic Island's `z-10` naturally overlaps the center
+- Verified: `npm run build` passes, `npm run lint` clean
