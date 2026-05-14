@@ -1,3 +1,5 @@
+import PhoneFrame from "@/components/PhoneFrame";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4">
@@ -27,7 +29,9 @@ export default function Home() {
         Made in Boston, Building in Public
       </p>
 
-      <div className="mt-12" />
+      <div className="mt-12">
+        <PhoneFrame />
+      </div>
     </main>
   );
 }
