@@ -33,7 +33,7 @@
   - Use placeholder icon paths (`/icons/placeholder.svg`) — actual icons in a later sub-step
   - Each product needs a realistic name, description, and URL (can use `#` placeholder URLs)
 
-- [ ] Step 2.2: Build the data fetch layer with static fallback
+- [x] Step 2.2: Build the data fetch layer with static fallback
   - Files: create `src/lib/products.ts`
   - Export async function `getProducts(): Promise<Product[]>` that:
     - Fetches from `process.env.NEXT_PUBLIC_PRODUCTS_URL` if set, otherwise from `/data/products.json`
@@ -48,33 +48,30 @@
     - Deprecated (badge null) last, alphabetically by name
   - This is a server-side utility — used in page.tsx or a server component
 
-  ### Step 2.2 Implementation Plan
+  ### Step 2.3 Implementation Plan
 
   **What to build:**
-  Create `src/lib/products.ts` with two exported functions:
-  1. `getProducts()` — async fetch with env-var URL override and static JSON fallback
-  2. `sortProducts()` — deterministic priority sort matching the spec's row layout
+  Create placeholder icon SVG(s) for the product grid. A single generic placeholder SVG (60×60, rounded square with subtle gradient fill and centered app-like glyph), plus optionally 2-3 color variants for visual variety.
 
-  **File to create:** `src/lib/products.ts`
+  **Files:**
+  - Create: `public/icons/placeholder.svg`
+  - Optionally create: `public/icons/placeholder-blue.svg`, `public/icons/placeholder-green.svg`, `public/icons/placeholder-orange.svg`
+  - Modify: `public/data/products.json` — update icon paths if multiple variants are created
 
   **Technical details:**
-  - Import `Product` from `@/types/product` (path alias already configured in tsconfig)
-  - `getProducts()`: try `fetch(process.env.NEXT_PUBLIC_PRODUCTS_URL || '/data/products.json')`, catch → `import('../../public/data/products.json')` as static fallback. For server components, the `/data/products.json` path resolves via Next.js public dir.
-  - `sortProducts()` priority buckets (in order):
-    1. `featured === true` → sorted by `order` ascending
-    2. Next 4 by highest `order` among non-featured (newest) → sorted by `order` descending
-    3. Remaining with `badge === "L"` → alphabetical by `name`
-    4. Remaining with `badge === "B"` → alphabetical by `name`
-    5. Remaining with `badge === "W"` → alphabetical by `name`
-    6. `badge === null` (deprecated) → alphabetical by `name`
-  - Pure server-side module — no `"use client"`, no browser APIs
-  - The 24 products in `products.json` (from Step 2.1) have: 4 featured, 4 N-badge (newest candidates by high order), 12 L-badge, 4 B-badge, 3 W-badge, 1 null-badge
+  - SVG dimensions: 60×60px viewBox
+  - Shape: rounded rectangle (`rx`/`ry` for squircle approximation)
+  - Fill: subtle linear gradient (e.g., light gray top-left to medium gray bottom-right)
+  - Center glyph: simple abstract app icon shape (e.g., rounded square outline, grid dots, or generic "app" symbol)
+  - Color variants (optional): swap gradient colors — blue (`#4A90D9`→`#357ABD`), green (`#4CAF50`→`#388E3C`), orange (`#FF9800`→`#F57C00`)
+  - If variants are created, distribute them across `products.json` entries for visual variety in the grid
+  - Keep SVGs minimal — no external dependencies, no embedded fonts
 
   **Acceptance criteria:**
+  - `public/icons/placeholder.svg` exists and renders at 60×60 in browser
   - `npx tsc --noEmit` passes
   - `npm run build` succeeds
   - All 6 existing tests still pass (no regressions)
-  - Manual verification: import and call both functions in a scratch test or node REPL to confirm sort order matches spec
 
   **Execution Profile:**
   - Parallel mode: serial
@@ -82,7 +79,7 @@
   - Conflict risk: low
   - Review gates: none
 
-  **Ship-one-step handoff:** Implement only Step 2.2, validate it (TypeScript compiles, build passes, tests green), then run `/ship` when done.
+  **Ship-one-step handoff:** Implement only Step 2.3, validate it, then run `/ship` when done.
 
 - [ ] Step 2.3: Create placeholder icon SVGs
   - Files: create `public/icons/placeholder.svg`

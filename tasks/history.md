@@ -102,3 +102,12 @@
 - All products use placeholder icon paths (`/icons/placeholder.svg`) and `#` URLs
 - Categories span: productivity, communication, storage, media, utilities, developer, design, entertainment, finance, health, security, business
 - Verified: TypeScript compiles clean, JSON valid (24 products), `npm run build` passes, 6/6 tests pass
+
+## 2026-05-14 — Phase 2, Step 2.2: Build the data fetch layer with static fallback
+
+- Created `src/lib/products.ts` with two exported functions
+- `getProducts()`: async fetch from `NEXT_PUBLIC_PRODUCTS_URL` env var or `/data/products.json`, falls back to static JSON import on failure
+- `sortProducts()`: deterministic priority sort — featured (by order asc) → top 4 newest non-featured (by order desc) → remaining L → B → W → null (each alphabetical by name)
+- Imports `Product` type from `@/types/product`, static data from `../../public/data/products.json`
+- Pure server-side module — no `"use client"`, no browser APIs
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
