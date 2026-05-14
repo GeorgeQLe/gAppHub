@@ -1,5 +1,6 @@
 import DynamicIsland from "@/components/DynamicIsland";
 import PhoneFrame from "@/components/PhoneFrame";
+import StatusBar from "@/components/StatusBar";
 
 export default function Home() {
   return (
@@ -32,6 +33,7 @@ export default function Home() {
 
       <div className="mt-12">
         <PhoneFrame>
+          <StatusBar />
           <DynamicIsland />
         </PhoneFrame>
       </div>
