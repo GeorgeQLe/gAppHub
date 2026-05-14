@@ -25,7 +25,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 2.1: Define the product data schema and create static `products.json`
+- [x] Step 2.1: Define the product data schema and create static `products.json`
   - Files: create `public/data/products.json`, create `src/types/product.ts`
   - Define TypeScript interface `Product` with fields: `id` (string), `name` (string), `url` (string), `icon` (string), `description` (string), `badge` (`"L" | "B" | "N" | "W" | null`), `category` (string[]), `featured` (boolean), `dock` (boolean), `order` (number)
   - Define `ProductsResponse` type: `{ products: Product[] }`

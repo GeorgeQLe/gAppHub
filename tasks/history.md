@@ -87,3 +87,18 @@
 - Updated `src/app/page.tsx`: imported HomeIndicator, added as child of `<PhoneFrame>`
 - Step 1.7 (assemble all components) marked no-op — components were composed incrementally in Steps 1.3–1.6
 - Verified: `npm run build` passes, `npm run lint` clean
+
+## 2026-05-14 — Phase 2, Step 2.1: Define product data schema and static products.json
+
+- Created `src/types/product.ts` with `Product` and `ProductsResponse` TypeScript interfaces
+- `Product` fields: `id`, `name`, `url`, `icon`, `description`, `badge` (`"L"|"B"|"N"|"W"|null`), `category` (string[]), `featured` (boolean), `dock` (boolean), `order` (number)
+- Created `public/data/products.json` with 24 sample products:
+  - 4 featured + dock (Mail, Calendar, Drive, Chat)
+  - 4 newest (Notes, Tasks, Meet, Photos — badge "N")
+  - 4 beta (Translate, Analytics, Studio, Code — badge "B")
+  - 8 live (Sheets, Slides, Forms, Maps, Music, News, Wallet, Health — badge "L")
+  - 3 wishlist (Vault, AI, CRM — badge "W")
+  - 1 deprecated/null badge (Hub Classic)
+- All products use placeholder icon paths (`/icons/placeholder.svg`) and `#` URLs
+- Categories span: productivity, communication, storage, media, utilities, developer, design, entertainment, finance, health, security, business
+- Verified: TypeScript compiles clean, JSON valid (24 products), `npm run build` passes, 6/6 tests pass
