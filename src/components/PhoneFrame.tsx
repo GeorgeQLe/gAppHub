@@ -1,16 +1,16 @@
 export default function PhoneFrame({ children }: { children?: React.ReactNode }) {
   return (
     <div
-      className="rounded-[50px] p-[3px]"
+      className="flex h-full w-fit flex-col rounded-[50px] p-[3px]"
       style={{
         background: "linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0)",
         boxShadow:
           "0 20px 60px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3)",
       }}
     >
-      <div className="rounded-[48px] bg-[#1c1c1e] p-3">
+      <div className="flex min-h-0 flex-1 flex-col rounded-[48px] bg-[#1c1c1e] p-3">
         <div
-          className="relative h-[812px] w-[375px] overflow-hidden rounded-[38px]"
+          className="relative min-h-0 flex-1 w-[375px] overflow-hidden rounded-[38px]"
           style={{
             background: "linear-gradient(to bottom, #e8ecf4, #f5f0f6)",
           }}

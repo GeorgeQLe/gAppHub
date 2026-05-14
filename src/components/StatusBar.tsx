@@ -20,10 +20,10 @@ export default function StatusBar() {
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 right-0 flex h-[44px] items-center justify-between px-6">
-      <span className="text-xs font-semibold text-[#1d1d1f]">{time}</span>
+    <div className="absolute top-0 left-0 right-0 h-[48px]">
+      <span className="absolute left-6 top-[22px] -translate-y-1/2 text-xs font-semibold text-[#1d1d1f]">{time}</span>
 
-      <div className="flex items-center gap-1.5">
+      <div className="absolute right-6 top-[22px] -translate-y-1/2 flex items-center gap-1.5">
         {/* Signal bars */}
         <svg
           width="16"

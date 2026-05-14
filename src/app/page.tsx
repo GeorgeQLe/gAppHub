@@ -5,7 +5,7 @@ import StatusBar from "@/components/StatusBar";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-4">
+    <main className="flex h-screen flex-col items-center px-4 py-4">
       <svg
         width="140"
         height="32"
@@ -28,11 +28,11 @@ export default function Home() {
         </text>
       </svg>
 
-      <p className="mt-3 text-[13px] uppercase tracking-widest text-[#86868b]">
+      <p className="mt-1 text-[13px] uppercase tracking-widest text-[#86868b]">
         Made in Boston, Building in Public
       </p>
 
-      <div className="mt-12">
+      <div className="mt-3 min-h-0 flex-1 pb-4">
         <PhoneFrame>
           <StatusBar />
           <DynamicIsland />
