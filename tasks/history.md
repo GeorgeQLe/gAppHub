@@ -49,3 +49,12 @@
 - Updated `src/app/page.tsx`: imported StatusBar, added as child of `<PhoneFrame>` alongside DynamicIsland
 - No z-index needed — Dynamic Island's `z-10` naturally overlaps the center
 - Verified: `npm run build` passes, `npm run lint` clean
+
+## 2026-05-14 — Phase 1, Step 1.6: Home indicator component
+
+- Created `src/components/HomeIndicator.tsx` — iOS-style swipe-up capsule (134×5px, `rounded-full`, `bg-[#1d1d1f] opacity-30`)
+- Absolutely positioned: `bottom-2 left-1/2 -translate-x-1/2` within PhoneFrame's screen area
+- Server component — no interactivity or state
+- Updated `src/app/page.tsx`: imported HomeIndicator, added as child of `<PhoneFrame>`
+- Step 1.7 (assemble all components) marked no-op — components were composed incrementally in Steps 1.3–1.6
+- Verified: `npm run build` passes, `npm run lint` clean

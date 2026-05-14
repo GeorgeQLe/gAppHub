@@ -61,48 +61,12 @@
   - Right side: signal bars (placeholder static for now), Wi-Fi icon (static SVG), battery icon with "100%" text (static placeholder)
   - Typography: system sans-serif, 12px, semibold, dark text on light wallpaper
 
-- [ ] Step 1.6: Build the home indicator component
+- [x] Step 1.6: Build the home indicator component
   - Files: create `src/components/HomeIndicator.tsx`
   - Rounded capsule, ~134×5px, dark gray with slight transparency
   - Centered horizontally, ~8px from bottom of screen area
 
-  #### Implementation Plan (Step 1.6)
-
-  **Context:** The phone screen area (`PhoneFrame.tsx`) is a `relative overflow-hidden rounded-[38px]` div (375×812px). Components are positioned absolutely within this container. `StatusBar` is at the top (`absolute top-0`), `DynamicIsland` at `absolute top-3`. The home indicator goes at the bottom.
-
-  **What to build:**
-  Create a `HomeIndicator` component — the iOS-style swipe-up bar at the bottom of the screen.
-  - Rounded capsule: ~134×5px, dark gray (`#1d1d1f`) with slight transparency (`opacity-30` or similar)
-  - Absolutely positioned: centered horizontally, ~8px from the bottom of the screen area
-
-  **Files to create/modify:**
-  - **Create** `src/components/HomeIndicator.tsx` — static presentational component (no client directive needed)
-  - **Modify** `src/app/page.tsx` — add `<HomeIndicator />` as a child of `<PhoneFrame>`
-
-  **Technical approach:**
-  - Pure Tailwind: `absolute bottom-2 left-1/2 -translate-x-1/2 h-[5px] w-[134px] rounded-full bg-[#1d1d1f] opacity-30`
-  - No interactivity, no state — server component is fine
-  - No z-index needed
-
-  **Conventions from prior steps:**
-  - Tailwind v4 with CSS `@theme` config (no `tailwind.config.ts`)
-  - Light-only design (no dark mode)
-  - Pure Tailwind classes preferred
-  - PhoneFrame screen area is `relative overflow-hidden rounded-[38px]`
-
-  **Execution Profile:**
-  - Parallel mode: serial
-  - Integration owner: main agent
-
-  **Verification:**
-  - `npm run build` succeeds
-  - `npm run lint` clean
-  - Dev server shows dark capsule centered at bottom of phone screen
-  - Capsule is semi-transparent against the wallpaper gradient
-
-  **Handoff:** Implement only this step, validate it, then run `/ship` when done.
-
-- [ ] Step 1.7: Assemble all components on the main page
+- [x] Step 1.7: Assemble all components on the main page _(no-op: components were composed incrementally in Steps 1.3–1.6; build and lint pass)_
   - Files: modify `src/app/page.tsx`
   - Compose: page background → logo/tagline → PhoneFrame (containing wallpaper, DynamicIsland, StatusBar, empty screen area, HomeIndicator)
   - Verify vertical centering with offset for logo above and legend space below
@@ -116,6 +80,48 @@
   - Test: Home indicator renders
   - Test: Dynamic Island renders
   - Test: Page renders logo text and tagline text
+
+  #### Implementation Plan (Step 1.8)
+
+  **Context:** All visual components (PhoneFrame, DynamicIsland, StatusBar, HomeIndicator) are built and composed in `page.tsx`. No test framework exists yet. This step sets up Vitest + React Testing Library and writes smoke tests for every component.
+
+  **What to build:**
+  1. Install test dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`
+  2. Create `vitest.config.ts` at project root — configure jsdom environment, path aliases (`@/` → `src/`)
+  3. Add `"test": "vitest run"` script to `package.json`
+  4. Create `src/__tests__/PhoneFrame.test.tsx` with these smoke tests:
+     - PhoneFrame renders children
+     - StatusBar displays time matching `h:mm` pattern (mock timers or regex match)
+     - DynamicIsland renders (check for its element)
+     - HomeIndicator renders (check for the capsule element)
+     - Page renders "LEXCORP" text and "Made in Boston, Building in Public" tagline
+
+  **Files to create/modify:**
+  - **Modify** `package.json` — add test script and dev dependencies
+  - **Create** `vitest.config.ts` — Vitest configuration with jsdom and path aliases
+  - **Create** `src/__tests__/PhoneFrame.test.tsx` — smoke tests
+
+  **Technical notes:**
+  - StatusBar is a `"use client"` component with `useEffect`/`setInterval` — tests should use `vi.useFakeTimers()` or match the initial render time
+  - Next.js path alias `@/` maps to `src/` — configure in vitest via `resolve.alias`
+  - Use `@testing-library/jest-dom` matchers for `toBeInTheDocument()`
+  - Components use Tailwind classes — no need to test visual styles, just DOM presence
+
+  **Conventions from prior steps:**
+  - Tailwind v4 with CSS `@theme` config
+  - Next.js 16 with App Router
+  - Components: PhoneFrame (server), DynamicIsland (server), StatusBar (client), HomeIndicator (server)
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+
+  **Verification:**
+  - `npm run test` passes (all smoke tests green)
+  - `npm run build` still succeeds
+  - `npm run lint` clean
+
+  **Handoff:** Implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 1.9: Run all tests, verify they pass, build succeeds with `npm run build`
 
