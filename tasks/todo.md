@@ -48,6 +48,42 @@
     - Deprecated (badge null) last, alphabetically by name
   - This is a server-side utility — used in page.tsx or a server component
 
+  ### Step 2.2 Implementation Plan
+
+  **What to build:**
+  Create `src/lib/products.ts` with two exported functions:
+  1. `getProducts()` — async fetch with env-var URL override and static JSON fallback
+  2. `sortProducts()` — deterministic priority sort matching the spec's row layout
+
+  **File to create:** `src/lib/products.ts`
+
+  **Technical details:**
+  - Import `Product` from `@/types/product` (path alias already configured in tsconfig)
+  - `getProducts()`: try `fetch(process.env.NEXT_PUBLIC_PRODUCTS_URL || '/data/products.json')`, catch → `import('../../public/data/products.json')` as static fallback. For server components, the `/data/products.json` path resolves via Next.js public dir.
+  - `sortProducts()` priority buckets (in order):
+    1. `featured === true` → sorted by `order` ascending
+    2. Next 4 by highest `order` among non-featured (newest) → sorted by `order` descending
+    3. Remaining with `badge === "L"` → alphabetical by `name`
+    4. Remaining with `badge === "B"` → alphabetical by `name`
+    5. Remaining with `badge === "W"` → alphabetical by `name`
+    6. `badge === null` (deprecated) → alphabetical by `name`
+  - Pure server-side module — no `"use client"`, no browser APIs
+  - The 24 products in `products.json` (from Step 2.1) have: 4 featured, 4 N-badge (newest candidates by high order), 12 L-badge, 4 B-badge, 3 W-badge, 1 null-badge
+
+  **Acceptance criteria:**
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+  - All 6 existing tests still pass (no regressions)
+  - Manual verification: import and call both functions in a scratch test or node REPL to confirm sort order matches spec
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Ship-one-step handoff:** Implement only Step 2.2, validate it (TypeScript compiles, build passes, tests green), then run `/ship` when done.
+
 - [ ] Step 2.3: Create placeholder icon SVGs
   - Files: create `public/icons/placeholder.svg`
   - Single generic placeholder SVG (60×60, rounded square with a subtle gradient fill and centered app-like glyph)
