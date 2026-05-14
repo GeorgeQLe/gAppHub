@@ -35,7 +35,7 @@
   - Configure system font stack in Tailwind config and globals
   - Set page metadata (title: "GappHub — Lexcorp Products", description)
 
-- [ ] Step 1.2: Build page layout with background gradient and logo/tagline
+- [x] Step 1.2: Build page layout with background gradient and logo/tagline
   - Files: modify `src/app/page.tsx`, modify `src/app/globals.css`
   - Full-viewport layout with silver-to-white gradient background (`#f5f5f7` → `#ffffff`)
   - Flexbox column: logo → tagline → phone frame → (legend placeholder)
@@ -48,6 +48,46 @@
   - Inner bezel: ~12px dark border (`#1c1c1e`), corner radius ~38px
   - 3D shadow: multi-layer `box-shadow` (primary `0 20px 60px rgba(0,0,0,0.15)`, secondary `0 2px 8px rgba(0,0,0,0.08)`, edge highlight `inset 0 1px 0 rgba(255,255,255,0.3)`)
   - Screen area: 375×812px, contains wallpaper gradient (`#e8ecf4` → `#f5f0f6`), overflow hidden
+
+  #### Implementation Plan (Step 1.3)
+
+  **Context:** Step 1.2 established the page layout with centered flex column, gradient background, LEXCORP logo, and tagline. The spacer `div.mt-12` in `src/app/page.tsx` is where the phone frame will be placed.
+
+  **What to build:**
+  Create a `PhoneFrame` component that renders a realistic iPhone 15 Pro frame with:
+  1. Outer metallic border with gradient (simulating stainless steel edge)
+  2. Inner dark bezel layer
+  3. Screen area with wallpaper gradient
+  4. `children` prop for future inner components (Dynamic Island, StatusBar, etc.)
+
+  **Files to create/modify:**
+  - Create `src/components/PhoneFrame.tsx` — the frame component
+  - Modify `src/app/page.tsx` — replace spacer div with `<PhoneFrame />`, import the component
+
+  **Technical approach:**
+  - Use nested divs: outer frame (metallic gradient border via `background: linear-gradient(...)` + padding trick or border-image) → inner bezel (`bg-[#1c1c1e]`, rounded-[38px], ~12px padding) → screen area (375×812px, `bg-gradient-to-b from-[#e8ecf4] to-[#f5f0f6]`, `overflow-hidden`, `relative` for absolute children)
+  - 3D shadow on outer frame: `shadow-[0_20px_60px_rgba(0,0,0,0.15),0_2px_8px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.3)]`
+  - Metallic border gradient: `linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0)` on the outermost div, with the bezel inset to create the "frame" appearance
+  - Corner radius: ~50px outer, ~38px inner (bezel)
+  - Accept `children` prop so Dynamic Island, StatusBar, HomeIndicator can be composed inside later
+
+  **Conventions from prior steps:**
+  - Tailwind v4 with CSS `@theme` config (no `tailwind.config.ts`)
+  - System font stack already configured
+  - Light-only design (no dark mode)
+  - Inline styles acceptable for complex gradients/shadows that Tailwind can't express cleanly
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+
+  **Verification:**
+  - `npm run build` succeeds
+  - `npm run lint` clean
+  - `npm run dev` — phone frame visible, centered below tagline, with metallic border, dark bezel, wallpaper gradient, and 3D shadow
+  - Frame dimensions roughly match spec (~423×860 outer, ~375×812 screen)
+
+  **Handoff:** Implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 1.4: Build the Dynamic Island component
   - Files: create `src/components/DynamicIsland.tsx`
