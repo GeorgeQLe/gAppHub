@@ -67,6 +67,18 @@
 - Step 1.9 (verification) marked no-op — all checks passed during 1.8
 - Phase 1 implementation steps all complete; phase milestone blocked by manual task (Vercel project setup)
 
+## 2026-05-14 — Phase 1: Visual fixes & milestone completion
+
+- Fixed StatusBar right-side icons overlapping Dynamic Island — switched from flex row to absolute-positioned left/right groups
+- Vertically centered StatusBar items with Dynamic Island (both at 22px from top)
+- Repositioned Dynamic Island from `top-3` to `top-[4px]` so its center aligns with status bar items
+- Made PhoneFrame height flexible (`flex-1` instead of fixed `h-[812px]`) so phone fills remaining viewport
+- Changed page layout from `min-h-screen justify-center` to `h-screen` with compact padding, eliminating scroll
+- Reduced margins: logo-to-tagline `mt-3` → `mt-1`, tagline-to-phone `mt-12` → `mt-3`
+- Vercel project created and linked (manual task completed by user)
+- All Phase 1 milestone acceptance criteria now met — phase complete
+- 6/6 tests pass, build succeeds, lint clean
+
 ## 2026-05-14 — Phase 1, Step 1.6: Home indicator component
 
 - Created `src/components/HomeIndicator.tsx` — iOS-style swipe-up capsule (134×5px, `rounded-full`, `bg-[#1d1d1f] opacity-30`)

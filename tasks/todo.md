@@ -85,13 +85,13 @@
 
 ### Milestone: Phase 1 — Scaffold & Frame
 **Acceptance Criteria:**
-- [ ] Next.js app builds and runs locally with `npm run dev`
-- [ ] Phone frame renders at correct proportions (~375×812 screen area) with visible Dynamic Island, bezel, and 3D shadow
-- [ ] Status bar displays current real-world time on the left
-- [ ] Wallpaper gradient is visible behind the (empty) screen area
-- [ ] Home indicator renders at the bottom of the screen area
-- [ ] Lexcorp placeholder logo and tagline are visible above the phone
-- [ ] Page background is the specified silver-to-white gradient
-- [ ] App deploys to Vercel successfully
+- [x] Next.js app builds and runs locally with `npm run dev`
+- [x] Phone frame renders at correct proportions (~375×812 screen area) with visible Dynamic Island, bezel, and 3D shadow
+- [x] Status bar displays current real-world time on the left
+- [x] Wallpaper gradient is visible behind the (empty) screen area
+- [x] Home indicator renders at the bottom of the screen area
+- [x] Lexcorp placeholder logo and tagline are visible above the phone
+- [x] Page background is the specified silver-to-white gradient
+- [x] App deploys to Vercel successfully
 - [x] All phase tests pass
 - [x] No regressions in previous phase tests

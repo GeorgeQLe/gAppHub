@@ -5,4 +5,4 @@
 > Check them off as you complete them.
 
 ## Pre-Phase / Setup
-- [ ] Create Vercel project and link to GitHub repo _(blocks: deployment acceptance criterion in Milestone)_
+- [x] Create Vercel project and link to GitHub repo _(blocks: deployment acceptance criterion in Milestone)_
