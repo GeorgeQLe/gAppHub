@@ -1,16 +1,119 @@
+"use client";
+
+import { useState, useRef, useCallback } from "react";
 import { Product } from "@/types/product";
 import AppIcon from "@/components/AppIcon";
+
+const ICONS_PER_PAGE = 24;
 
 interface IconGridProps {
   products: Product[];
 }
 
 export default function IconGrid({ products }: IconGridProps) {
+  const pages = chunk(products, ICONS_PER_PAGE);
+  const totalPages = pages.length;
+  const [page, setPage] = useState(0);
+  const touchRef = useRef<{ startX: number; startY: number } | null>(null);
+  const dragRef = useRef<{ startX: number; dragging: boolean } | null>(null);
+
+  const goTo = useCallback(
+    (p: number) => setPage(Math.max(0, Math.min(p, totalPages - 1))),
+    [totalPages],
+  );
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchRef.current = {
+      startX: e.touches[0].clientX,
+      startY: e.touches[0].clientY,
+    };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchRef.current) return;
+    const dx = e.changedTouches[0].clientX - touchRef.current.startX;
+    const dy = e.changedTouches[0].clientY - touchRef.current.startY;
+    touchRef.current = null;
+    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
+    goTo(page + (dx < 0 ? 1 : -1));
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    dragRef.current = { startX: e.clientX, dragging: true };
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!dragRef.current?.dragging) return;
+    const dx = e.clientX - dragRef.current.startX;
+    dragRef.current = null;
+    if (Math.abs(dx) < 50) return;
+    goTo(page + (dx < 0 ? 1 : -1));
+  };
+
+  const handleMouseLeave = () => {
+    dragRef.current = null;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      goTo(page - 1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      goTo(page + 1);
+    }
+  };
+
   return (
-    <div className="grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4">
-      {products.map((p) => (
-        <AppIcon product={p} key={p.id} />
-      ))}
+    <div
+      className="overflow-hidden flex-1"
+      role="region"
+      aria-label="App pages"
+      tabIndex={0}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      onKeyDown={handleKeyDown}
+    >
+      <div
+        className="flex h-full transition-transform duration-300 ease-out"
+        style={{ transform: `translateX(-${page * 100}%)` }}
+      >
+        {pages.map((pageProducts, i) => (
+          <div
+            key={i}
+            className="w-full flex-shrink-0 grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4 content-start"
+          >
+            {pageProducts.map((p) => (
+              <AppIcon product={p} key={p.id} />
+            ))}
+          </div>
+        ))}
+      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-1.5 -mt-[78px]" aria-hidden>
+          {pages.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className={`w-[6px] h-[6px] rounded-full transition-colors ${
+                i === page ? "bg-white" : "bg-white/40"
+              }`}
+              aria-label={`Go to page ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
+}
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const result: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
 }
