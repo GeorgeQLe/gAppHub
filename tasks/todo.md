@@ -81,7 +81,7 @@
 
   **Ship-one-step handoff:** Implement only Step 2.3, validate it, then run `/ship` when done.
 
-- [ ] Step 2.3: Create placeholder icon SVGs
+- [x] Step 2.3: Create placeholder icon SVGs
   - Files: create `public/icons/placeholder.svg`
   - Single generic placeholder SVG (60×60, rounded square with a subtle gradient fill and centered app-like glyph)
   - Update `products.json` entries to reference `/icons/placeholder.svg`
