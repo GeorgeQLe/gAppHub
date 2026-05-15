@@ -397,3 +397,12 @@
   - `.z-50.bg-black` selector distinguishes boot overlay from DynamicIsland's bg-black
   - Explicit `cleanup()` in `beforeEach` prevents DOM leaking between describe blocks
 - Verified: 66/66 tests pass (55 existing + 11 new), `npx tsc --noEmit` clean, lint only pre-existing warnings
+
+## 2026-05-15 — Phase 6, Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
+
+- Created `src/hooks/useIsMobile.ts`: `useSyncExternalStore`-based hook detecting `(max-width: 767px)` breakpoint, SSR-safe with server snapshot returning `false`
+- Updated `src/components/PhoneFrame.tsx`: mobile (<768px) renders simplified frame — thin `border-2 border-gray-300`, `rounded-3xl`, `shadow-md`, `w-[90vw] max-w-[400px]`, aspect-ratio 375/812, no metallic gradient/bezel/Dynamic Island cutout. Desktop/wide: full realistic bezel unchanged. Tablet (768–1023px): wraps full frame in `.tablet-scale` container
+- Added `.tablet-scale` CSS class to `src/app/globals.css` with `transform: scale(0.85)` at 768–1023px media query, `transform-origin: top center`
+- Updated `src/components/PageContent.tsx`: logo SVG shrinks to 100×24 on mobile (from 140×32), tagline drops to 11px (from 13px), added `overflow-x-hidden` to main element
+- Used `useSyncExternalStore` instead of `useState`+`useEffect` pattern to avoid the `set-state-in-effect` lint error that exists in `useReducedMotion`
+- Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings (none in modified files), 66/66 tests pass (no regressions)

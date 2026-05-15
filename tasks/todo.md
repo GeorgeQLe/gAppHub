@@ -44,7 +44,7 @@
 
 ### Implementation
 
-- [ ] Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
+- [x] Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
   - Files: modify `src/components/PhoneFrame.tsx`, modify `src/components/PageContent.tsx`
   - **PhoneFrame changes:**
     - Desktop (≥1024px): current full-scale (~375px screen width, realistic bezel + metallic frame) — no change needed
@@ -68,6 +68,16 @@
   - **StatusBar:** add `aria-hidden="true"` to the outer container (decorative)
   - **PageDots:** update `aria-label` to `"Page {n} of {total}"` format per spec (currently `"Page indicator"` and `"Page {n}"`)
   - **Verification:** Test with screen reader simulation, verify all roles and labels correct
+  - **Implementation plan (Step 6.2):**
+    - `src/components/PhoneFrame.tsx`: Add `role="region"` and `aria-label="Lexcorp product launcher"` to the inner screen-area `<div>` (the one with the wallpaper gradient background). Apply to both mobile and desktop render branches.
+    - `src/components/IconGrid.tsx`: Change existing `role="region"` to `role="grid"` and `aria-label="App pages"` to `aria-label="Product apps"` on the grid container.
+    - `src/components/AppIcon.tsx`: Wrap each icon's content in a `<div role="gridcell">`. Build a composite `aria-label` on the `<a>`: `"{name} — {badgeLabel}. {description}. Opens in new tab."` where badgeLabel maps L→"Live", B→"Beta", N→"New", W→"Wishlist", null→"Deprecated". Add `aria-hidden="true"` to the badge `<span>` element.
+    - `src/components/Dock.tsx`: Add `role="toolbar"` and `aria-label="Pinned apps"` to the dock container `<div>`.
+    - `src/components/StatusBar.tsx`: Add `aria-hidden="true"` to the outer container (purely decorative).
+    - `src/components/PageDots.tsx`: Change per-dot `aria-label` from `"Page {n}"` to `"Page {n} of {total}"`.
+    - Approach: pure attribute additions, no structural changes. No new dependencies.
+    - Acceptance criteria: `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass.
+    - **Ship-one-step handoff:** Implement only Step 6.2, validate it, then run `/ship` when done.
 
 - [ ] Step 6.3: Implement full keyboard navigation for icon grid and dock
   - Files: modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`
