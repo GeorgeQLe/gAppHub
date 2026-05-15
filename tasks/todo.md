@@ -1,273 +1,148 @@
 # GappHub — Current Phase
 
 > Project: GappHub (Lexcorp product portfolio launcher)
-> Phase: 5 of 6 — Loading Animations
+> Phase: 6 of 6 — Responsive, Accessibility & Polish
 > Test strategy: tests-after
 
-## Phase 5: Loading Animations
+## Phase 6: Responsive, Accessibility & Polish
 
-**Goal**: Implement three entrance animation variants on separate routes (`/boot`, `/slide`, `/assemble`) so the user can compare them side by side and choose a winner for the main route.
+**Goal**: Ensure the app works across all viewport sizes, meets accessibility requirements, and has final visual polish.
 
 **Scope**:
-- `/boot` route: black screen → Lexcorp logo pulse → wallpaper fade → icons stagger row-by-row → dock slides up (total ~2.2s)
-- `/slide` route: phone frame slides up + fades in → status bar → icons stagger + fade → dock fades in (total ~1.5s)
-- `/assemble` route: frame sides slide in → seam flash → screen fade → Dynamic Island pop → icons drop with bounce → dock slides up (total ~2.3s)
-- Main `/` route: simple fade-in as interim default
-- `prefers-reduced-motion`: all variants collapse to ≤200ms opacity fade
-- Animation implemented with CSS @keyframes + Framer Motion (or GSAP)
+- Desktop (≥1024px): full-scale frame, centered, generous whitespace
+- Tablet (768–1023px): frame at ~85% scale
+- Mobile (<768px): simplified frame (thin border + subtle shadow, no realistic bezel/island), screen fills ~90% width
+- Wide desktop (≥1440px): frame stays at 100%, extra whitespace absorbed
+- Logo/tagline/legend scale and reflow for each breakpoint
+- Keyboard navigation: tab order through icons, arrow key grid navigation, Enter/Space to activate
+- Screen reader: `role="region"`, `role="grid"`, `role="gridcell"`, `role="toolbar"` with proper aria-labels
+- Status bar: `aria-hidden="true"`
+- Badges: `aria-hidden="true"` (info in parent aria-label)
+- Page indicator: `role="tablist"` with page labels
+- Color contrast: verify all text/bg combinations meet WCAG AA
+- Touch targets: minimum 44×44px on mobile
+- Final visual polish: verify all shadows, gradients, typography, and spacing match spec
 
 **Acceptance Criteria:**
-- [ ] `/boot` plays the boot screen animation sequence as specified
-- [ ] `/slide` plays the slide-up + fade animation sequence as specified
-- [ ] `/assemble` plays the frame assembly animation sequence as specified
-- [ ] All three routes end at the identical final state (fully rendered phone with icons)
-- [ ] Main `/` route uses a simple fade-in as temporary default
-- [ ] Reduced motion preference disables all animations, replacing with a quick opacity fade
-- [ ] Animations feel smooth at 60fps with no visible jank
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [ ] Phone frame renders correctly at desktop, tablet, mobile, and wide desktop breakpoints
+- [ ] Mobile uses simplified frame without realistic bezel details
+- [ ] Tab key navigates through all interactive elements in logical order
+- [ ] Arrow keys navigate the icon grid spatially
+- [ ] Screen reader announces icon names, states, and "opens in new tab"
+- [ ] Reduced motion disables all animations and transitions
+- [ ] All text/background combinations pass WCAG AA contrast (4.5:1)
+- [ ] Touch targets meet 44×44px minimum on mobile viewports
+- [ ] Visual output matches spec across all breakpoints
 
 ### Execution Profile
 **Parallel mode:** serial
 **Integration owner:** main agent
-**Conflict risk:** low (new route files + shared wrapper; existing components unchanged)
+**Conflict risk:** low (modifications to existing components, no new features)
 **Review gates:** none
 
 **Subagent lanes:** none
 
 ### Implementation
-- [x] Step 5.1: Install Framer Motion and create shared page wrapper + reduced motion hook
-  - Files: modify `package.json`, create `src/hooks/useReducedMotion.ts`, create `src/components/PageContent.tsx`, modify `src/app/page.tsx`
-  - Install `framer-motion` as a dependency
-  - Create `useReducedMotion` hook: listens to `prefers-reduced-motion` media query, returns boolean
-  - Extract the shared page content from `page.tsx` into `PageContent` — a client component that accepts `animationVariant` prop (`"none" | "boot" | "slide" | "assemble"`)
-  - `PageContent` fetches products (via props from server page) and renders logo, tagline, PhoneFrame children, and BadgeLegend
-  - The existing children (StatusBar, DynamicIsland, IconGrid, Dock, HomeIndicator) become animation targets via wrapper divs or Framer Motion `motion.*` components
-  - Main `/` page.tsx: render `PageContent` with `variant="none"` and a simple 200ms fade-in on the entire content
-  - Verify: app still renders identically on `/`, all 55 tests pass, `npm run build` succeeds
 
-- [x] Step 5.2: Build the `/boot` animation route
-  - Files: create `src/app/boot/page.tsx`, modify `src/components/PageContent.tsx`
-  - Server component that fetches products and passes them + variant to `PageContent`
-  - Animation sequence (all times from page load, using Framer Motion `useAnimate` or `AnimatePresence`):
-    - 0–800ms: Black overlay fills phone screen, white Lexcorp logo SVG (80px wide) fades in at center with subtle scale pulse (1.0 → 1.05 → 1.0 loop)
-    - 800–1200ms: Logo fades out, black overlay fades to reveal wallpaper gradient
-    - 1200–1800ms: StatusBar fades in. Icons stagger in row-by-row (4 per row, 50ms delay per icon), each scaling from 80% → 100% with slight bounce (`type: "spring"`, `bounce: 0.3`)
-    - 1800–2200ms: Dock slides up from `translateY(100%)` to `translateY(0)`. PageDots fade in
-    - 2200ms+: Settled, all transforms removed
-  - Reduced motion: skip all, show final state with ≤200ms opacity fade
-  - Verify: `/boot` plays full sequence and ends at identical state to `/`
+- [ ] Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
+  - Files: modify `src/components/PhoneFrame.tsx`, modify `src/components/PageContent.tsx`
+  - **PhoneFrame changes:**
+    - Desktop (≥1024px): current full-scale (~375px screen width, realistic bezel + metallic frame) — no change needed
+    - Tablet (768–1023px): wrap outer frame in a container with `transform: scale(0.85)` via Tailwind `md:scale-85` or media query
+    - Mobile (<768px): replace realistic bezel (metallic gradient, thick padding, rounded-[50px]) with simplified frame: thin 2px rounded border (`border-2 border-gray-300 rounded-3xl`), subtle shadow, no metallic gradient, no Dynamic Island visual. Screen area fills ~90% viewport width instead of fixed 375px
+    - Wide desktop (≥1440px): no scaling change, frame stays at 100%
+    - Use Tailwind responsive prefixes (`sm:`, `md:`, `lg:`, `xl:`) or CSS media queries
+    - PhoneFrame needs a `simplified` prop or internal breakpoint detection to swap bezel rendering
+  - **PageContent changes:**
+    - Logo/tagline: reduce font sizes on mobile (`text-lg` → smaller on `sm:`)
+    - BadgeLegend: allow wrapping, reduce font size on mobile
+    - Ensure no horizontal overflow at any breakpoint
+  - **Verification:** Dev server renders correctly at 375px, 768px, 1024px, 1440px viewports
 
-  **Implementation plan:**
+- [ ] Step 6.2: Add comprehensive ARIA roles and labels for screen readers
+  - Files: modify `src/components/PhoneFrame.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`, modify `src/components/StatusBar.tsx`, modify `src/components/PageDots.tsx`
+  - **PhoneFrame:** add `role="region"` and `aria-label="Lexcorp product launcher"` to screen area container
+  - **IconGrid:** change `role="region"` → `role="grid"`, `aria-label="App pages"` → `aria-label="Product apps"`
+  - **AppIcon:** add `role="gridcell"` wrapper div; update `<a>` to include `aria-label="{name} — {badge state}. {description}. Opens in new tab."` (badge state: "Live"/"Beta"/"New"/"Wishlist"/"Deprecated"); add `aria-hidden="true"` to badge `<span>`
+  - **Dock:** add `role="toolbar"` and `aria-label="Pinned apps"` to dock container
+  - **StatusBar:** add `aria-hidden="true"` to the outer container (decorative)
+  - **PageDots:** update `aria-label` to `"Page {n} of {total}"` format per spec (currently `"Page indicator"` and `"Page {n}"`)
+  - **Verification:** Test with screen reader simulation, verify all roles and labels correct
 
-  1. **Create `src/app/boot/page.tsx`** — async server component identical to `src/app/page.tsx` but passes `variant="boot"` to `PageContent`
+- [ ] Step 6.3: Implement full keyboard navigation for icon grid and dock
+  - Files: modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`
+  - **IconGrid keyboard navigation:**
+    - Currently supports ArrowLeft/ArrowRight for page navigation on the grid container
+    - Add Up/Down/Left/Right arrow key navigation between individual icons within the grid (4-column spatial navigation)
+    - Each `<a>` in the grid should be focusable (already is) — add `roving tabindex` pattern: only the active icon has `tabIndex={0}`, others have `tabIndex={-1}`
+    - Arrow keys move focus between icons: Left/Right move horizontally, Up/Down move between rows, wrapping at row edges advances to next/previous row
+    - Enter/Space on a focused icon triggers navigation (already handled by `<a>` default behavior)
+    - Tab from last grid icon should move to first dock icon
+  - **Dock keyboard navigation:**
+    - Add Left/Right arrow key navigation between dock icons
+    - Same roving tabindex pattern
+    - Tab from dock should move to legend
+  - **Tab order:** Logo (skip) → first grid icon → (arrow keys within grid) → Tab → first dock icon → (arrow keys within dock) → Tab → legend
+  - **Verification:** Navigate entire UI using only keyboard, verify all icons reachable
 
-  2. **Extend `PageContent` for `variant="boot"`** in `src/components/PageContent.tsx`:
-     - When `variant === "boot"` and `!reducedMotion`, orchestrate a multi-phase animation sequence:
-       - **Phase 1 (0–800ms):** Render a black overlay (`position: absolute`, `inset: 0`, `z-index: 50`) inside the PhoneFrame area. Center a white LEXCORP SVG (80px wide) with a looping scale pulse (`animate={{ scale: [1, 1.05, 1] }}`, `transition={{ repeat: Infinity, duration: 1 }}`). Both overlay and logo fade in from opacity 0.
-       - **Phase 2 (800–1200ms):** Logo fades out, black overlay fades out to reveal the wallpaper/content beneath.
-       - **Phase 3 (1200–1800ms):** StatusBar fades in. IconGrid icons stagger in row-by-row (4 per row, 50ms delay per icon). Each icon scales from 0.8 → 1.0 with spring bounce (`type: "spring"`, `bounce: 0.3`).
-       - **Phase 4 (1800–2200ms):** Dock slides up from `translateY(100%)` → `translateY(0)`. PageDots fade in.
-       - **Phase 5 (2200ms+):** Settled, all animation wrappers removed or at final values.
-     - Use `useState` for a phase counter or `useAnimate` from Framer Motion to orchestrate timing via `setTimeout` or Framer's `sequence` API.
-     - Children components (StatusBar, IconGrid, Dock) need to be individually wrapped in `motion.div` elements for staggered control. Consider passing animation state as props or using CSS visibility to initially hide elements.
-     - The boot overlay (black screen + logo) is an additional element layered on top of the phone content.
+- [ ] Step 6.4: Ensure touch targets meet 44×44px minimum and verify contrast
+  - Files: modify `src/components/AppIcon.tsx` (if needed), modify `src/components/PageDots.tsx` (if needed)
+  - **Touch targets:**
+    - AppIcon `<a>` elements: icons are 60×60px — already meets 44px minimum
+    - PageDots buttons: currently 6-8px dots — add min 44×44px tap area via padding or invisible hit target (`min-w-[44px] min-h-[44px]`)
+    - Dock icons: same as AppIcon, 60×60px — OK
+    - SearchOverlay dismiss button/backdrop: full-screen — OK
+  - **Color contrast audit (WCAG AA 4.5:1):**
+    - Icon labels: `#333` on wallpaper gradient (`#e8ecf4`→`#f5f0f6`) — verify ≥4.5:1
+    - Tagline: `#86868b` on page background (`#f5f5f7`) — verify ≥4.5:1 (may need darkening)
+    - Badge text: white on colored backgrounds (L=#34C759, B=#FF9500, N=#007AFF, W=#AF52DE) — verify at 11px bold
+    - Status bar text: `#1d1d1f` on wallpaper — high contrast, OK
+    - Deprecated label: `text-gray-400` on wallpaper — verify or darken
+    - Fix any contrast failures found
+  - **Verification:** All tap targets ≥44px, all text passes 4.5:1 contrast ratio
 
-  3. **Key patterns from Step 5.1:**
-     - `PageContent` already has the `variant` prop and `useReducedMotion` hook wired up
-     - When `reducedMotion` is true, skip all boot animation and render with ≤200ms opacity fade (same as `variant="none"`)
-     - Product type imported from `@/types/product`
-     - `matchMedia` mock in `src/__tests__/setup.ts` handles test environment
-
-  4. **Verification:**
-     - `npx tsc --noEmit` passes
-     - `npm run build` succeeds
-     - All 55 existing tests pass (no regressions)
-     - Dev server: `/boot` plays the full 2.2s boot sequence
-     - Dev server: `/boot` ends at the identical visual state as `/`
-     - Dev server: toggling `prefers-reduced-motion` in DevTools shows instant render on `/boot`
-
-  ### Execution Profile
-  **Parallel mode:** serial
-  **Integration owner:** main agent
-  **Conflict risk:** low (new route file + extending existing PageContent)
-
-  **Ship-one-step handoff:** Implement only Step 5.2, validate it, then run `/ship` when done.
-
-- [x] Step 5.3: Build the `/slide` animation route
-  - Files: create `src/app/slide/page.tsx`, modify `src/components/PageContent.tsx`
-  - Server component that fetches products and passes them + variant to `PageContent`
-  - Animation sequence:
-    - 0–600ms: Entire phone frame (including outer wrapper) slides up from `translateY(100px)` + `opacity: 0` → final position + `opacity: 1`, ease-out curve
-    - 600–1200ms: StatusBar fades in first (200ms), then icons stagger in (40ms per icon, each scale 90% → 100% + fade 0 → 1)
-    - 1200–1500ms: Dock fades in. PageDots appear
-    - 1500ms+: Settled
-  - Reduced motion: skip all, show final state with ≤200ms opacity fade
-  - Verify: `/slide` plays full sequence and ends at identical state to `/`
-
-  **Implementation plan:**
-
-  1. **Create `src/app/slide/page.tsx`** — async server component identical to `src/app/page.tsx` / `src/app/boot/page.tsx` but passes `variant="slide"` to `PageContent`
-
-  2. **Extend `PageContent` for `variant="slide"`** in `src/components/PageContent.tsx`:
-     - Follow the same pattern as boot: use `useState<SlidePhase>` (0–4) with `useEffect` scheduling `setTimeout` chain
-     - When `variant === "slide"` and `!reducedMotion`, orchestrate:
-       - **Phase 1 (0–600ms):** The entire `<main>` content wrapper (logo + tagline + PhoneFrame + BadgeLegend) slides up from `translateY(100px)` + `opacity: 0` → final position + `opacity: 1`, ease-out. Use `motion.main` wrapping the content.
-       - **Phase 2 (600–1200ms):** StatusBar fades in (200ms). Icons stagger in — each icon scales from 0.9 → 1.0 and fades from 0 → 1, with 40ms delay per icon. This likely needs the `IconGrid` content wrapped in a `motion.div` or individual icon wrappers with `staggerChildren`.
-       - **Phase 3 (1200–1500ms):** Dock fades in from opacity 0 → 1. PageDots fade in simultaneously.
-       - **Phase 4 (1500ms+):** Settled, all animation wrappers at final values.
-     - Unlike boot, the slide variant doesn't need a separate `SlidePhoneContent` component — the phone content structure is the same as the default, just wrapped in motion divs. The main difference is the outer wrapper slides up.
-     - May need a `SlidePhoneContent` sub-component if individual child wrappers are needed for StatusBar/IconGrid/Dock fade-in timing.
-
-  3. **Key patterns from Step 5.2:**
-     - Boot used `BootPhoneContent` to swap phone internals — slide can follow same pattern for per-child animation wrappers
-     - Phase state + setTimeout chain pattern works well
-     - `AnimatePresence` only needed for elements that mount/unmount (boot overlay); slide elements are always present, just animated
-     - Reduced motion path: render the default (non-animated) phone content with 200ms opacity fade
-
-  4. **Verification:**
-     - `npx tsc --noEmit` passes
-     - All 55 existing tests pass (no regressions)
-     - Dev server: `/slide` plays the full ~1.5s slide-up sequence
-     - Dev server: `/slide` ends at the identical visual state as `/`
-     - Dev server: toggling `prefers-reduced-motion` shows instant render on `/slide`
-     - Note: `npm run build` has a pre-existing static generation timeout (not caused by our changes)
-
-  ### Execution Profile
-  **Parallel mode:** serial
-  **Integration owner:** main agent
-  **Conflict risk:** low (new route file + extending existing PageContent)
-
-  **Ship-one-step handoff:** Implement only Step 5.3, validate it, then run `/ship` when done.
-
-- [x] Step 5.4: Build the `/assemble` animation route
-  - Files: create `src/app/assemble/page.tsx`, modify `src/components/PageContent.tsx`
-  - Server component that fetches products and passes them + variant to `PageContent`
-  - Animation sequence:
-    - 0–400ms: Phone frame split into left/right halves (using clip-path or separate divs), sliding in from off-screen horizontally. Top/bottom edges slide in vertically
-    - 400–700ms: Frame pieces meet, brief white flash/highlight along seam lines (opacity pulse on a border overlay)
-    - 700–900ms: Screen area transitions from black to wallpaper gradient
-    - 900–1400ms: Dynamic Island pops in (scale 0 → 1 with bounce). StatusBar slides in from the sides
-    - 1400–2000ms: Icons drop in from above (translateY -30px → 0) one by one, 30ms stagger, soft bounce landing
-    - 2000–2300ms: Dock slides up. PageDots fade in
-    - 2300ms+: Settled
-  - Reduced motion: skip all, show final state with ≤200ms opacity fade
-  - This is the most complex variant — may need to simplify the frame-split effect if CSS clip-path approach proves unwieldy. Fallback: frame fades from transparent → opaque instead of splitting
-  - Verify: `/assemble` plays full sequence and ends at identical state to `/`
-
-  _(Completed: 7-phase assembly animation with clip-path frame halves, seam flash, spring physics on DI/StatusBar/icons/dock)_
-
-- [x] Step 5.5: Polish animations and verify cross-route consistency
-  - Files: modify `src/components/PageContent.tsx` (if needed), any animation route files
-  - Visually compare all four routes side by side in the browser
-  - Verify all three variant routes end at the exact same visual state as `/`
-  - Check for jank: use browser DevTools Performance tab, verify animations use `transform`/`opacity` only (GPU-composited properties)
-  - Test reduced motion: toggle `prefers-reduced-motion` in DevTools → all variants should collapse to ≤200ms fade
-  - Fix any timing, easing, or layering issues found
-
-  **Implementation plan:**
-
-  1. **Start dev server** and visually review all 4 routes (`/`, `/boot`, `/slide`, `/assemble`):
-     - Confirm each animation plays to completion without visual glitches
-     - Verify all 3 variant routes end at identical final state (same StatusBar, DynamicIsland, IconGrid, Dock, HomeIndicator layout)
-     - Check that no z-index conflicts cause elements to overlap incorrectly during animation phases
-
-  2. **Review animation properties for GPU compositing:**
-     - Audit `src/components/PageContent.tsx` — all animated properties should be `transform` and `opacity` only (GPU-composited)
-     - `clip-path` in assemble Phase 1 is NOT GPU-composited on all browsers — if jank is observed, replace with `translateX` + `overflow: hidden` approach or simple opacity fade fallback
-     - Document any properties that can't be changed without breaking the visual effect
-
-  3. **Test reduced motion on all variant routes:**
-     - Toggle `prefers-reduced-motion: reduce` in browser DevTools (or via system settings)
-     - Verify all 4 routes (`/`, `/boot`, `/slide`, `/assemble`) render with ≤200ms opacity fade, no animation sequences
-     - Verify final visual state matches between reduced-motion and non-reduced-motion
-
-  4. **Fix any issues found** — timing, easing, layering, z-index, or jank problems
-
-  5. **Verification:**
-     - `npx tsc --noEmit` passes
-     - `npm run lint` — only pre-existing warnings (not in modified files)
-     - All 55 existing tests pass (no regressions)
-     - All 4 routes visually correct in browser
-
-  ### Execution Profile
-  **Parallel mode:** serial
-  **Integration owner:** main agent
-  **Conflict risk:** low (modifications to existing PageContent only if issues found)
-
-  _(Completed: Audited all 4 routes — final states consistent, all animations use transform/opacity except brief clip-path on lightweight overlays in assemble Phase 1, reduced motion correctly collapses to ≤200ms fade. No code changes needed. 55/55 tests pass, tsc clean, lint only pre-existing warnings.)_
-
-  **Ship-one-step handoff:** Implement only Step 5.6, validate it, then run `/ship` when done.
+- [ ] Step 6.5: Visual polish pass — verify spec conformance
+  - Files: modify any component files as needed
+  - **Check against spec (specs/ui-gapphub.md):**
+    - Typography: verify all font sizes match spec (icon labels 11px, tagline 13px, legend 12px, tooltip 12px, status bar 12px)
+    - Shadows: phone frame multi-layer, dock inset highlight (`inset 0 1px 0 rgba(255,255,255,0.5)`), tooltip shadow (`0 4px 12px rgba(0,0,0,0.15)`)
+    - Gradients: page background, phone frame metallic, wallpaper — all match spec color tokens
+    - Spacing: logo to tagline, tagline to phone, phone to legend — proportional at all breakpoints
+    - Dock glass: `rgba(255,255,255,0.72)` per spec (currently `bg-white/60` = 0.60) — fix if needed
+  - **Reduced motion:** already implemented in Phase 5, verify no new CSS transitions introduced without `motion-safe` guards
+  - **Verification:** Visual comparison against spec at each breakpoint
 
 ### Green
-- [x] Step 5.6: Write regression tests covering Phase 5 acceptance criteria
-  - Files: create `src/__tests__/Animations.test.tsx`
-  - Test each route's page component renders without crashing
-  - Test `useReducedMotion` hook returns correct value based on media query
-  - Test that all animation routes render the same final content (same number of icons, same dock, same status bar)
-  - Test that reduced motion class/attribute is applied when `prefers-reduced-motion` is active
-  - Use `vi.stubGlobal` or `window.matchMedia` mock for reduced motion testing
+- [ ] Step 6.6: Write regression tests covering Phase 6 acceptance criteria
+  - Files: create `src/__tests__/Responsive.test.tsx`, create `src/__tests__/Accessibility.test.tsx`
+  - **Responsive tests:**
+    - PhoneFrame renders simplified frame when viewport < 768px (mock `window.innerWidth` or use container queries)
+    - PhoneFrame renders full realistic frame at ≥1024px
+    - Layout has no horizontal overflow at 375px viewport
+  - **Accessibility tests:**
+    - PhoneFrame screen area has `role="region"` and correct `aria-label`
+    - IconGrid has `role="grid"` and `aria-label="Product apps"`
+    - AppIcon `<a>` has comprehensive `aria-label` with name, badge state, description, and "Opens in new tab"
+    - Badge `<span>` has `aria-hidden="true"`
+    - StatusBar has `aria-hidden="true"`
+    - Dock has `role="toolbar"` and `aria-label="Pinned apps"`
+    - Arrow key navigation moves focus between grid icons
+    - PageDots buttons have minimum 44px tap target dimensions
+  - **Verification:** All tests pass, no regressions in 66 existing tests
 
-  **Implementation plan:**
+- [ ] Step 6.7: Run all tests, verify they pass, build succeeds _(will be no-op if 6.6 tests pass)_
 
-  1. **Create `src/__tests__/Animations.test.tsx`** with these test groups:
-
-     **PageContent rendering (4 variants):**
-     - `variant="none"` renders StatusBar, DynamicIsland, IconGrid, Dock, HomeIndicator, BadgeLegend
-     - `variant="boot"` renders same final content (at settled phase 5)
-     - `variant="slide"` renders same final content (at settled phase 4)
-     - `variant="assemble"` renders same final content (at settled phase 7)
-     - All 4 variants render the LEXCORP SVG logo and tagline text
-
-     **useReducedMotion hook:**
-     - Returns `false` when `prefers-reduced-motion` media query doesn't match
-     - Returns `true` when `prefers-reduced-motion: reduce` matches
-     - Updates when media query changes (simulate via `change` event on mql mock)
-
-     **Reduced motion behavior on animation variants:**
-     - When reduced motion is active, boot/slide/assemble variants skip animation phases (render at final state immediately)
-     - The wrapping `motion.div` gets `opacity` animation with `duration: 0.2`
-
-     **Cross-route consistency:**
-     - All 4 variants render the same number of app icons (20 grid icons)
-     - All 4 variants render the same number of dock icons (4)
-     - StatusBar time display present in all variants at settled state
-
-  2. **Testing approach:**
-     - Mock `window.matchMedia` per-test to control reduced motion state (override the global mock from `src/__tests__/setup.ts`)
-     - Use `vi.useFakeTimers()` and `vi.advanceTimersByTime()` to fast-forward animation phases to settled state
-     - Import `PageContent` directly (not the async route pages) — pass mock product data
-     - Use `makeProduct()` helper (same pattern as existing test files) for test data
-     - The existing `src/__tests__/setup.ts` already mocks `matchMedia` with `matches: false` — override with `vi.spyOn` for reduced-motion tests
-
-  3. **Key files:**
-     - Create: `src/__tests__/Animations.test.tsx`
-     - Read (reference): `src/components/PageContent.tsx`, `src/hooks/useReducedMotion.ts`, `src/__tests__/setup.ts`
-
-  4. **Verification:**
-     - `npx tsc --noEmit` passes
-     - `npm run lint` — only pre-existing warnings
-     - All tests pass (55 existing + new animation tests)
-     - No regressions in any existing test file
-
-  ### Execution Profile
-  **Parallel mode:** serial
-  **Integration owner:** main agent
-  **Conflict risk:** low (new test file only, no source changes)
-
-  **Ship-one-step handoff:** Implement only Step 5.6, validate it, then run `/ship` when done.
-
-- [ ] Step 5.7: Run all tests, verify they pass, build succeeds with `npm run build` _(will be no-op if 5.6 tests pass)_
-
-### Milestone: Phase 5 — Loading Animations
+### Milestone: Phase 6 — Responsive, Accessibility & Polish
 **Acceptance Criteria:**
-- [ ] `/boot` plays the boot screen animation sequence as specified
-- [ ] `/slide` plays the slide-up + fade animation sequence as specified
-- [ ] `/assemble` plays the frame assembly animation sequence as specified
-- [ ] All three routes end at the identical final state (fully rendered phone with icons)
-- [ ] Main `/` route uses a simple fade-in as temporary default
-- [ ] Reduced motion preference disables all animations, replacing with a quick opacity fade
-- [ ] Animations feel smooth at 60fps with no visible jank
+- [ ] Phone frame renders correctly at desktop, tablet, mobile, and wide desktop breakpoints
+- [ ] Mobile uses simplified frame without realistic bezel details
+- [ ] Tab key navigates through all interactive elements in logical order
+- [ ] Arrow keys navigate the icon grid spatially
+- [ ] Screen reader announces icon names, states, and "opens in new tab"
+- [ ] Reduced motion disables all animations and transitions
+- [ ] All text/background combinations pass WCAG AA contrast (4.5:1)
+- [ ] Touch targets meet 44×44px minimum on mobile viewports
+- [ ] Visual output matches spec across all breakpoints
 - [ ] All phase tests pass
 - [ ] No regressions in previous phase tests
 

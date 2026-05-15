@@ -413,14 +413,14 @@ GappHub is built in six serial phases, each layering new capability onto the pre
   - Files: create `src/__tests__/Animations.test.tsx`
 - Step 5.7: Run all tests, verify they pass, build succeeds
 
-### Milestone: Phase 5 — Loading Animations
+### Milestone: Phase 5 — Loading Animations ✓
 **Acceptance Criteria:**
-- [ ] `/boot` plays the boot screen animation sequence as specified
-- [ ] `/slide` plays the slide-up + fade animation sequence as specified
-- [ ] `/assemble` plays the frame assembly animation sequence as specified
-- [ ] All three routes end at the identical final state (fully rendered phone with icons)
-- [ ] Main `/` route uses a simple fade-in as temporary default
-- [ ] Reduced motion preference disables all animations, replacing with a quick opacity fade
+- [x] `/boot` plays the boot screen animation sequence as specified
+- [x] `/slide` plays the slide-up + fade animation sequence as specified
+- [x] `/assemble` plays the frame assembly animation sequence as specified
+- [x] All three routes end at the identical final state (fully rendered phone with icons)
+- [x] Main `/` route uses a simple fade-in as temporary default
+- [x] Reduced motion preference disables all animations, replacing with a quick opacity fade
 - [ ] Animations feel smooth at 60fps with no visible jank
 - [ ] All phase tests pass
 - [ ] No regressions in previous phase tests
@@ -465,6 +465,47 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 **Parallelization:** serial
 
 **Coordination Notes:** Final phase — polishes everything from Phases 1–5. Testing should cover the full flow on real devices or emulators.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** low (modifications to existing components, no new features)
+**Review gates:** none
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
+  - Files: modify `src/components/PhoneFrame.tsx`, modify `src/components/PageContent.tsx`
+- Step 6.2: Add comprehensive ARIA roles and labels for screen readers
+  - Files: modify `src/components/PhoneFrame.tsx`, `IconGrid.tsx`, `AppIcon.tsx`, `Dock.tsx`, `StatusBar.tsx`, `PageDots.tsx`
+- Step 6.3: Implement full keyboard navigation for icon grid and dock
+  - Files: modify `src/components/IconGrid.tsx`, `AppIcon.tsx`, `Dock.tsx`
+- Step 6.4: Ensure touch targets meet 44×44px minimum and verify contrast
+  - Files: modify `src/components/AppIcon.tsx`, `PageDots.tsx` (if needed)
+- Step 6.5: Visual polish pass — verify spec conformance
+  - Files: modify any component files as needed
+
+### Green
+- Step 6.6: Write regression tests covering Phase 6 acceptance criteria
+  - Files: create `src/__tests__/Responsive.test.tsx`, create `src/__tests__/Accessibility.test.tsx`
+- Step 6.7: Run all tests, verify they pass, build succeeds
+
+### Milestone: Phase 6 — Responsive, Accessibility & Polish
+**Acceptance Criteria:**
+- [ ] Phone frame renders correctly at desktop, tablet, mobile, and wide desktop breakpoints
+- [ ] Mobile uses simplified frame without realistic bezel details
+- [ ] Tab key navigates through all interactive elements in logical order
+- [ ] Arrow keys navigate the icon grid spatially
+- [ ] Screen reader announces icon names, states, and "opens in new tab"
+- [ ] Reduced motion disables all animations and transitions
+- [ ] All text/background combinations pass WCAG AA contrast (4.5:1)
+- [ ] Touch targets meet 44×44px minimum on mobile viewports
+- [ ] Visual output matches spec across all breakpoints
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
 
 **On Completion:**
 - Deviations from plan:
