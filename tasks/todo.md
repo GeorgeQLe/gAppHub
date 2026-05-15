@@ -107,20 +107,26 @@
 ### Green
 - [ ] Step 6.6: Write regression tests covering Phase 6 acceptance criteria
   - Files: create `src/__tests__/Responsive.test.tsx`, create `src/__tests__/Accessibility.test.tsx`
-  - **Responsive tests:**
-    - PhoneFrame renders simplified frame when viewport < 768px (mock `window.innerWidth` or use container queries)
-    - PhoneFrame renders full realistic frame at ≥1024px
-    - Layout has no horizontal overflow at 375px viewport
-  - **Accessibility tests:**
-    - PhoneFrame screen area has `role="region"` and correct `aria-label`
-    - IconGrid has `role="grid"` and `aria-label="Product apps"`
-    - AppIcon `<a>` has comprehensive `aria-label` with name, badge state, description, and "Opens in new tab"
-    - Badge `<span>` has `aria-hidden="true"`
-    - StatusBar has `aria-hidden="true"`
-    - Dock has `role="toolbar"` and `aria-label="Pinned apps"`
-    - Arrow key navigation moves focus between grid icons
-    - PageDots buttons have minimum 44px tap target dimensions
-  - **Verification:** All tests pass, no regressions in 66 existing tests
+  - **Implementation plan (Step 6.6):**
+    - **`src/__tests__/Responsive.test.tsx`:**
+      - Mock `useIsMobile` hook (from `src/hooks/useIsMobile.ts`) to control breakpoint detection
+      - Test: PhoneFrame renders simplified frame at mobile (<768px) — assert `border-2`, `rounded-3xl`, no metallic gradient style, no Dynamic Island visual within frame
+      - Test: PhoneFrame renders full realistic frame at desktop (≥1024px) — assert `rounded-[50px]`, metallic `background: linear-gradient(145deg, ...)` in inline styles
+      - Test: PhoneFrame screen area maintains `role="region"` and `aria-label` at both mobile and desktop
+      - Test: Mobile frame uses `w-[90vw]` and `max-w-[400px]`
+    - **`src/__tests__/Accessibility.test.tsx`:**
+      - Test: PhoneFrame screen area has `role="region"` and `aria-label="Lexcorp product launcher"`
+      - Test: IconGrid has `role="grid"` and `aria-label="Product apps"`
+      - Test: AppIcon `<a>` has composite `aria-label` with product name and badge state (e.g. "Test App, Live")
+      - Test: Badge `<span>` has `aria-hidden="true"`
+      - Test: StatusBar has `aria-hidden="true"`
+      - Test: Dock has `role="toolbar"` and `aria-label="Pinned apps"`
+      - Test: Dock glass uses spec opacity `bg-white/[0.72]` and inset highlight `shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]`
+      - Test: PageDots buttons have minimum 44px tap target (`min-w-[44px] min-h-[44px]`)
+    - **Key context:** `useIsMobile` uses `useSyncExternalStore` with `matchMedia` — mock `window.matchMedia` to control mobile/desktop. Existing test setup in `src/__tests__/setup.ts` already mocks `matchMedia` (default: `matches: false` = desktop). Use `vi.spyOn(window, 'matchMedia')` per-test for mobile overrides.
+    - **Acceptance criteria:** `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all tests pass (66 existing + new), no regressions.
+    - **Ship-one-step handoff:** Implement only Step 6.6, validate it, then run `/ship` when done.
+  - **Execution Profile:** serial, main agent, low conflict risk
 
 - [ ] Step 6.7: Run all tests, verify they pass, build succeeds _(will be no-op if 6.6 tests pass)_
 
