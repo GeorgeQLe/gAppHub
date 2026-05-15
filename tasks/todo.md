@@ -15,6 +15,20 @@
 ## Implementation Tasks (from spec drift)
 
 - [ ] Add `prefers-reduced-motion` support to AppIcon hover/press states — disable `hover:scale-105` and replace `active:scale-[0.92]` with opacity dim when reduced motion is active. File: `src/components/AppIcon.tsx`. Spec ref: `specs/ui-gapphub.md` § Reduced Motion.
+  - **Implementation plan:**
+    - Add a CSS `@media (prefers-reduced-motion: reduce)` block in `src/app/globals.css` that overrides AppIcon interactive states:
+      - Disable `hover:scale-105`, `hover:shadow-lg`, `hover:-translate-y-0.5` — set `transform: none !important; box-shadow: none !important` on hover
+      - Replace `active:scale-[0.92]` with `opacity: 0.7` on active
+      - Keep `transition-all duration-150 ease-out` but for opacity only
+    - Alternative approach: use the existing `useReducedMotion()` hook in AppIcon to conditionally apply different className strings. This is cleaner but requires reading the hook in every AppIcon instance.
+    - **Recommended:** CSS media query approach — zero runtime cost, no React re-renders, applies universally. Add to `globals.css` targeting the AppIcon `<a>` elements inside `[role="gridcell"]` and `[role="toolbar"]`.
+    - **Test updates:** Add 2 tests to `src/__tests__/Accessibility.test.tsx`:
+      - Test: AppIcon hover classes include `hover:scale-105` (default)
+      - Test: verify the CSS media query exists in globals.css (or mock `matchMedia` to test reduced-motion className branch if using the hook approach)
+    - **Verification:** `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all tests pass, reduced-motion behavior confirmed
+    - **Acceptance criteria:** When `prefers-reduced-motion: reduce` is active, hovering an AppIcon does not scale/lift and pressing dims via opacity instead of scaling down
+    - **Ship-one-step handoff:** Implement only this task, validate it, then run `/ship` when done.
+  - **Execution Profile:** serial, main agent, low conflict risk
 
 > **Note:** Business research items (ICP, competitive analysis, positioning, GTM, monetization, metrics, landing copy, journey map) are not applicable — GappHub is a personal portfolio launcher, not a revenue-generating SaaS product. No concept-exploration needed; `research/concept-brief.md` already exists.
 
