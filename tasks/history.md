@@ -286,3 +286,14 @@
   - Horizontal swipe and keyboard nav disabled during search (early returns)
   - On dismiss: clears search term, returns to paginated grid at previous page
 - Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
+
+## 2026-05-15 — Phase 4, Step 4.5: Wire up all components and refine integration
+
+- Verified all integration points — no code changes needed, architecture was already correct:
+  - Dock persists across page swipes and search (rendered as sibling to IconGrid in page.tsx, absolutely positioned)
+  - PageDots hidden during search (filtered branch skips the fragment containing PageDots)
+  - Touch conflicts resolved: vertical pull-down (>30px) → search, horizontal swipe (>50px) → pages, search mode disables swipe handlers
+  - Keyboard: ArrowLeft/Right guarded by `if (showSearch) return`, Escape handled in SearchOverlay
+  - HomeIndicator renders below Dock in page.tsx composition order
+  - Single page (20 grid products < 24 per page): PageDots returns null for `total <= 1`
+- Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds

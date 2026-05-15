@@ -84,7 +84,7 @@
     - If no results: show "No apps found" centered text
     - On dismiss: clear search, return to paginated grid at previous page
 
-- [ ] Step 4.5: Wire up all components and refine integration
+- [x] Step 4.5: Wire up all components and refine integration
   - Files: modify `src/app/page.tsx`, modify `src/components/IconGrid.tsx`
   - Ensure dock persists across page swipes and during search (dock is separate from IconGrid)
   - Ensure page dots hide when search is active
@@ -100,12 +100,12 @@
   - Pagination tests: page state changes on simulated swipe, page dots render correctly, arrow key navigation works, page content changes
   - Search tests: search input filters by name/badge/category, "No apps found" for empty results, Escape dismisses search
   - Use `makeProduct()` helper, `vi.useFakeTimers()` where needed
-- [ ] Step 4.7: Run all tests, verify they pass, build succeeds with `npm run build`
+- [ ] Step 4.7: Run all tests, verify they pass, build succeeds with `npm run build` _(will be no-op if 4.6 tests pass)_
 
 ### Milestone: Phase 4 — Dock, Pagination & Search
 **Acceptance Criteria:**
 - [x] Dock renders with frosted glass effect and 4 pinned app icons
-- [ ] Dock stays fixed across page swipes
+- [x] Dock stays fixed across page swipes
 - [x] Swiping horizontally navigates between icon pages with smooth transition
 - [x] Page dots render correctly, highlighting the active page
 - [x] Arrow keys navigate between pages
@@ -123,64 +123,22 @@
 
 ---
 
-## Next Step Plan — Step 4.5: Wire up all components and refine integration
+## Next Step Plan — Step 4.6: Write regression tests covering Phase 4 acceptance criteria
 
 ### What to build
 
-Verify and refine the integration of dock, pagination, search, and page dots. Ensure dock persists across page swipes and during search, page dots hide during search, touch events don't conflict, and keyboard navigation works correctly.
+Write comprehensive tests for Dock, Pagination, and Search components.
 
 ### Files
 
-- **Modify:** `src/app/page.tsx` — verify component composition order
-- **Modify:** `src/components/IconGrid.tsx` — refine touch conflict handling if needed
+- **Create:** `src/__tests__/Dock.test.tsx`
+- **Create:** `src/__tests__/Pagination.test.tsx`
+- **Create:** `src/__tests__/Search.test.tsx`
 
 ### Approach
 
-1. **Dock persistence verification:**
-   - Dock is already rendered separately from IconGrid in `page.tsx` — confirm it persists across page swipes and during search mode
-   - HomeIndicator should still render below dock
+1. **Dock tests:** renders 4 icons, frosted glass classes present, dock products excluded from grid
+2. **Pagination tests:** page state changes on simulated swipe, page dots render correctly, arrow key navigation works
+3. **Search tests:** search input filters by name/badge/category, "No apps found" for empty results, Escape dismisses search
 
-2. **Page dots during search:**
-   - Already implemented: PageDots are hidden when search is active (search branch doesn't render the `<>` fragment with PageDots)
-   - Verify visually
-
-3. **Touch event conflict check:**
-   - Horizontal swipe (>50px dx, dx > dy) → page change
-   - Vertical pull-down (>30px dy, dy > dx) → open search
-   - Search active → swipe gestures disabled (early return in handleTouchEnd)
-   - Confirm no conflicting states
-
-4. **Keyboard navigation:**
-   - ArrowLeft/Right for pages (disabled during search via early return)
-   - Escape dismisses search (handled by SearchOverlay's onKeyDown)
-   - Verify all paths
-
-5. **Test with current data:**
-   - 24 total products, 4 dock = 20 grid products = 1 page
-   - PageDots returns null for single page (correct)
-   - Verify search works across all 20 grid products
-
-### Current state context
-
-- Dock is in `page.tsx`, separate from IconGrid — already persists
-- SearchOverlay has backdrop click dismiss and Escape key dismiss
-- IconGrid search mode: skips horizontal swipe handlers, hides PageDots
-- PageDots `total <= 1` → returns null
-- All 37 tests pass, tsc clean, build succeeds
-
-### Execution Profile
-
-- **Parallel mode:** serial
-- **Integration owner:** main agent
-- **Conflict risk:** low (mostly verification with minor tweaks)
-- **Review gates:** none
-
-### Verification
-
-- `npx tsc --noEmit` passes
-- All 37 existing tests pass (no regressions)
-- `npm run build` succeeds
-- Dev server: dock persists across pages and search, page dots hidden during search, no touch conflicts
-- Keyboard: ArrowLeft/Right paginate, Escape dismisses search
-
-**Ship-one-step handoff:** Implement only Step 4.5, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** Implement only Step 4.6, validate it, then run `/ship` when done.
