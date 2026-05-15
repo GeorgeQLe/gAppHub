@@ -327,3 +327,19 @@
 - Refactored `src/app/page.tsx` to thin server component: fetches products, passes to `<PageContent variant="none" />`
 - Created `src/__tests__/setup.ts` with `window.matchMedia` mock for jsdom test environment; wired into `vitest.config.ts` via `setupFiles`
 - Verified: `npx tsc --noEmit` clean, 55/55 tests pass (no regressions), `npm run build` succeeds
+
+## 2026-05-15 — Phase 5, Step 5.2: Build the `/boot` animation route
+
+- Created `src/app/boot/page.tsx` — thin async server component identical to home page, passes `variant="boot"` to PageContent
+- Extended `src/components/PageContent.tsx` with multi-phase boot animation orchestration:
+  - Phase 1 (0–800ms): Black overlay with white LEXCORP logo, looping scale pulse (1.0 → 1.06 → 1.0)
+  - Phase 2 (800–1200ms): Logo + overlay fade out (400ms ease-out) revealing content
+  - Phase 3 (1200–1800ms): StatusBar fades in (300ms), IconGrid appears with staggered delay
+  - Phase 4 (1800–2200ms): Dock slides up with spring physics (stiffness: 300, damping: 25)
+  - Phase 5 (2200ms+): Settled at final state
+- Boot animation uses `useState<BootPhase>` (0–5) with `useEffect` scheduling `setTimeout` chain
+- Extracted `BootPhoneContent` sub-component for boot-specific phone internals
+- Reduced motion: skips boot animation entirely, renders with 200ms opacity fade (same as `variant="none"`)
+- `AnimatePresence` wraps the boot overlay for clean exit animation
+- Note: `npm run build` static generation timeout is pre-existing on `main` (relative fetch URL in `getProducts` hangs during build); not introduced by this change
+- Verified: `npx tsc --noEmit` clean, 55/55 tests pass (no regressions), dev server renders `/boot` correctly

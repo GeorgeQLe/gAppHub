@@ -46,7 +46,7 @@
   - Main `/` page.tsx: render `PageContent` with `variant="none"` and a simple 200ms fade-in on the entire content
   - Verify: app still renders identically on `/`, all 55 tests pass, `npm run build` succeeds
 
-- [ ] Step 5.2: Build the `/boot` animation route
+- [x] Step 5.2: Build the `/boot` animation route
   - Files: create `src/app/boot/page.tsx`, modify `src/components/PageContent.tsx`
   - Server component that fetches products and passes them + variant to `PageContent`
   - Animation sequence (all times from page load, using Framer Motion `useAnimate` or `AnimatePresence`):
@@ -95,7 +95,7 @@
   **Ship-one-step handoff:** Implement only Step 5.2, validate it, then run `/ship` when done.
 
 - [ ] Step 5.3: Build the `/slide` animation route
-  - Files: create `src/app/slide/page.tsx`
+  - Files: create `src/app/slide/page.tsx`, modify `src/components/PageContent.tsx`
   - Server component that fetches products and passes them + variant to `PageContent`
   - Animation sequence:
     - 0–600ms: Entire phone frame (including outer wrapper) slides up from `translateY(100px)` + `opacity: 0` → final position + `opacity: 1`, ease-out curve
@@ -104,6 +104,41 @@
     - 1500ms+: Settled
   - Reduced motion: skip all, show final state with ≤200ms opacity fade
   - Verify: `/slide` plays full sequence and ends at identical state to `/`
+
+  **Implementation plan:**
+
+  1. **Create `src/app/slide/page.tsx`** — async server component identical to `src/app/page.tsx` / `src/app/boot/page.tsx` but passes `variant="slide"` to `PageContent`
+
+  2. **Extend `PageContent` for `variant="slide"`** in `src/components/PageContent.tsx`:
+     - Follow the same pattern as boot: use `useState<SlidePhase>` (0–4) with `useEffect` scheduling `setTimeout` chain
+     - When `variant === "slide"` and `!reducedMotion`, orchestrate:
+       - **Phase 1 (0–600ms):** The entire `<main>` content wrapper (logo + tagline + PhoneFrame + BadgeLegend) slides up from `translateY(100px)` + `opacity: 0` → final position + `opacity: 1`, ease-out. Use `motion.main` wrapping the content.
+       - **Phase 2 (600–1200ms):** StatusBar fades in (200ms). Icons stagger in — each icon scales from 0.9 → 1.0 and fades from 0 → 1, with 40ms delay per icon. This likely needs the `IconGrid` content wrapped in a `motion.div` or individual icon wrappers with `staggerChildren`.
+       - **Phase 3 (1200–1500ms):** Dock fades in from opacity 0 → 1. PageDots fade in simultaneously.
+       - **Phase 4 (1500ms+):** Settled, all animation wrappers at final values.
+     - Unlike boot, the slide variant doesn't need a separate `SlidePhoneContent` component — the phone content structure is the same as the default, just wrapped in motion divs. The main difference is the outer wrapper slides up.
+     - May need a `SlidePhoneContent` sub-component if individual child wrappers are needed for StatusBar/IconGrid/Dock fade-in timing.
+
+  3. **Key patterns from Step 5.2:**
+     - Boot used `BootPhoneContent` to swap phone internals — slide can follow same pattern for per-child animation wrappers
+     - Phase state + setTimeout chain pattern works well
+     - `AnimatePresence` only needed for elements that mount/unmount (boot overlay); slide elements are always present, just animated
+     - Reduced motion path: render the default (non-animated) phone content with 200ms opacity fade
+
+  4. **Verification:**
+     - `npx tsc --noEmit` passes
+     - All 55 existing tests pass (no regressions)
+     - Dev server: `/slide` plays the full ~1.5s slide-up sequence
+     - Dev server: `/slide` ends at the identical visual state as `/`
+     - Dev server: toggling `prefers-reduced-motion` shows instant render on `/slide`
+     - Note: `npm run build` has a pre-existing static generation timeout (not caused by our changes)
+
+  ### Execution Profile
+  **Parallel mode:** serial
+  **Integration owner:** main agent
+  **Conflict risk:** low (new route file + extending existing PageContent)
+
+  **Ship-one-step handoff:** Implement only Step 5.3, validate it, then run `/ship` when done.
 
 - [ ] Step 5.4: Build the `/assemble` animation route
   - Files: create `src/app/assemble/page.tsx`
