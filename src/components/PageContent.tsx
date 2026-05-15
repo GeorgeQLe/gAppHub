@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import BadgeLegend from "@/components/BadgeLegend";
 import Dock from "@/components/Dock";
@@ -29,6 +30,7 @@ export default function PageContent({
   gridProducts,
   variant,
 }: PageContentProps) {
+  const isMobile = useIsMobile();
   const reducedMotion = useReducedMotion();
   const [bootPhase, setBootPhase] = useState<BootPhase>(
     variant === "boot" ? 0 : 5,
@@ -86,10 +88,10 @@ export default function PageContent({
   const shouldAnimate = variant === "none" && !reducedMotion;
 
   const content = (
-    <main className="flex h-screen flex-col items-center px-4 py-4">
+    <main className="flex h-screen flex-col items-center overflow-x-hidden px-4 py-4">
       <svg
-        width="140"
-        height="32"
+        width={isMobile ? 100 : 140}
+        height={isMobile ? 24 : 32}
         viewBox="0 0 140 32"
         xmlns="http://www.w3.org/2000/svg"
         aria-label="Lexcorp"
@@ -109,7 +111,7 @@ export default function PageContent({
         </text>
       </svg>
 
-      <p className="mt-1 text-[13px] uppercase tracking-widest text-[#86868b]">
+      <p className={`mt-1 uppercase tracking-widest text-[#86868b] ${isMobile ? "text-[11px]" : "text-[13px]"}`}>
         Made in Boston, Building in Public
       </p>
 
