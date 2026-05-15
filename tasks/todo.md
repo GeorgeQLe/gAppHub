@@ -157,7 +157,7 @@
 
   _(Completed: 7-phase assembly animation with clip-path frame halves, seam flash, spring physics on DI/StatusBar/icons/dock)_
 
-- [ ] Step 5.5: Polish animations and verify cross-route consistency
+- [x] Step 5.5: Polish animations and verify cross-route consistency
   - Files: modify `src/components/PageContent.tsx` (if needed), any animation route files
   - Visually compare all four routes side by side in the browser
   - Verify all three variant routes end at the exact same visual state as `/`
@@ -195,7 +195,9 @@
   **Integration owner:** main agent
   **Conflict risk:** low (modifications to existing PageContent only if issues found)
 
-  **Ship-one-step handoff:** Implement only Step 5.5, validate it, then run `/ship` when done.
+  _(Completed: Audited all 4 routes — final states consistent, all animations use transform/opacity except brief clip-path on lightweight overlays in assemble Phase 1, reduced motion correctly collapses to ≤200ms fade. No code changes needed. 55/55 tests pass, tsc clean, lint only pre-existing warnings.)_
+
+  **Ship-one-step handoff:** Implement only Step 5.6, validate it, then run `/ship` when done.
 
 ### Green
 - [ ] Step 5.6: Write regression tests covering Phase 5 acceptance criteria

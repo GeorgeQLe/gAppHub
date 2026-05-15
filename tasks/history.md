@@ -373,3 +373,12 @@
 - Reduced motion: skips slide animation, renders with 200ms opacity fade
 - Fixed pre-existing lint error: synchronous `setState` in effect bodies (boot + slide) — deferred to `setTimeout(..., 0)`
 - Verified: `npx tsc --noEmit` clean, `npm run lint` clean, 55/55 tests pass (no regressions)
+
+## 2026-05-15 — Phase 5, Step 5.5: Polish animations and verify cross-route consistency
+
+- Audited all 4 animation routes (`/`, `/boot`, `/slide`, `/assemble`) for visual correctness and cross-route consistency
+- Verified all routes end at identical final state: same StatusBar, DynamicIsland, IconGrid, Dock, HomeIndicator
+- Reviewed animated properties: boot and slide use only GPU-composited `transform`/`opacity`; assemble uses `clip-path` on two lightweight overlay divs for 0.4s (acceptable, not worth refactoring)
+- Confirmed reduced motion support on all routes: animation sequences skipped, ≤200ms opacity fade applied
+- No code changes needed — all animations correct as-is
+- Verified: `npx tsc --noEmit` clean, 55/55 tests pass, lint only pre-existing warnings (not in modified files)
