@@ -1,3 +1,4 @@
+import BadgeLegend from "@/components/BadgeLegend";
 import DynamicIsland from "@/components/DynamicIsland";
 import HomeIndicator from "@/components/HomeIndicator";
 import IconGrid from "@/components/IconGrid";
@@ -43,6 +44,9 @@ export default async function Home() {
           <IconGrid products={products} />
           <HomeIndicator />
         </PhoneFrame>
+        <div className="mt-4">
+          <BadgeLegend />
+        </div>
       </div>
     </main>
   );
