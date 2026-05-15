@@ -27,7 +27,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 3.1: Add notification badges to AppIcon
+- [x] Step 3.1: Add notification badges to AppIcon
   - Files: modify `src/components/AppIcon.tsx`
   - Add a badge overlay element positioned top-right of the icon image, overlapping by ~6px
   - Badge shape: 20px diameter circle, 2px solid white border
@@ -46,6 +46,36 @@
   - Release: spring back to 100% (handled by CSS transition), navigation via default `<a>` behavior
   - Use CSS transitions (no JS state needed for hover/press/focus — pure CSS pseudoclass approach)
   - Transition: `transition-transform duration-150 ease-out`
+
+  ### Step 3.2 Implementation Plan
+
+  **What to build:** Add `"use client"` and CSS-only hover/press/focus interaction states to AppIcon.
+
+  **Context:** AppIcon is currently a server component at `src/components/AppIcon.tsx`. Step 3.1 just added the badge overlay (relative container + absolute badge span). The `<a>` element wraps the icon container and name label. All interactions are pure CSS pseudo-classes — no React state needed.
+
+  **Files:**
+  - **Modify:** `src/components/AppIcon.tsx` — add `"use client"` directive and Tailwind interaction classes
+
+  **Approach:**
+  1. Add `"use client"` at top of file
+  2. On the `<a>` element, add: `transition-transform duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92]`
+  3. On the `<a>` element, add: `focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2`
+  4. Add `rounded-2xl` to the `<a>` for the focus outline to follow rounded shape
+  5. Ensure transition also covers shadow and translate: use `transition-all` or explicit `transition` covering transform + shadow
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Verification:**
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+  - All 17 existing tests still pass
+  - Visual check: hover scales up with shadow lift, click presses in, tab focus shows blue ring
+
+  **Ship-one-step handoff:** Implement only Step 3.2, validate it, then run `/ship` when done.
 
 - [ ] Step 3.3: Add description tooltip on hover
   - Files: modify `src/components/AppIcon.tsx`

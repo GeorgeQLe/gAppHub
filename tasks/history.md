@@ -143,6 +143,15 @@
 - Pure server-side module — no `"use client"`, no browser APIs
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
 
+## 2026-05-14 — Phase 3, Step 3.1: Add notification badges to AppIcon
+
+- Added badge color map (`badgeColorMap`) with four badge types: L=#34C759, B=#FF9500, N=#007AFF, W=#AF52DE
+- Wrapped `<img>` in a `relative` container div inside the `<a>` element
+- Added absolutely-positioned badge `<span>` at top-right (-3px offset): 20px circle, 2px white border, white bold 11px letter
+- Badge only renders when `product.badge` is truthy (not null) — deprecated icons unchanged
+- AppIcon remains a server component (no JS/state needed)
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
+
 ## 2026-05-14 — Phase 2, Step 2.6: Write regression tests covering Phase 2 acceptance criteria
 
 - Created `src/__tests__/IconGrid.test.tsx` with 6 tests:
