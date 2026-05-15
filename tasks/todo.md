@@ -59,7 +59,7 @@
   - Position: absolute, above the icon container, with `z-20` to float above other icons
   - Accessible: `role="tooltip"`, linked via `aria-describedby` on the `<a>`
 
-- [ ] Step 3.4: Build the BadgeLegend component
+- [x] Step 3.4: Build the BadgeLegend component
   - Files: create `src/components/BadgeLegend.tsx`
   - Horizontal row of badge examples, each showing the colored badge circle + label text
   - Items: L=Live, B=Beta, N=New, W=Wishlist, plus a grayed-out icon example for Deprecated
@@ -68,38 +68,6 @@
   - Deprecated example: small grayed-out square icon + "Deprecated" label
   - Spacing: `gap-4` or `gap-6` between items, flex row with wrap for small screens
   - This is a client component (`"use client"`) to support legend tooltip hover
-
-  ### Step 3.4 Implementation Plan
-
-  **What to build:** A `BadgeLegend` component that renders a horizontal row of badge type examples (L, B, N, W, Deprecated) below the phone frame with matching colors and labels.
-
-  **Context:** Badge colors are already defined in `src/components/AppIcon.tsx` as `badgeColorMap`. The legend is a standalone component that will be integrated into the page in Step 3.5. It needs `"use client"` because Step 3.5 will add hover tooltips.
-
-  **Files:**
-  - **Create:** `src/components/BadgeLegend.tsx`
-
-  **Approach:**
-  1. Create a client component (`"use client"`) exporting `BadgeLegend`
-  2. Define legend items array: `[{ letter: "L", label: "Live", color: "#34C759" }, { letter: "B", label: "Beta", color: "#FF9500" }, { letter: "N", label: "New", color: "#007AFF" }, { letter: "W", label: "Wishlist", color: "#AF52DE" }]`
-  3. Render flex row (`flex flex-wrap items-center justify-center gap-4`) containing:
-     - For each badge item: a flex row with a 16px colored circle (matching badge color) containing the white letter + label text
-     - A deprecated example: small grayed-out square icon (`w-4 h-4 rounded bg-gray-300`) + "Deprecated" label
-  4. Typography: `text-xs text-[#86868b]` for labels
-  5. Badge circles: `w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white` with inline `backgroundColor`
-
-  **Execution Profile:**
-  - Parallel mode: serial
-  - Integration owner: main agent
-  - Conflict risk: low
-  - Review gates: none
-
-  **Verification:**
-  - `npx tsc --noEmit` passes
-  - `npm run build` succeeds
-  - All 17 existing tests still pass (no regressions)
-  - Visual check will happen in Step 3.5 when integrated into the page
-
-  **Ship-one-step handoff:** Implement only Step 3.4, validate it, then run `/ship` when done.
 
 - [ ] Step 3.5: Add legend tooltips and integrate BadgeLegend into the page
   - Files: modify `src/components/BadgeLegend.tsx`, modify `src/app/page.tsx`
@@ -113,6 +81,45 @@
   - Simpler positioning since legend is outside the phone frame — tooltip above each item
   - In `page.tsx`: add `<BadgeLegend />` below the PhoneFrame container div, with `mt-4` spacing
   - Legend is centered horizontally, matching the phone frame alignment
+
+  ### Step 3.5 Implementation Plan
+
+  **What to build:** Add hover tooltips to each BadgeLegend item and integrate the component into the main page below the phone frame.
+
+  **Context:** `BadgeLegend` already exists at `src/components/BadgeLegend.tsx` as a `"use client"` component with 4 badge items + deprecated. AppIcon tooltips (Step 3.3) use `useState` + `useRef` with 400ms delay, dark rounded rect styling. The page layout is in `src/app/page.tsx` with `<PhoneFrame>` containing DynamicIsland, StatusBar, IconGrid, HomeIndicator.
+
+  **Files:**
+  - **Modify:** `src/components/BadgeLegend.tsx` — add tooltip hover state per legend item
+  - **Modify:** `src/app/page.tsx` — import and render `<BadgeLegend />` below PhoneFrame
+
+  **Approach:**
+  1. In `BadgeLegend.tsx`, add tooltip descriptions to each legend item:
+     - L: "Product is live and available"
+     - B: "Product is in beta testing"
+     - N: "Recently launched product"
+     - W: "Product on the wishlist — coming soon"
+     - Deprecated: "Product has been retired"
+  2. Add hover tooltip state: track which item is hovered via `useState<string | null>`
+  3. On `onMouseEnter` set hovered item key, on `onMouseLeave` clear it (no delay needed for legend — simpler than AppIcon tooltips)
+  4. Tooltip markup: `absolute bottom-full` above each item, same style as AppIcon tooltips (`bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-md`), with downward caret
+  5. Add `relative` positioning to each legend item container for tooltip placement
+  6. Accessibility: `role="tooltip"` on tooltip, `aria-describedby` on trigger
+  7. In `page.tsx`: add `<BadgeLegend />` after the PhoneFrame `<div>` wrapper with `mt-4` spacing, centered
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Verification:**
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+  - All 17 existing tests still pass (no regressions)
+  - Visual check: BadgeLegend visible below phone frame, tooltips appear on hover
+  - Start dev server and verify in browser
+
+  **Ship-one-step handoff:** Implement only Step 3.5, validate it, then run `/ship` when done.
 
 ### Green
 - [ ] Step 3.6: Write regression tests covering Phase 3 acceptance criteria

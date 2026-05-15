@@ -193,3 +193,14 @@
   - `getProducts` returns static data when fetch fails (mock global fetch to throw)
 - Helper `makeProduct(overrides)` pattern used in both files for test data generation
 - Verified: 17/17 tests pass (6 existing + 11 new), `npx tsc --noEmit` clean, `npm run build` succeeds
+
+## 2026-05-14 — Phase 3, Step 3.4: Build the BadgeLegend component
+
+- Created `src/components/BadgeLegend.tsx` — client component (`"use client"`) rendering a horizontal flex row of badge type examples
+- Legend items array with 4 badge types: L=Live (#34C759), B=Beta (#FF9500), N=New (#007AFF), W=Wishlist (#AF52DE)
+- Each badge: 16px colored circle (`w-4 h-4 rounded-full`) with centered white 9px bold letter + muted label (`text-xs text-[#86868b]`)
+- Badge colors applied via inline `backgroundColor` style
+- Deprecated example: small gray rounded square with inner SVG rect + "Deprecated" label
+- Layout: `flex flex-wrap items-center justify-center gap-4` — wraps on small screens
+- Standalone presentational component — will be integrated into page and get hover tooltips in Step 3.5
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
