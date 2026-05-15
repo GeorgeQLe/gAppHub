@@ -152,6 +152,19 @@
 - AppIcon remains a server component (no JS/state needed)
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
 
+## 2026-05-14 — Phase 3, Step 3.2: Convert AppIcon to client component with hover/press/focus interactions
+
+- Added `"use client"` directive to `src/components/AppIcon.tsx`
+- Added CSS-only interaction states on the `<a>` element via Tailwind classes:
+  - `transition-all duration-150 ease-out` for smooth transitions
+  - `hover:scale-105 hover:shadow-lg hover:-translate-y-0.5` for hover lift effect
+  - `active:scale-[0.92]` for press-in feedback
+  - `focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2` for keyboard focus ring
+  - `rounded-2xl` so focus outline follows rounded shape
+- No React state or event handlers needed — pure CSS pseudo-class approach
+- Navigation remains default `<a>` behavior
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
+
 ## 2026-05-14 — Phase 2, Step 2.6: Write regression tests covering Phase 2 acceptance criteria
 
 - Created `src/__tests__/IconGrid.test.tsx` with 6 tests:

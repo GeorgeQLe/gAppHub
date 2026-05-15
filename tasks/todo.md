@@ -37,7 +37,7 @@
   - Wrap the icon image + badge in a `relative` container to position the badge absolutely
   - Keep AppIcon as a server component for this step — no interactivity yet
 
-- [ ] Step 3.2: Convert AppIcon to client component and add hover/press/focus interactions
+- [x] Step 3.2: Convert AppIcon to client component and add hover/press/focus interactions
   - Files: modify `src/components/AppIcon.tsx`
   - Add `"use client"` directive
   - Hover state: CSS `transition` + `hover:scale-105` with subtle upward lift shadow (`hover:shadow-lg hover:-translate-y-0.5`)
@@ -46,36 +46,6 @@
   - Release: spring back to 100% (handled by CSS transition), navigation via default `<a>` behavior
   - Use CSS transitions (no JS state needed for hover/press/focus — pure CSS pseudoclass approach)
   - Transition: `transition-transform duration-150 ease-out`
-
-  ### Step 3.2 Implementation Plan
-
-  **What to build:** Add `"use client"` and CSS-only hover/press/focus interaction states to AppIcon.
-
-  **Context:** AppIcon is currently a server component at `src/components/AppIcon.tsx`. Step 3.1 just added the badge overlay (relative container + absolute badge span). The `<a>` element wraps the icon container and name label. All interactions are pure CSS pseudo-classes — no React state needed.
-
-  **Files:**
-  - **Modify:** `src/components/AppIcon.tsx` — add `"use client"` directive and Tailwind interaction classes
-
-  **Approach:**
-  1. Add `"use client"` at top of file
-  2. On the `<a>` element, add: `transition-transform duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92]`
-  3. On the `<a>` element, add: `focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2`
-  4. Add `rounded-2xl` to the `<a>` for the focus outline to follow rounded shape
-  5. Ensure transition also covers shadow and translate: use `transition-all` or explicit `transition` covering transform + shadow
-
-  **Execution Profile:**
-  - Parallel mode: serial
-  - Integration owner: main agent
-  - Conflict risk: low
-  - Review gates: none
-
-  **Verification:**
-  - `npx tsc --noEmit` passes
-  - `npm run build` succeeds
-  - All 17 existing tests still pass
-  - Visual check: hover scales up with shadow lift, click presses in, tab focus shows blue ring
-
-  **Ship-one-step handoff:** Implement only Step 3.2, validate it, then run `/ship` when done.
 
 - [ ] Step 3.3: Add description tooltip on hover
   - Files: modify `src/components/AppIcon.tsx`
@@ -88,6 +58,43 @@
   - Dismiss on touch: tap elsewhere
   - Position: absolute, above the icon container, with `z-20` to float above other icons
   - Accessible: `role="tooltip"`, linked via `aria-describedby` on the `<a>`
+
+  ### Step 3.3 Implementation Plan
+
+  **What to build:** Add a description tooltip that appears on hover (400ms delay) above each AppIcon, showing `product.description`.
+
+  **Context:** AppIcon (`src/components/AppIcon.tsx`) is now a client component (added `"use client"` in Step 3.2). It has CSS-only hover/press/focus interactions on the `<a>` element. The component renders an `<a>` wrapping a `relative` container (icon img + badge span) + name label. Need to add React state (`useState` for visibility, `useRef`+`setTimeout` for 400ms delay) and tooltip markup.
+
+  **Files:**
+  - **Modify:** `src/components/AppIcon.tsx` — add tooltip state, delay logic, tooltip markup, and accessibility attributes
+
+  **Approach:**
+  1. Add `useState<boolean>(false)` for tooltip visibility
+  2. Add `useRef<ReturnType<typeof setTimeout> | null>(null)` for the delay timer
+  3. On the outer `<a>` element, add `onMouseEnter` handler: set a 400ms timeout that sets tooltip visible
+  4. On the outer `<a>` element, add `onMouseLeave` handler: clear the timeout and hide tooltip
+  5. Add tooltip markup inside the `relative` container div (sibling to `<img>` and badge `<span>`):
+     - Position: `absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20`
+     - Style: `bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-md max-w-[200px] text-center`
+     - Caret: small CSS triangle below the tooltip (downward-pointing, using border trick or `after` pseudo)
+     - Content: `product.description`
+     - Only rendered when tooltip state is true
+  6. Accessibility: add `id={tooltipId}` on the tooltip element, `aria-describedby={tooltipId}` on the `<a>`, `role="tooltip"` on the tooltip
+  7. Touch dismiss: tooltip hides on `onMouseLeave` which covers touch-away on mobile
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Verification:**
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+  - All 17 existing tests still pass (no regressions)
+  - Visual check: hover over icon, tooltip appears after ~400ms with description text above icon
+
+  **Ship-one-step handoff:** Implement only Step 3.3, validate it, then run `/ship` when done.
 
 - [ ] Step 3.4: Build the BadgeLegend component
   - Files: create `src/components/BadgeLegend.tsx`
