@@ -102,6 +102,22 @@ describe("Dock accessibility", () => {
   });
 });
 
+describe("Reduced motion on AppIcon", () => {
+  it("globals.css contains prefers-reduced-motion media query for AppIcon links", async () => {
+    const fs = await import("fs");
+    const path = await import("path");
+    const css = fs.readFileSync(
+      path.resolve(__dirname, "../app/globals.css"),
+      "utf-8",
+    );
+    expect(css).toContain("prefers-reduced-motion: reduce");
+    expect(css).toContain('[role="gridcell"] a');
+    expect(css).toContain('[role="toolbar"] a');
+    expect(css).toContain("transform: none !important");
+    expect(css).toContain("opacity: 0.7");
+  });
+});
+
 describe("PageDots accessibility", () => {
   it("dots have 44×44 minimum touch targets", () => {
     const { container } = render(

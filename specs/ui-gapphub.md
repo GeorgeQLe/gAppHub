@@ -383,8 +383,8 @@ When `prefers-reduced-motion: reduce` is active, all variants collapse to: phone
 
 - All entrance animations collapse to a ≤200ms opacity fade
 - Swipe transitions become instant page switches
-- **TODO:** Hover scale effects should be disabled when `prefers-reduced-motion: reduce` is active
-- **TODO:** Press animation should be replaced by a simple opacity dim when reduced motion is active
+- Hover scale effects are disabled when `prefers-reduced-motion: reduce` is active (CSS media query in `globals.css`)
+- Press animation is replaced by a simple opacity dim when reduced motion is active (CSS media query in `globals.css`)
 
 ---
 

@@ -28,3 +28,22 @@ body {
     transform: scale(0.85);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  [role="gridcell"] a,
+  [role="toolbar"] a {
+    transition-property: opacity !important;
+  }
+
+  [role="gridcell"] a:hover,
+  [role="toolbar"] a:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  [role="gridcell"] a:active,
+  [role="toolbar"] a:active {
+    transform: none !important;
+    opacity: 0.7;
+  }
+}
