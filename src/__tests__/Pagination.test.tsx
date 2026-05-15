@@ -52,7 +52,7 @@ describe("IconGrid keyboard navigation", () => {
     makeProduct({ id: `p-${i}`, name: `App ${i}` })
   );
 
-  it("ArrowRight advances to next page", () => {
+  it("ArrowRight past last icon advances to next page", () => {
     render(<IconGrid products={products} />);
     const region = screen.getByRole("grid", { name: "Product apps" });
 
@@ -61,7 +61,10 @@ describe("IconGrid keyboard navigation", () => {
       "true"
     );
 
-    fireEvent.keyDown(region, { key: "ArrowRight" });
+    // 24 icons per page — arrow past the last one to trigger page change
+    for (let i = 0; i < 24; i++) {
+      fireEvent.keyDown(region, { key: "ArrowRight" });
+    }
 
     expect(screen.getAllByRole("tab")[1]).toHaveAttribute(
       "aria-selected",
@@ -69,16 +72,20 @@ describe("IconGrid keyboard navigation", () => {
     );
   });
 
-  it("ArrowLeft goes to previous page", () => {
+  it("ArrowLeft at first icon goes to previous page", () => {
     render(<IconGrid products={products} />);
     const region = screen.getByRole("grid", { name: "Product apps" });
 
-    fireEvent.keyDown(region, { key: "ArrowRight" });
+    // Navigate to page 2
+    for (let i = 0; i < 24; i++) {
+      fireEvent.keyDown(region, { key: "ArrowRight" });
+    }
     expect(screen.getAllByRole("tab")[1]).toHaveAttribute(
       "aria-selected",
       "true"
     );
 
+    // ArrowLeft at first icon of page 2 goes back to page 1
     fireEvent.keyDown(region, { key: "ArrowLeft" });
     expect(screen.getAllByRole("tab")[0]).toHaveAttribute(
       "aria-selected",

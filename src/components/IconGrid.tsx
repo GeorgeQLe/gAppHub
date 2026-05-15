@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Product } from "@/types/product";
 import AppIcon from "@/components/AppIcon";
 import PageDots from "@/components/PageDots";
 import SearchOverlay from "@/components/SearchOverlay";
 
 const ICONS_PER_PAGE = 24;
+const COLS = 4;
 const PULL_DOWN_THRESHOLD = 30;
 
 const BADGE_LABELS: Record<string, string> = {
@@ -24,10 +25,12 @@ export default function IconGrid({ products }: IconGridProps) {
   const pages = chunk(products, ICONS_PER_PAGE);
   const totalPages = pages.length;
   const [page, setPage] = useState(0);
+  const [focusedIndex, setFocusedIndex] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const touchRef = useRef<{ startX: number; startY: number } | null>(null);
   const dragRef = useRef<{ startX: number; dragging: boolean } | null>(null);
+  const iconRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const goTo = useCallback(
     (p: number) => setPage(Math.max(0, Math.min(p, totalPages - 1))),
@@ -87,14 +90,77 @@ export default function IconGrid({ products }: IconGridProps) {
     dragRef.current = null;
   };
 
+  const currentPageIcons = pages[page] ?? [];
+  const iconCount = currentPageIcons.length;
+
+  useEffect(() => {
+    iconRefs.current[focusedIndex]?.focus();
+  }, [focusedIndex]);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (showSearch) return;
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      goTo(page - 1);
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      goTo(page + 1);
+    const col = focusedIndex % COLS;
+
+    switch (e.key) {
+      case "ArrowRight": {
+        e.preventDefault();
+        if (focusedIndex + 1 < iconCount) {
+          setFocusedIndex(focusedIndex + 1);
+        } else if (page < totalPages - 1) {
+          goTo(page + 1);
+          setFocusedIndex(0);
+        }
+        break;
+      }
+      case "ArrowLeft": {
+        e.preventDefault();
+        if (focusedIndex > 0) {
+          setFocusedIndex(focusedIndex - 1);
+        } else if (page > 0) {
+          goTo(page - 1);
+          const prevCount = pages[page - 1].length;
+          setFocusedIndex(prevCount - 1);
+        }
+        break;
+      }
+      case "ArrowDown": {
+        e.preventDefault();
+        const next = focusedIndex + COLS;
+        if (next < iconCount) {
+          setFocusedIndex(next);
+        } else if (page < totalPages - 1) {
+          goTo(page + 1);
+          setFocusedIndex(Math.min(col, (pages[page + 1]?.length ?? 1) - 1));
+        }
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        const prev = focusedIndex - COLS;
+        if (prev >= 0) {
+          setFocusedIndex(prev);
+        } else if (page > 0) {
+          goTo(page - 1);
+          const prevPageCount = pages[page - 1].length;
+          const lastRow = Math.floor((prevPageCount - 1) / COLS);
+          const target = lastRow * COLS + col;
+          setFocusedIndex(Math.min(target, prevPageCount - 1));
+        }
+        break;
+      }
+      case "Home": {
+        e.preventDefault();
+        if (page !== 0) goTo(0);
+        setFocusedIndex(0);
+        break;
+      }
+      case "End": {
+        e.preventDefault();
+        const lastPage = totalPages - 1;
+        if (page !== lastPage) goTo(lastPage);
+        setFocusedIndex((pages[lastPage]?.length ?? 1) - 1);
+        break;
+      }
     }
   };
 
@@ -105,7 +171,6 @@ export default function IconGrid({ products }: IconGridProps) {
       className="overflow-hidden flex-1 relative"
       role="grid"
       aria-label="Product apps"
-      tabIndex={0}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
@@ -142,9 +207,20 @@ export default function IconGrid({ products }: IconGridProps) {
                 key={i}
                 className="w-full flex-shrink-0 grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4 content-start"
               >
-                {pageProducts.map((p) => (
-                  <AppIcon product={p} key={p.id} />
-                ))}
+                {pageProducts.map((p, j) =>
+                  i === page ? (
+                    <AppIcon
+                      product={p}
+                      key={p.id}
+                      tabIndex={j === focusedIndex ? 0 : -1}
+                      ref={(el) => {
+                        iconRefs.current[j] = el;
+                      }}
+                    />
+                  ) : (
+                    <AppIcon product={p} key={p.id} tabIndex={-1} />
+                  ),
+                )}
               </div>
             ))}
           </div>

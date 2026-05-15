@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, forwardRef } from "react";
 import { Product } from "@/types/product";
 
 interface AppIconProps {
   product: Product;
   hideBadge?: boolean;
+  tabIndex?: number;
 }
 
 const badgeColorMap: Record<string, string> = {
@@ -22,7 +23,10 @@ const badgeLabelMap: Record<string, string> = {
   W: "Wishlist",
 };
 
-export default function AppIcon({ product, hideBadge }: AppIconProps) {
+const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
+  { product, hideBadge, tabIndex },
+  ref,
+) {
   const deprecated = product.badge === null;
   const [showTooltip, setShowTooltip] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -45,11 +49,13 @@ export default function AppIcon({ product, hideBadge }: AppIconProps) {
   return (
     <div role="gridcell">
       <a
+        ref={ref}
         href={product.url}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={compositeLabel}
         aria-describedby={showTooltip ? tooltipId : undefined}
+        tabIndex={tabIndex}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className="flex flex-col items-center gap-1 rounded-2xl transition-all duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
@@ -91,4 +97,6 @@ export default function AppIcon({ product, hideBadge }: AppIconProps) {
       </a>
     </div>
   );
-}
+});
+
+export default AppIcon;
