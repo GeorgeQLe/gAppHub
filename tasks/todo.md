@@ -59,25 +59,8 @@
     - Ensure no horizontal overflow at any breakpoint
   - **Verification:** Dev server renders correctly at 375px, 768px, 1024px, 1440px viewports
 
-- [ ] Step 6.2: Add comprehensive ARIA roles and labels for screen readers
+- [x] Step 6.2: Add comprehensive ARIA roles and labels for screen readers
   - Files: modify `src/components/PhoneFrame.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`, modify `src/components/StatusBar.tsx`, modify `src/components/PageDots.tsx`
-  - **PhoneFrame:** add `role="region"` and `aria-label="Lexcorp product launcher"` to screen area container
-  - **IconGrid:** change `role="region"` → `role="grid"`, `aria-label="App pages"` → `aria-label="Product apps"`
-  - **AppIcon:** add `role="gridcell"` wrapper div; update `<a>` to include `aria-label="{name} — {badge state}. {description}. Opens in new tab."` (badge state: "Live"/"Beta"/"New"/"Wishlist"/"Deprecated"); add `aria-hidden="true"` to badge `<span>`
-  - **Dock:** add `role="toolbar"` and `aria-label="Pinned apps"` to dock container
-  - **StatusBar:** add `aria-hidden="true"` to the outer container (decorative)
-  - **PageDots:** update `aria-label` to `"Page {n} of {total}"` format per spec (currently `"Page indicator"` and `"Page {n}"`)
-  - **Verification:** Test with screen reader simulation, verify all roles and labels correct
-  - **Implementation plan (Step 6.2):**
-    - `src/components/PhoneFrame.tsx`: Add `role="region"` and `aria-label="Lexcorp product launcher"` to the inner screen-area `<div>` (the one with the wallpaper gradient background). Apply to both mobile and desktop render branches.
-    - `src/components/IconGrid.tsx`: Change existing `role="region"` to `role="grid"` and `aria-label="App pages"` to `aria-label="Product apps"` on the grid container.
-    - `src/components/AppIcon.tsx`: Wrap each icon's content in a `<div role="gridcell">`. Build a composite `aria-label` on the `<a>`: `"{name} — {badgeLabel}. {description}. Opens in new tab."` where badgeLabel maps L→"Live", B→"Beta", N→"New", W→"Wishlist", null→"Deprecated". Add `aria-hidden="true"` to the badge `<span>` element.
-    - `src/components/Dock.tsx`: Add `role="toolbar"` and `aria-label="Pinned apps"` to the dock container `<div>`.
-    - `src/components/StatusBar.tsx`: Add `aria-hidden="true"` to the outer container (purely decorative).
-    - `src/components/PageDots.tsx`: Change per-dot `aria-label` from `"Page {n}"` to `"Page {n} of {total}"`.
-    - Approach: pure attribute additions, no structural changes. No new dependencies.
-    - Acceptance criteria: `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass.
-    - **Ship-one-step handoff:** Implement only Step 6.2, validate it, then run `/ship` when done.
 
 - [ ] Step 6.3: Implement full keyboard navigation for icon grid and dock
   - Files: modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`
@@ -94,6 +77,26 @@
     - Tab from dock should move to legend
   - **Tab order:** Logo (skip) → first grid icon → (arrow keys within grid) → Tab → first dock icon → (arrow keys within dock) → Tab → legend
   - **Verification:** Navigate entire UI using only keyboard, verify all icons reachable
+  - **Implementation plan (Step 6.3):**
+    - `src/components/IconGrid.tsx`:
+      - Add `focusedIndex` state (number, default 0) tracking which icon within the current page has roving focus
+      - Move the `onKeyDown` handler from the container div to inside the grid page divs or delegate from container
+      - Arrow key logic: Left/Right move `focusedIndex ± 1` within current page (wrap at page boundary triggers page change), Up/Down move `focusedIndex ± 4` (4-column grid)
+      - When `focusedIndex` changes, call `.focus()` on the corresponding `<a>` element via refs
+      - Pass `tabIndex={focusedIndex === i ? 0 : -1}` to each `AppIcon` (or the gridcell wrapper)
+      - Remove the existing `tabIndex={0}` from the container div (icons themselves will be focusable)
+      - Preserve existing ArrowLeft/ArrowRight page navigation when focus is on the container (not on an icon)
+    - `src/components/AppIcon.tsx`:
+      - Accept optional `tabIndex` prop and forward it to the `<a>` element
+      - Accept optional `onKeyDown` callback prop for keyboard nav delegation
+    - `src/components/Dock.tsx`:
+      - Add `focusedIndex` state for roving tabindex across dock icons
+      - Add `onKeyDown` handler: ArrowLeft/ArrowRight move between dock icons
+      - Pass `tabIndex` to each dock `AppIcon`
+    - Approach: roving tabindex pattern — only one element per group has `tabIndex={0}`, rest have `tabIndex={-1}`. Arrow keys move focus within group, Tab moves between groups.
+    - Key decisions: Use `useRef` array to hold refs to `<a>` elements for programmatic `.focus()`. Page changes triggered by arrow nav at boundaries should auto-focus first/last icon on new page.
+    - Acceptance criteria: `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass, keyboard-only navigation reaches every icon.
+    - **Ship-one-step handoff:** Implement only Step 6.3, validate it, then run `/ship` when done.
 
 - [ ] Step 6.4: Ensure touch targets meet 44×44px minimum and verify contrast
   - Files: modify `src/components/AppIcon.tsx` (if needed), modify `src/components/PageDots.tsx` (if needed)

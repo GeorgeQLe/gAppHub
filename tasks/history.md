@@ -398,6 +398,18 @@
   - Explicit `cleanup()` in `beforeEach` prevents DOM leaking between describe blocks
 - Verified: 66/66 tests pass (55 existing + 11 new), `npx tsc --noEmit` clean, lint only pre-existing warnings
 
+## 2026-05-15 — Phase 6, Step 6.2: Add comprehensive ARIA roles and labels for screen readers
+
+- Added ARIA attributes across 6 components for screen reader navigation:
+  - `PhoneFrame.tsx`: `role="region"` + `aria-label="Lexcorp product launcher"` on screen area div (both mobile and desktop branches)
+  - `IconGrid.tsx`: Changed `role="region"` → `role="grid"`, `aria-label="App pages"` → `aria-label="Product apps"`
+  - `AppIcon.tsx`: Wrapped content in `<div role="gridcell">`, added composite `aria-label` on `<a>` (e.g. "AppName, Live"), added `aria-hidden="true"` to badge `<span>`, new `badgeLabelMap` (L→Live, B→Beta, N→New, W→Wishlist, null→Deprecated)
+  - `Dock.tsx`: Added `role="toolbar"` + `aria-label="Pinned apps"` to dock container
+  - `StatusBar.tsx`: Added `aria-hidden="true"` to outer container (decorative)
+  - `PageDots.tsx`: Changed per-dot `aria-label` from `"Page {n}"` to `"Page {n} of {total}"`
+- Updated 2 test files (`Pagination.test.tsx`, `Search.test.tsx`) to match new role/name queries (`grid` / `"Product apps"`)
+- Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings, 66/66 tests pass (no regressions)
+
 ## 2026-05-15 — Phase 6, Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
 
 - Created `src/hooks/useIsMobile.ts`: `useSyncExternalStore`-based hook detecting `(max-width: 767px)` breakpoint, SSR-safe with server snapshot returning `false`
