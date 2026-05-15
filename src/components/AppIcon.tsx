@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "@/types/product";
 
 interface AppIconProps {
@@ -19,7 +21,7 @@ export default function AppIcon({ product }: AppIconProps) {
       href={product.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col items-center gap-1"
+      className="flex flex-col items-center gap-1 rounded-2xl transition-all duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
     >
       <div className="relative">
         <img
