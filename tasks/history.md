@@ -454,3 +454,21 @@
 - **Reduced motion:** No new CSS transitions introduced in Phase 6 — no changes needed
 - **Test update:** `Dock.test.tsx` assertion updated from `bg-white/60` to `bg-white/[0.72]`
 - Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings (not in modified files), 66/66 tests pass (no regressions)
+
+## 2026-05-15 — Icon handler: Apply GappHub app icon across all surfaces
+
+- Source asset: `gapphub-icon.png` (1254×1254 PNG, phone with teal G logo on black background)
+- Generated `src/app/favicon.ico` (16/32/48px multi-size ICO via ImageMagick)
+- Generated `src/app/icon.png` (512×512), `src/app/apple-icon.png` (180×180)
+- Generated `public/apple-touch-icon.png` (180×180), `public/icon.png` (512×512), `public/icon-192.png` (192×192), `public/icon-512.png` (512×512)
+- Created `public/manifest.webmanifest` with 192px and 512px icon entries
+- Updated `src/app/layout.tsx`: added `icons` and `manifest` metadata
+- All three Next App Router icon bodies verified in `.next/server/app/`
+
+## 2026-05-15 — Lint fixes: resolve pre-existing lint errors
+
+- Refactored `src/hooks/useReducedMotion.ts`: replaced `useState`+`useEffect` with `useSyncExternalStore` to eliminate `set-state-in-effect` lint error
+- Removed unused `BADGE_ORDER` const from `src/lib/products.ts`
+- Suppressed `set-state-in-effect` in `src/components/SearchOverlay.tsx` (intentional reset-on-open pattern)
+- Updated `src/__tests__/Animations.test.tsx`: `mockReducedMotion` now returns `{ listeners, mockMql }` to support `useSyncExternalStore` snapshot mutation
+- Verified: 0 lint errors, 66/66 tests pass
