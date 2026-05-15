@@ -142,3 +142,21 @@
 - Imports `Product` type from `@/types/product`, static data from `../../public/data/products.json`
 - Pure server-side module — no `"use client"`, no browser APIs
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
+
+## 2026-05-14 — Phase 2, Step 2.6: Write regression tests covering Phase 2 acceptance criteria
+
+- Created `src/__tests__/IconGrid.test.tsx` with 6 tests:
+  - IconGrid renders correct number of icons (24 `<a>` elements)
+  - Each icon displays its product name
+  - Links have `target="_blank"` and correct `href`
+  - Long names have `truncate` CSS class
+  - Deprecated products (badge null) have `grayscale` class on img
+  - Non-deprecated products do not have `grayscale` class
+- Created `src/__tests__/products.test.ts` with 5 tests:
+  - `sortProducts` puts featured first sorted by order ascending
+  - Next 4 entries are highest-order non-featured (newest)
+  - Remaining grouped by badge L → B → W → null, alphabetical within each
+  - Full badge ordering with alphabetical tiebreak across all groups
+  - `getProducts` returns static data when fetch fails (mock global fetch to throw)
+- Helper `makeProduct(overrides)` pattern used in both files for test data generation
+- Verified: 17/17 tests pass (6 existing + 11 new), `npx tsc --noEmit` clean, `npm run build` succeeds

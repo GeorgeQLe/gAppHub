@@ -191,22 +191,22 @@ GappHub is built in six serial phases, each layering new capability onto the pre
   - Files: create `src/__tests__/IconGrid.test.tsx`
 - Step 2.7: Run all tests, verify they pass, build succeeds
 
-### Milestone: Phase 2 — Icon Grid & Data Layer
+### Milestone: Phase 2 — Icon Grid & Data Layer ✓ (completed 2026-05-14)
 **Acceptance Criteria:**
-- [ ] Grid renders 24 icons correctly inside the phone frame with proper spacing
-- [ ] Icons display placeholder artwork, product name, and truncate long names with ellipsis
-- [ ] Clicking an icon opens the product URL in a new tab
-- [ ] Products sort according to the priority layout rules
-- [ ] Data fetches from configured URL when available
-- [ ] App gracefully falls back to `products.json` when fetch fails (no error visible to user)
-- [ ] Deprecated products render at the end of the sort order
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Grid renders 24 icons correctly inside the phone frame with proper spacing
+- [x] Icons display placeholder artwork, product name, and truncate long names with ellipsis
+- [x] Clicking an icon opens the product URL in a new tab
+- [x] Products sort according to the priority layout rules
+- [x] Data fetches from configured URL when available
+- [x] App gracefully falls back to `products.json` when fetch fails (no error visible to user)
+- [x] Deprecated products render at the end of the sort order
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase: yes/no
+- Deviations from plan: created `src/__tests__/products.test.ts` as separate file instead of extending PhoneFrame.test.tsx
+- Tech debt / follow-ups: none
+- Ready for next phase: yes
 
 ---
 
