@@ -428,3 +428,18 @@
 - Updated `src/components/PageContent.tsx`: logo SVG shrinks to 100×24 on mobile (from 140×32), tagline drops to 11px (from 13px), added `overflow-x-hidden` to main element
 - Used `useSyncExternalStore` instead of `useState`+`useEffect` pattern to avoid the `set-state-in-effect` lint error that exists in `useReducedMotion`
 - Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings (none in modified files), 66/66 tests pass (no regressions)
+
+## 2026-05-15 — Phase 6, Step 6.4: Touch targets and WCAG AA contrast compliance
+
+- **PageDots touch targets:** Added `min-w-[44px] min-h-[44px]` with flex centering to each dot `<button>`, wrapped visual dot in a child `<span>` — visual size unchanged, tap target now meets 44×44px minimum
+- **Badge contrast (WCAG AA 4.5:1 for white text on colored bg):**
+  - Green (Live): `#34C759` → `#15803d` (~5.1:1 ratio)
+  - Orange (Beta): `#FF9500` → `#C2410C` (~5.2:1 ratio)
+  - Blue (New): `#007AFF` → `#0066CC` (~5.6:1 ratio)
+  - Purple (Wishlist): `#AF52DE` → `#8B3FC1` (~5.9:1 ratio)
+  - Updated both `AppIcon.tsx` (badgeColorMap) and `BadgeLegend.tsx` (legendItems) to use matching darkened colors
+- **Text contrast fixes:**
+  - Tagline (`PageContent.tsx`) and legend labels (`BadgeLegend.tsx`): `#86868b` → `#6e6e73` (~4.6:1 on `#f5f5f7`)
+  - Deprecated icon labels (`AppIcon.tsx`): `text-gray-400` → `text-gray-500` for better contrast on wallpaper
+- **Tests updated:** Badge color assertions in `Interactions.test.tsx` (4 tests), PageDots dot class assertions in `Pagination.test.tsx` (1 test) — now query child `<span>` instead of button
+- Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings (not in modified files), 66/66 tests pass (no regressions)

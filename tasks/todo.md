@@ -98,55 +98,21 @@
     - Acceptance criteria: `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass, keyboard-only navigation reaches every icon.
     - **Ship-one-step handoff:** Implement only Step 6.3, validate it, then run `/ship` when done.
 
-- [ ] Step 6.4: Ensure touch targets meet 44×44px minimum and verify contrast
-  - Files: modify `src/components/AppIcon.tsx` (if needed), modify `src/components/PageDots.tsx` (if needed)
-  - **Touch targets:**
-    - AppIcon `<a>` elements: icons are 60×60px — already meets 44px minimum
-    - PageDots buttons: currently 6-8px dots — add min 44×44px tap area via padding or invisible hit target (`min-w-[44px] min-h-[44px]`)
-    - Dock icons: same as AppIcon, 60×60px — OK
-    - SearchOverlay dismiss button/backdrop: full-screen — OK
-  - **Color contrast audit (WCAG AA 4.5:1):**
-    - Icon labels: `#333` on wallpaper gradient (`#e8ecf4`→`#f5f0f6`) — verify ≥4.5:1
-    - Tagline: `#86868b` on page background (`#f5f5f7`) — verify ≥4.5:1 (may need darkening)
-    - Badge text: white on colored backgrounds (L=#34C759, B=#FF9500, N=#007AFF, W=#AF52DE) — verify at 11px bold
-    - Status bar text: `#1d1d1f` on wallpaper — high contrast, OK
-    - Deprecated label: `text-gray-400` on wallpaper — verify or darken
-    - Fix any contrast failures found
-  - **Verification:** All tap targets ≥44px, all text passes 4.5:1 contrast ratio
-  - **Implementation plan (Step 6.4):**
-    - `src/components/PageDots.tsx`:
-      - Each dot button is currently 6-8px. Add `min-w-[44px] min-h-[44px]` to each button (or use padding) so the clickable area meets 44×44px minimum while keeping the visual dot small inside.
-      - The dot `<span>` inside stays at its current size — the button wrapper gets the larger hit target.
-    - **Color contrast audit procedure:**
-      - Calculate contrast ratios for each text/background combination:
-        - `#333` on `#e8ecf4` (icon labels on wallpaper) — should be ~9:1 (pass)
-        - `#86868b` on `#f5f5f7` (tagline on page bg) — calculate; if <4.5:1, darken to `#6e6e73` or similar
-        - White `#fff` on `#34C759` (Live badge) — calculate; green may need darkening
-        - White `#fff` on `#FF9500` (Beta badge) — calculate; orange may need darkening
-        - White `#fff` on `#007AFF` (New badge) — likely passes
-        - White `#fff` on `#AF52DE` (Wishlist badge) — calculate
-        - `text-gray-400` (`#9ca3af`) on wallpaper gradient — may need darkening to `text-gray-500`
-        - `#1d1d1f` on wallpaper — high contrast, skip
-      - For badge text: 11px bold qualifies as "large text" under WCAG if ≥14px bold, so 11px bold does NOT qualify — must meet 4.5:1 ratio
-      - Fix any failures by adjusting the lighter color (darken backgrounds or text as appropriate)
-    - **Files likely modified:** `src/components/PageDots.tsx` (touch target), possibly `src/components/BadgeLegend.tsx`, `src/components/AppIcon.tsx`, `src/app/globals.css` or `src/components/PageContent.tsx` (contrast fixes)
-    - **Key context from prior steps:**
-      - AppIcon uses `forwardRef` now (Step 6.3) — careful with any prop changes
-      - PageDots uses `role="tablist"` / `role="tab"` + `aria-selected` (Step 6.2) — preserve ARIA attributes when modifying button sizing
-      - Dock and IconGrid have roving tabindex (Step 6.3) — don't break `tabIndex` forwarding
-    - **Acceptance criteria:** `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass, PageDot buttons have ≥44px tap targets, all text passes WCAG AA 4.5:1 contrast ratio
-    - **Ship-one-step handoff:** Implement only Step 6.4, validate it, then run `/ship` when done.
+- [x] Step 6.4: Ensure touch targets meet 44×44px minimum and verify contrast
+  - Files: modified `src/components/PageDots.tsx`, `src/components/AppIcon.tsx`, `src/components/BadgeLegend.tsx`, `src/components/PageContent.tsx`
 
 - [ ] Step 6.5: Visual polish pass — verify spec conformance
-  - Files: modify any component files as needed
-  - **Check against spec (specs/ui-gapphub.md):**
-    - Typography: verify all font sizes match spec (icon labels 11px, tagline 13px, legend 12px, tooltip 12px, status bar 12px)
-    - Shadows: phone frame multi-layer, dock inset highlight (`inset 0 1px 0 rgba(255,255,255,0.5)`), tooltip shadow (`0 4px 12px rgba(0,0,0,0.15)`)
-    - Gradients: page background, phone frame metallic, wallpaper — all match spec color tokens
-    - Spacing: logo to tagline, tagline to phone, phone to legend — proportional at all breakpoints
-    - Dock glass: `rgba(255,255,255,0.72)` per spec (currently `bg-white/60` = 0.60) — fix if needed
-  - **Reduced motion:** already implemented in Phase 5, verify no new CSS transitions introduced without `motion-safe` guards
-  - **Verification:** Visual comparison against spec at each breakpoint
+  - Files: modify `src/components/Dock.tsx`, possibly `src/components/AppIcon.tsx`, `src/components/BadgeLegend.tsx`, `src/components/PhoneFrame.tsx`
+  - **Implementation plan (Step 6.5):**
+    - **Dock glass opacity:** Currently `bg-white/60` (0.60), spec says `rgba(255,255,255,0.72)`. Change to `bg-white/[0.72]` in `src/components/Dock.tsx`. Also add dock inset highlight `shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]` if missing.
+    - **Tooltip shadow:** Spec says `0 4px 12px rgba(0,0,0,0.15)`. AppIcon tooltip currently uses `shadow-md` — verify it matches or replace with `shadow-[0_4px_12px_rgba(0,0,0,0.15)]`. Same for BadgeLegend Tooltip.
+    - **Phone frame shadows:** Spec says primary `0 20px 60px rgba(0,0,0,0.15)`, secondary `0 2px 8px rgba(0,0,0,0.08)`, edge highlight `inset 0 1px 0 rgba(255,255,255,0.3)`. Verify `src/components/PhoneFrame.tsx` matches.
+    - **Typography audit:** Icon labels 11px ✓, tagline 13px (desktop) / 11px (mobile) ✓, legend should be 12px (currently `text-xs` = 12px ✓), tooltip 12px (currently `text-xs` = 12px ✓), status bar 12px (currently `text-xs` ✓).
+    - **Reduced motion:** Phase 5 already handles this; verify no new CSS transitions were introduced in Phase 6 without `motion-safe` guards.
+    - **Key context:** Badge colors changed in Step 6.4 to WCAG AA compliant values. Dock has roving tabindex (Step 6.3). Tests check for `bg-white/60` and `backdrop-blur-[20px]` — update if dock glass class changes.
+    - **Acceptance criteria:** `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass, visual output matches spec tokens.
+    - **Ship-one-step handoff:** Implement only Step 6.5, validate it, then run `/ship` when done.
+  - **Execution Profile:** serial, main agent, low conflict risk
 
 ### Green
 - [ ] Step 6.6: Write regression tests covering Phase 6 acceptance criteria
