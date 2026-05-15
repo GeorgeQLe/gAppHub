@@ -80,7 +80,7 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
             <span
               id={tooltipId}
               role="tooltip"
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20 bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-md max-w-[200px] text-center whitespace-normal pointer-events-none"
+              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20 bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.15)] max-w-[200px] text-center whitespace-normal pointer-events-none"
             >
               {product.description}
               <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#333]/90" />

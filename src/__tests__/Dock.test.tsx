@@ -43,7 +43,7 @@ describe("Dock", () => {
     const { container } = render(<Dock products={dockProducts} />);
     const dock = container.firstElementChild!;
     expect(dock.className).toContain("backdrop-blur-[20px]");
-    expect(dock.className).toContain("bg-white/60");
+    expect(dock.className).toContain("bg-white/[0.72]");
   });
 
   it("hides badges on dock icons", () => {

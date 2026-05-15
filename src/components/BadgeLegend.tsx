@@ -16,7 +16,7 @@ function Tooltip({ id, text }: { id: string; text: string }) {
     <div
       id={id}
       role="tooltip"
-      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-md"
+      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
     >
       {text}
       <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#333]/90" />
