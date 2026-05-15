@@ -386,6 +386,45 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 **Coordination Notes:** Depends on all visual components from Phases 1–4 being in place. Each animation variant is independent of the others but all use the same final-state components.
 
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** low (new route files + shared wrapper; existing components unchanged)
+**Review gates:** none
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 5.1: Install Framer Motion and create shared page wrapper + reduced motion hook
+  - Files: modify `package.json`, create `src/hooks/useReducedMotion.ts`, create `src/components/PageContent.tsx`, modify `src/app/page.tsx`
+- Step 5.2: Build the `/boot` animation route
+  - Files: create `src/app/boot/page.tsx`
+- Step 5.3: Build the `/slide` animation route
+  - Files: create `src/app/slide/page.tsx`
+- Step 5.4: Build the `/assemble` animation route
+  - Files: create `src/app/assemble/page.tsx`
+- Step 5.5: Polish animations and verify cross-route consistency
+  - Files: modify `src/components/PageContent.tsx` (if needed), any animation route files
+
+### Green
+- Step 5.6: Write regression tests covering Phase 5 acceptance criteria
+  - Files: create `src/__tests__/Animations.test.tsx`
+- Step 5.7: Run all tests, verify they pass, build succeeds
+
+### Milestone: Phase 5 — Loading Animations
+**Acceptance Criteria:**
+- [ ] `/boot` plays the boot screen animation sequence as specified
+- [ ] `/slide` plays the slide-up + fade animation sequence as specified
+- [ ] `/assemble` plays the frame assembly animation sequence as specified
+- [ ] All three routes end at the identical final state (fully rendered phone with icons)
+- [ ] Main `/` route uses a simple fade-in as temporary default
+- [ ] Reduced motion preference disables all animations, replacing with a quick opacity fade
+- [ ] Animations feel smooth at 60fps with no visible jank
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
+
 **On Completion:**
 - Deviations from plan:
 - Tech debt / follow-ups:
