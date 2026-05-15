@@ -97,12 +97,12 @@ There is no global shell (no persistent header, sidebar, or footer). The entire 
 ### Status Bar
 
 - **Position:** Inside the screen area, flanking the Dynamic Island
-- **Height:** ~48px (accommodates Dynamic Island alignment)
+- **Height:** ~44px (standard iOS status bar)
 - **Content (left of island):** Current real-world time in `h:mm` format
 - **Content (right of island):**
-  - **Signal bars:** Static 4 filled bars (decorative)
+  - **Signal bars:** Number of filled bars = number of Live products out of total products (e.g., 3/5 = 3 bars filled)
   - **Wi-Fi icon:** Always full (decorative)
-  - **Battery:** Static 100% with battery icon (decorative)
+  - **Battery:** Percentage = `(shipped products / total products) × 100`. Displayed as a battery icon with fill level and percentage text
 - **Typography:** SF Pro or system sans-serif, 12px, semibold
 - **Color:** Dark text on the light wallpaper background
 
@@ -193,7 +193,7 @@ Dock apps follow the same icon design as grid icons but may omit badges.
 
 - **Shape:** Rounded square (iOS superellipse / squircle), CSS `border-radius: 22.5%` approximation
 - **Size:** 60px × 60px on desktop
-- **Border:** None
+- **Border:** None by default. 1px subtle white inner shadow for depth
 - **Content:** Product icon artwork (provided per product)
 
 ### Name Label
@@ -209,11 +209,11 @@ Dock apps follow the same icon design as grid icons but may omit badges.
 - **Shape:** Circle (or rounded pill if two characters)
 - **Size:** 20px diameter minimum, expands for wider content
 - **Position:** Top-right corner of the icon, overlapping by ~6px
-- **Background colors (WCAG AA compliant):**
-  - `L` (Live): Green (#15803d)
-  - `B` (Beta): Orange (#C2410C)
-  - `N` (New): Blue (#0066CC)
-  - `W` (Wishlist): Purple (#8B3FC1)
+- **Background colors:**
+  - `L` (Live): Green (#34C759)
+  - `B` (Beta): Orange (#FF9500)
+  - `N` (New): Blue (#007AFF)
+  - `W` (Wishlist): Purple (#AF52DE)
 - **Text:** White, bold, 11px, single character centered
 - **Border:** 2px solid white outline (to separate from icon artwork)
 
@@ -335,12 +335,12 @@ When `prefers-reduced-motion: reduce` is active, all variants collapse to: phone
 | `--wallpaper-start` | #e8ecf4 | Wallpaper gradient top (soft blue-gray) |
 | `--wallpaper-end` | #f5f0f6 | Wallpaper gradient bottom (soft lavender) |
 | `--text-primary` | #1d1d1f | Icon labels, status bar |
-| `--text-secondary` | #6e6e73 | Tagline, legend labels (WCAG AA compliant) |
+| `--text-secondary` | #86868b | Tagline, legend labels |
 | `--dock-blur-bg` | rgba(255,255,255,0.72) | Dock frosted glass |
-| `--badge-live` | #15803d | Live badge (WCAG AA) |
-| `--badge-beta` | #C2410C | Beta badge (WCAG AA) |
-| `--badge-new` | #0066CC | New badge (WCAG AA) |
-| `--badge-wishlist` | #8B3FC1 | Wishlist badge (WCAG AA) |
+| `--badge-live` | #34C759 | Live badge |
+| `--badge-beta` | #FF9500 | Beta badge |
+| `--badge-new` | #007AFF | New badge |
+| `--badge-wishlist` | #AF52DE | Wishlist badge |
 | `--shadow-primary` | rgba(0,0,0,0.15) | Phone drop shadow |
 
 ### Shadows
@@ -365,7 +365,7 @@ When `prefers-reduced-motion: reduce` is active, all variants collapse to: phone
 
 - Phone frame: `role="region"` with `aria-label="Lexcorp product launcher"`
 - Icon grid: `role="grid"` with `aria-label="Product apps"`
-- Each icon: `role="gridcell"` containing an `<a>` with `aria-label="{Product Name}, {badge state}"` (e.g. "Alpha, Live"). Description conveyed via `aria-describedby` referencing the tooltip when visible.
+- Each icon: `role="gridcell"` containing an `<a>` with `aria-label="{Product Name} — {badge state}. {description}. Opens in new tab."`
 - Badge: `aria-hidden="true"` (info conveyed via parent aria-label)
 - Status bar: `aria-hidden="true"` (decorative easter eggs)
 - Dock: `role="toolbar"` with `aria-label="Pinned apps"`
@@ -383,8 +383,8 @@ When `prefers-reduced-motion: reduce` is active, all variants collapse to: phone
 
 - All entrance animations collapse to a ≤200ms opacity fade
 - Swipe transitions become instant page switches
-- **TODO:** Hover scale effects should be disabled when `prefers-reduced-motion: reduce` is active
-- **TODO:** Press animation should be replaced by a simple opacity dim when reduced motion is active
+- Hover scale effects are disabled
+- Press animation is replaced by a simple opacity dim
 
 ---
 
@@ -424,6 +424,7 @@ When `prefers-reduced-motion: reduce` is active, all variants collapse to: phone
 - First Contentful Paint: < 1.5s
 - Animation start: < 500ms after FCP
 - Total bundle: < 150KB gzipped (excluding icon images)
+- Icons: Lazy-load images below the fold / on paginated pages
 
 ---
 
