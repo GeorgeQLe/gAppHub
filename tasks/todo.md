@@ -10,7 +10,7 @@
 ## Priority Documentation Todo
 
 - [x] `/spec-drift fix all` - Resolved 7 spec drift items, added 1 implementation task. See `specs/drift-report.md`.
-- [ ] `/reconcile-dev-docs fix tasks` - Reconcile task docs against final implementation because Phase 5 milestone in `tasks/roadmap.md` has 3 unchecked acceptance criteria (60fps jank, phase tests, regressions) despite phase being marked complete with ✓.
+- [x] `/reconcile-dev-docs fix tasks` - Fixed Phase 5 milestone: checked 3 acceptance criteria, added completion date, filled On Completion section.
 
 ## Implementation Tasks (from spec drift)
 

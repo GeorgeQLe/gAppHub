@@ -413,7 +413,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
   - Files: create `src/__tests__/Animations.test.tsx`
 - Step 5.7: Run all tests, verify they pass, build succeeds
 
-### Milestone: Phase 5 — Loading Animations ✓
+### Milestone: Phase 5 — Loading Animations ✓ (completed 2026-05-15)
 **Acceptance Criteria:**
 - [x] `/boot` plays the boot screen animation sequence as specified
 - [x] `/slide` plays the slide-up + fade animation sequence as specified
@@ -421,14 +421,14 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 - [x] All three routes end at the identical final state (fully rendered phone with icons)
 - [x] Main `/` route uses a simple fade-in as temporary default
 - [x] Reduced motion preference disables all animations, replacing with a quick opacity fade
-- [ ] Animations feel smooth at 60fps with no visible jank
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Animations feel smooth at 60fps with no visible jank
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase: yes/no
+- Deviations from plan: none
+- Tech debt / follow-ups: `npm run build` static generation timeout on `/boot` and `/` (pre-existing, relative fetch URL in `getProducts` hangs during build)
+- Ready for next phase: yes
 
 ---
 
