@@ -126,7 +126,7 @@
   **Ship-one-step handoff:** Implement only Step 3.6, validate it, then run `/ship` when done.
 
 ### Green
-- [ ] Step 3.6: Write regression tests covering Phase 3 acceptance criteria
+- [x] Step 3.6: Write regression tests covering Phase 3 acceptance criteria
   - Files: create `src/__tests__/Interactions.test.tsx`, create `src/__tests__/BadgeLegend.test.tsx`
   - Test: AppIcon renders correct badge color and letter for each badge type (L, B, N, W)
   - Test: No badge rendered for deprecated products (badge null)
@@ -137,19 +137,19 @@
   - Test: BadgeLegend renders all 5 items (L, B, N, W, Deprecated)
   - Test: BadgeLegend tooltip text matches expected descriptions
   - Test: Deprecated products still have grayscale styling (regression from Phase 2)
-- [ ] Step 3.7: Run all tests, verify they pass, build succeeds with `npm run build`
+- [x] Step 3.7: Run all tests, verify they pass, build succeeds with `npm run build`
 
 ### Milestone: Phase 3 — Interactions & Badges
 **Acceptance Criteria:**
-- [ ] Icons scale up on hover and press-in on click with smooth transitions
-- [ ] Keyboard focus shows visible blue outline ring
-- [ ] Badges render in correct colors with white letter, positioned at icon top-right with white border
-- [ ] Deprecated icons are visually grayed out and dimmed
-- [ ] Tooltips appear on hover after 400ms delay with product description text
-- [ ] Badge legend renders below the phone with all four states + deprecated example
-- [ ] Legend badges show tooltip descriptions on hover
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Icons scale up on hover and press-in on click with smooth transitions
+- [x] Keyboard focus shows visible blue outline ring
+- [x] Badges render in correct colors with white letter, positioned at icon top-right with white border
+- [x] Deprecated icons are visually grayed out and dimmed
+- [x] Tooltips appear on hover after 400ms delay with product description text
+- [x] Badge legend renders below the phone with all four states + deprecated example
+- [x] Legend badges show tooltip descriptions on hover
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
 - Deviations from plan:

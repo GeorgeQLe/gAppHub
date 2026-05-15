@@ -213,3 +213,24 @@
 - Accessibility: `role="tooltip"` on tooltip element, `aria-describedby` on trigger (only set when visible)
 - Integrated `<BadgeLegend />` into `src/app/page.tsx` below PhoneFrame with `mt-4` spacing, centered
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
+
+## 2026-05-15 — Phase 3, Step 3.6: Write regression tests covering Phase 3 acceptance criteria
+
+- Created `src/__tests__/Interactions.test.tsx` with 12 tests:
+  - AppIcon renders correct badge color and letter for each badge type (L=#34C759, B=#FF9500, N=#007AFF, W=#AF52DE)
+  - No badge rendered for deprecated products (badge null)
+  - Badge has white 2px border (`border-2 border-white` classes)
+  - AppIcon `<a>` has focus-visible outline classes (`focus-visible:outline`, `focus-visible:outline-2`, `focus-visible:outline-blue-500`)
+  - Hover/active scale classes present (`hover:scale-105`, `active:scale-[0.92]`)
+  - Tooltip appears with correct description after 400ms hover delay (fake timers)
+  - Tooltip hides on mouse leave
+  - Deprecated products have `grayscale` and `opacity-50` styling
+  - Active products do not have grayscale
+- Created `src/__tests__/BadgeLegend.test.tsx` with 8 tests:
+  - Renders all 5 legend items (Live, Beta, New, Wishlist, Deprecated)
+  - Renders badge letters L, B, N, W
+  - Tooltip text matches expected descriptions for each badge type on hover
+  - Tooltip for Deprecated shows "Product has been retired"
+  - Tooltip hides on mouse leave
+- Used `vi.useFakeTimers()` for AppIcon tooltip delay, `within()` for scoped queries to handle StrictMode double renders
+- Verified: 37/37 tests pass (20 new + 17 existing), `npx tsc --noEmit` clean, `npm run build` succeeds
