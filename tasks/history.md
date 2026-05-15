@@ -204,3 +204,12 @@
 - Layout: `flex flex-wrap items-center justify-center gap-4` — wraps on small screens
 - Standalone presentational component — will be integrated into page and get hover tooltips in Step 3.5
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
+
+## 2026-05-14 — Phase 3, Step 3.5: Add legend tooltips and integrate BadgeLegend into the page
+
+- Added tooltip descriptions to each legend item in `BadgeLegend.tsx`: L="Product is live and available", B="Product is in beta testing", N="Recently launched product", W="Product on the wishlist — coming soon", Deprecated="Product has been retired"
+- Implemented hover tooltip state via `useState<string | null>` — `onMouseEnter`/`onMouseLeave` per legend item
+- Extracted `Tooltip` sub-component: absolute positioned above item (`bottom-full`), dark rounded rect (`bg-[#333]/90`), downward caret via CSS border trick
+- Accessibility: `role="tooltip"` on tooltip element, `aria-describedby` on trigger (only set when visible)
+- Integrated `<BadgeLegend />` into `src/app/page.tsx` below PhoneFrame with `mt-4` spacing, centered
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)

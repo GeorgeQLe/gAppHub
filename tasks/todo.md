@@ -69,7 +69,7 @@
   - Spacing: `gap-4` or `gap-6` between items, flex row with wrap for small screens
   - This is a client component (`"use client"`) to support legend tooltip hover
 
-- [ ] Step 3.5: Add legend tooltips and integrate BadgeLegend into the page
+- [x] Step 3.5: Add legend tooltips and integrate BadgeLegend into the page
   - Files: modify `src/components/BadgeLegend.tsx`, modify `src/app/page.tsx`
   - Each legend item shows a tooltip on hover with a one-line description:
     - L: "Product is live and available"
@@ -82,29 +82,35 @@
   - In `page.tsx`: add `<BadgeLegend />` below the PhoneFrame container div, with `mt-4` spacing
   - Legend is centered horizontally, matching the phone frame alignment
 
-  ### Step 3.5 Implementation Plan
+  ### Step 3.6 Implementation Plan
 
-  **What to build:** Add hover tooltips to each BadgeLegend item and integrate the component into the main page below the phone frame.
+  **What to build:** Write regression tests covering all Phase 3 acceptance criteria — interaction states, badges, tooltips, and BadgeLegend.
 
-  **Context:** `BadgeLegend` already exists at `src/components/BadgeLegend.tsx` as a `"use client"` component with 4 badge items + deprecated. AppIcon tooltips (Step 3.3) use `useState` + `useRef` with 400ms delay, dark rounded rect styling. The page layout is in `src/app/page.tsx` with `<PhoneFrame>` containing DynamicIsland, StatusBar, IconGrid, HomeIndicator.
+  **Context:** Phase 3 implementation is complete (Steps 3.1–3.5). All components are client components with interaction states:
+  - `AppIcon.tsx`: hover/press/focus CSS transitions, notification badges (L/B/N/W colored circles), description tooltips with 400ms delay
+  - `BadgeLegend.tsx`: horizontal legend row with tooltips on hover, `useState` for hovered item tracking
+  - `page.tsx`: integrates BadgeLegend below PhoneFrame
+  - Existing test files: `src/__tests__/PhoneFrame.test.tsx` (6 tests), `src/__tests__/IconGrid.test.tsx` (6 tests), `src/__tests__/products.test.ts` (5 tests)
 
   **Files:**
-  - **Modify:** `src/components/BadgeLegend.tsx` — add tooltip hover state per legend item
-  - **Modify:** `src/app/page.tsx` — import and render `<BadgeLegend />` below PhoneFrame
+  - **Create:** `src/__tests__/Interactions.test.tsx` — tests for AppIcon interaction classes and tooltip behavior
+  - **Create:** `src/__tests__/BadgeLegend.test.tsx` — tests for BadgeLegend rendering and tooltip descriptions
 
   **Approach:**
-  1. In `BadgeLegend.tsx`, add tooltip descriptions to each legend item:
-     - L: "Product is live and available"
-     - B: "Product is in beta testing"
-     - N: "Recently launched product"
-     - W: "Product on the wishlist — coming soon"
-     - Deprecated: "Product has been retired"
-  2. Add hover tooltip state: track which item is hovered via `useState<string | null>`
-  3. On `onMouseEnter` set hovered item key, on `onMouseLeave` clear it (no delay needed for legend — simpler than AppIcon tooltips)
-  4. Tooltip markup: `absolute bottom-full` above each item, same style as AppIcon tooltips (`bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-md`), with downward caret
-  5. Add `relative` positioning to each legend item container for tooltip placement
-  6. Accessibility: `role="tooltip"` on tooltip, `aria-describedby` on trigger
-  7. In `page.tsx`: add `<BadgeLegend />` after the PhoneFrame `<div>` wrapper with `mt-4` spacing, centered
+  1. `Interactions.test.tsx`:
+     - Test: AppIcon renders correct badge color and letter for each badge type (L, B, N, W)
+     - Test: No badge rendered for deprecated products (badge null)
+     - Test: Badge has white 2px border (`border-white border-2` classes)
+     - Test: AppIcon `<a>` has focus-visible outline classes
+     - Test: Hover/active scale classes are present (`hover:scale-105`, `active:scale-[0.92]`)
+     - Test: Tooltip appears with correct description text (simulate mouseenter, advance timers 400ms)
+     - Test: Deprecated products have `grayscale` styling (regression guard from Phase 2)
+  2. `BadgeLegend.test.tsx`:
+     - Test: Renders all 5 items (L, B, N, W, Deprecated)
+     - Test: Each badge shows correct label text
+     - Test: Tooltip text matches expected descriptions on hover (simulate mouseenter)
+  3. Use `vi.useFakeTimers()` for AppIcon tooltip delay tests
+  4. Use `makeProduct()` helper pattern (consistent with existing test files)
 
   **Execution Profile:**
   - Parallel mode: serial
@@ -114,12 +120,10 @@
 
   **Verification:**
   - `npx tsc --noEmit` passes
+  - All new tests pass alongside existing 17 tests
   - `npm run build` succeeds
-  - All 17 existing tests still pass (no regressions)
-  - Visual check: BadgeLegend visible below phone frame, tooltips appear on hover
-  - Start dev server and verify in browser
 
-  **Ship-one-step handoff:** Implement only Step 3.5, validate it, then run `/ship` when done.
+  **Ship-one-step handoff:** Implement only Step 3.6, validate it, then run `/ship` when done.
 
 ### Green
 - [ ] Step 3.6: Write regression tests covering Phase 3 acceptance criteria
