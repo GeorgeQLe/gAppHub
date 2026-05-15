@@ -27,7 +27,7 @@ describe("AppIcon badge rendering", () => {
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("L");
-    expect(badge.className).toContain("bg-[#34C759]");
+    expect(badge.className).toContain("bg-[#15803d]");
   });
 
   it("renders orange badge with letter B", () => {
@@ -36,7 +36,7 @@ describe("AppIcon badge rendering", () => {
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("B");
-    expect(badge.className).toContain("bg-[#FF9500]");
+    expect(badge.className).toContain("bg-[#C2410C]");
   });
 
   it("renders blue badge with letter N", () => {
@@ -45,7 +45,7 @@ describe("AppIcon badge rendering", () => {
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("N");
-    expect(badge.className).toContain("bg-[#007AFF]");
+    expect(badge.className).toContain("bg-[#0066CC]");
   });
 
   it("renders purple badge with letter W", () => {
@@ -54,7 +54,7 @@ describe("AppIcon badge rendering", () => {
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("W");
-    expect(badge.className).toContain("bg-[#AF52DE]");
+    expect(badge.className).toContain("bg-[#8B3FC1]");
   });
 
   it("does not render badge for deprecated products", () => {

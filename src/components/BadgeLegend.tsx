@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 const legendItems = [
-  { letter: "L", label: "Live", color: "#34C759", description: "Product is live and available" },
-  { letter: "B", label: "Beta", color: "#FF9500", description: "Product is in beta testing" },
-  { letter: "N", label: "New", color: "#007AFF", description: "Recently launched product" },
-  { letter: "W", label: "Wishlist", color: "#AF52DE", description: "Product on the wishlist — coming soon" },
+  { letter: "L", label: "Live", color: "#15803d", description: "Product is live and available" },
+  { letter: "B", label: "Beta", color: "#C2410C", description: "Product is in beta testing" },
+  { letter: "N", label: "New", color: "#0066CC", description: "Recently launched product" },
+  { letter: "W", label: "Wishlist", color: "#8B3FC1", description: "Product on the wishlist — coming soon" },
 ];
 
 const deprecatedDescription = "Product has been retired";
@@ -46,7 +46,7 @@ export default function BadgeLegend() {
             >
               {item.letter}
             </span>
-            <span className="text-xs text-[#86868b]">{item.label}</span>
+            <span className="text-xs text-[#6e6e73]">{item.label}</span>
           </div>
         );
       })}
@@ -68,7 +68,7 @@ export default function BadgeLegend() {
             <rect width="10" height="10" rx="2" fill="#8E8E93" />
           </svg>
         </span>
-        <span className="text-xs text-[#86868b]">Deprecated</span>
+        <span className="text-xs text-[#6e6e73]">Deprecated</span>
       </div>
     </div>
   );

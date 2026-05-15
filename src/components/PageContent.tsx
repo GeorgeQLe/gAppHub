@@ -111,7 +111,7 @@ export default function PageContent({
         </text>
       </svg>
 
-      <p className={`mt-1 uppercase tracking-widest text-[#86868b] ${isMobile ? "text-[11px]" : "text-[13px]"}`}>
+      <p className={`mt-1 uppercase tracking-widest text-[#6e6e73] ${isMobile ? "text-[11px]" : "text-[13px]"}`}>
         Made in Boston, Building in Public
       </p>
 

@@ -10,10 +10,10 @@ interface AppIconProps {
 }
 
 const badgeColorMap: Record<string, string> = {
-  L: "bg-[#34C759]",
-  B: "bg-[#FF9500]",
-  N: "bg-[#007AFF]",
-  W: "bg-[#AF52DE]",
+  L: "bg-[#15803d]",
+  B: "bg-[#C2410C]",
+  N: "bg-[#0066CC]",
+  W: "bg-[#8B3FC1]",
 };
 
 const badgeLabelMap: Record<string, string> = {
@@ -89,7 +89,7 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
         </div>
         <span
           className={`text-[11px] font-medium text-center leading-tight truncate max-w-[74px] ${
-            deprecated ? "text-gray-400" : "text-[#333]"
+            deprecated ? "text-gray-500" : "text-[#333]"
           }`}
         >
           {product.name}

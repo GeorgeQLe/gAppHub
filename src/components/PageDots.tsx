@@ -20,12 +20,16 @@ export default function PageDots({ total, active, onChange }: PageDotsProps) {
           aria-selected={i === active}
           aria-label={`Page ${i + 1} of ${total}`}
           onClick={() => onChange?.(i)}
-          className={`rounded-full transition-all duration-200 ${
-            i === active
-              ? "w-2 h-2 bg-white"
-              : "w-1.5 h-1.5 bg-white/40"
-          }`}
-        />
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center"
+        >
+          <span
+            className={`rounded-full transition-all duration-200 ${
+              i === active
+                ? "w-2 h-2 bg-white"
+                : "w-1.5 h-1.5 bg-white/40"
+            }`}
+          />
+        </button>
       ))}
     </div>
   );
