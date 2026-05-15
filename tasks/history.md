@@ -344,6 +344,22 @@
 - Note: `npm run build` static generation timeout is pre-existing on `main` (relative fetch URL in `getProducts` hangs during build); not introduced by this change
 - Verified: `npx tsc --noEmit` clean, 55/55 tests pass (no regressions), dev server renders `/boot` correctly
 
+## 2026-05-15 — Phase 5, Step 5.4: Build the `/assemble` animation route
+
+- Created `src/app/assemble/page.tsx` — thin async server component passing `variant="assemble"` to PageContent
+- Extended `src/components/PageContent.tsx` with 7-phase assemble animation orchestration:
+  - Phase 1 (0–400ms): Left/right frame halves slide in via `clip-path: inset()` on two overlapping metallic gradient divs
+  - Phase 2 (400–700ms): White flash along center seam (glowing 2px line with box-shadow), frame overlays fade out
+  - Phase 3 (700–900ms): Black screen overlay fades to reveal wallpaper gradient
+  - Phase 4 (900–1400ms): DynamicIsland pops with spring bounce (scale 0.3→1), StatusBar slides in from left (x: -20→0)
+  - Phase 5 (1400–2000ms): Icons drop from above (y: -40→0) with spring physics
+  - Phase 6 (2000–2300ms): Dock slides up (y: 80→0) with spring
+  - Phase 7 (2300ms+): Settled at final state
+- Extracted `AssemblePhoneContent` sub-component (same pattern as Boot/Slide)
+- `AnimatePresence` wraps seam flash overlay for clean mount/unmount
+- Reduced motion: skips all animation, renders with 200ms opacity fade
+- Verified: `npx tsc --noEmit` clean, 55/55 tests pass (no regressions), lint only pre-existing warnings
+
 ## 2026-05-15 — Phase 5, Step 5.3: Build the `/slide` animation route
 
 - Created `src/app/slide/page.tsx` — thin async server component passing `variant="slide"` to PageContent

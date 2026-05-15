@@ -22,6 +22,7 @@ interface PageContentProps {
 
 type BootPhase = 0 | 1 | 2 | 3 | 4 | 5;
 type SlidePhase = 0 | 1 | 2 | 3 | 4;
+type AssemblePhase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export default function PageContent({
   dockProducts,
@@ -34,6 +35,9 @@ export default function PageContent({
   );
   const [slidePhase, setSlidePhase] = useState<SlidePhase>(
     variant === "slide" ? 0 : 4,
+  );
+  const [assemblePhase, setAssemblePhase] = useState<AssemblePhase>(
+    variant === "assemble" ? 0 : 7,
   );
 
   useEffect(() => {
@@ -61,8 +65,24 @@ export default function PageContent({
     return () => timers.forEach(clearTimeout);
   }, [variant, reducedMotion]);
 
+  useEffect(() => {
+    if (variant !== "assemble" || reducedMotion) return;
+
+    const timers = [
+      setTimeout(() => setAssemblePhase(1), 0),
+      setTimeout(() => setAssemblePhase(2), 400),
+      setTimeout(() => setAssemblePhase(3), 700),
+      setTimeout(() => setAssemblePhase(4), 900),
+      setTimeout(() => setAssemblePhase(5), 1400),
+      setTimeout(() => setAssemblePhase(6), 2000),
+      setTimeout(() => setAssemblePhase(7), 2300),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [variant, reducedMotion]);
+
   const isBoot = variant === "boot" && !reducedMotion;
   const isSlide = variant === "slide" && !reducedMotion;
+  const isAssemble = variant === "assemble" && !reducedMotion;
   const shouldAnimate = variant === "none" && !reducedMotion;
 
   const content = (
@@ -107,6 +127,12 @@ export default function PageContent({
               gridProducts={gridProducts}
               dockProducts={dockProducts}
             />
+          ) : isAssemble ? (
+            <AssemblePhoneContent
+              phase={assemblePhase}
+              gridProducts={gridProducts}
+              dockProducts={dockProducts}
+            />
           ) : (
             <>
               <StatusBar />
@@ -136,7 +162,7 @@ export default function PageContent({
     );
   }
 
-  if ((variant === "boot" || variant === "slide") && reducedMotion) {
+  if ((variant === "boot" || variant === "slide" || variant === "assemble") && reducedMotion) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -307,5 +333,147 @@ function SlidePhoneContent({
 
       <HomeIndicator />
     </motion.div>
+  );
+}
+
+function AssemblePhoneContent({
+  phase,
+  gridProducts,
+  dockProducts,
+}: {
+  phase: AssemblePhase;
+  gridProducts: Product[];
+  dockProducts: Product[];
+}) {
+  return (
+    <>
+      {/* Phase 1: Frame halves slide in via clip-path */}
+      <motion.div
+        className="absolute inset-0 z-40 pointer-events-none"
+        style={{
+          background: "linear-gradient(145deg, #c0c0c0, #808080, #a0a0a0)",
+        }}
+        initial={{ clipPath: "inset(0 50% 0 0)" }}
+        animate={{
+          clipPath: phase >= 1 ? "inset(0 0% 0 0)" : "inset(0 50% 0 0)",
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      />
+      <motion.div
+        className="absolute inset-0 z-40 pointer-events-none"
+        style={{
+          background: "linear-gradient(215deg, #c0c0c0, #808080, #a0a0a0)",
+        }}
+        initial={{ clipPath: "inset(0 0 0 50%)" }}
+        animate={{
+          clipPath: phase >= 1 ? "inset(0 0 0 0%)" : "inset(0 0 0 50%)",
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      />
+
+      {/* Phase 2: White flash along seam */}
+      <AnimatePresence>
+        {phase >= 2 && phase <= 3 && (
+          <motion.div
+            className="absolute inset-0 z-50 pointer-events-none flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 1, 0] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, times: [0, 0.4, 1] }}
+          >
+            <div className="w-[2px] h-full bg-white shadow-[0_0_20px_8px_rgba(255,255,255,0.6)]" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Phase 2+: Frame overlays fade out to reveal screen */}
+      <motion.div
+        className="absolute inset-0 z-30 pointer-events-none"
+        style={{
+          background: "linear-gradient(145deg, #c0c0c0, #808080, #a0a0a0)",
+        }}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: phase >= 2 ? 0 : 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      />
+
+      {/* Phase 3: Screen transitions from black to wallpaper */}
+      <motion.div
+        className="absolute inset-0 z-20 bg-black pointer-events-none"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: phase >= 3 ? 0 : 1 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      />
+
+      {/* Phase 4: StatusBar slides in from sides, DynamicIsland pops */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{
+          opacity: phase >= 4 ? 1 : 0,
+          x: phase >= 4 ? 0 : -20,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 20,
+          mass: 0.6,
+        }}
+      >
+        <StatusBar />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.3 }}
+        animate={{
+          opacity: phase >= 4 ? 1 : 0,
+          scale: phase >= 4 ? 1 : 0.3,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 18,
+          mass: 0.5,
+        }}
+      >
+        <DynamicIsland />
+      </motion.div>
+
+      {/* Phase 5: Icons drop from above with stagger */}
+      <motion.div
+        className="flex-1 overflow-hidden"
+        initial={{ opacity: 0, y: -40 }}
+        animate={{
+          opacity: phase >= 5 ? 1 : 0,
+          y: phase >= 5 ? 0 : -40,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 22,
+          mass: 0.7,
+        }}
+      >
+        <IconGrid products={gridProducts} />
+      </motion.div>
+
+      {/* Phase 6: Dock slides up with spring */}
+      <motion.div
+        initial={{ y: 80, opacity: 0 }}
+        animate={{
+          y: phase >= 6 ? 0 : 80,
+          opacity: phase >= 6 ? 1 : 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 25,
+          mass: 0.8,
+        }}
+      >
+        <Dock products={dockProducts} />
+      </motion.div>
+
+      <HomeIndicator />
+    </>
   );
 }
