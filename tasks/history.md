@@ -114,6 +114,17 @@
 - Updated `public/data/products.json` to cycle color variants across all 24 products for visual variety
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
 
+## 2026-05-14 — Phase 2, Step 2.4: Build the AppIcon component
+
+- Created `src/components/AppIcon.tsx` — presentational server component for iOS-style app icons
+- Props: `{ product: Product }` — renders `<a>` wrapping 60×60 squircle `<img>` + centered name label
+- Icon: `rounded-[22.5%]` border-radius, `overflow-hidden`, explicit width/height attributes
+- Label: 11px `font-medium`, `text-[#333]`, single-line truncation via `truncate` + `max-w-[74px]`
+- Deprecated state (badge === null): `grayscale opacity-50` on icon, `text-gray-400` on label
+- Container: flex column, items-center, 4px gap (`gap-1`)
+- Plain `<img>` (not Next.js `<Image>`) — local static SVGs don't need optimization
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
+
 ## 2026-05-14 — Phase 2, Step 2.2: Build the data fetch layer with static fallback
 
 - Created `src/lib/products.ts` with two exported functions

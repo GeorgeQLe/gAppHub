@@ -87,7 +87,7 @@
   - Update `products.json` entries to reference `/icons/placeholder.svg`
   - Optionally create 2-3 color variants for visual variety (e.g., blue, green, orange fills)
 
-- [ ] Step 2.4: Build the AppIcon component
+- [x] Step 2.4: Build the AppIcon component
   - Files: create `src/components/AppIcon.tsx`
   - Props: `product: Product`
   - Renders: `<a>` wrapping the icon image + label, `target="_blank"` and `rel="noopener noreferrer"`
@@ -97,41 +97,6 @@
   - No badge rendering yet (Phase 3) — but leave space for badge overlay position
   - Deprecated state: apply `grayscale(100%)` + `opacity: 0.5` to icon, gray label text
   - No hover/press animations yet (Phase 3)
-
-  ### Step 2.4 Implementation Plan
-
-  **What to build:**
-  A presentational `AppIcon` component that renders a single product app icon with its name label, matching iOS home screen icon style.
-
-  **Files:**
-  - Create: `src/components/AppIcon.tsx`
-
-  **Technical details:**
-  - Server component (no `"use client"` needed — no interactivity in this step)
-  - Import `Product` type from `@/types/product`
-  - Props: `{ product: Product }`
-  - Structure: `<a href={product.url} target="_blank" rel="noopener noreferrer">` wrapping:
-    - `<img src={product.icon} alt={product.name} />` — 60×60px, `border-radius: 22.5%`, `overflow: hidden`
-    - `<span>` for name label — centered, 11px, font-medium, `#333`, single-line truncation (max-width 74px)
-  - Container: flex column, items-center, 4px gap between icon and label
-  - Deprecated state (`product.badge === null`): apply `grayscale(100%) opacity-50` to the icon image, `text-gray-400` to label
-  - Use Tailwind classes throughout, matching the existing component patterns (see `PhoneFrame.tsx`, `StatusBar.tsx`)
-  - Use Next.js `<Image>` is optional — since icons are local SVGs, a plain `<img>` with explicit width/height is simpler and avoids optimization overhead for tiny static assets
-
-  **Acceptance criteria:**
-  - `src/components/AppIcon.tsx` exists and exports a default or named component
-  - `npx tsc --noEmit` passes
-  - `npm run build` succeeds
-  - All 6 existing tests pass (no regressions)
-  - Component renders correctly when manually tested in browser (verify in Step 2.5 integration)
-
-  **Execution Profile:**
-  - Parallel mode: serial
-  - Integration owner: main agent
-  - Conflict risk: low
-  - Review gates: none
-
-  **Ship-one-step handoff:** Implement only Step 2.4, validate it, then run `/ship` when done.
 
 - [ ] Step 2.5: Build the IconGrid component and integrate into the page
   - Files: create `src/components/IconGrid.tsx`, modify `src/app/page.tsx`
@@ -144,6 +109,49 @@
   - Populate with AppIcon components for each product
   - In `page.tsx`: call `getProducts()` + `sortProducts()` at the server component level, pass sorted products to IconGrid
   - Verify grid renders 24 icons properly within the phone frame without overflow
+
+  ### Step 2.5 Implementation Plan
+
+  **What to build:**
+  Create the `IconGrid` component that renders a 4-column CSS grid of `AppIcon` components, then integrate it into `page.tsx` with real data from the fetch layer.
+
+  **Files:**
+  - Create: `src/components/IconGrid.tsx`
+  - Modify: `src/app/page.tsx`
+
+  **Technical details:**
+  - `IconGrid.tsx` — server component (no `"use client"`)
+    - Import `Product` from `@/types/product` and `AppIcon` from `@/components/AppIcon`
+    - Props: `{ products: Product[] }` (expects already-sorted array)
+    - Render a CSS grid: `grid grid-cols-4` with `gap-x-5 gap-y-7` (~20px h-gap, ~28px v-gap)
+    - Apply `pt-[76px]` (clear status bar + Dynamic Island) and `pb-[90px]` (reserve dock space)
+    - Add `px-4` horizontal padding to center the grid within the 375px screen
+    - Map over products, render `<AppIcon product={p} key={p.id} />`
+  - `page.tsx` — convert `Home()` to `async` server component
+    - Import `getProducts` and `sortProducts` from `@/lib/products`
+    - Import `IconGrid` from `@/components/IconGrid`
+    - Call `const products = sortProducts(await getProducts())` at the top of the function
+    - Add `<IconGrid products={products} />` as a child of `<PhoneFrame>`, between DynamicIsland and HomeIndicator
+  - Current `page.tsx` structure: `<PhoneFrame>` wraps `<StatusBar />`, `<DynamicIsland />`, `<HomeIndicator />` — IconGrid goes between DynamicIsland and HomeIndicator
+  - `PhoneFrame` uses `relative` positioning with `overflow-hidden` on the screen area; IconGrid's padding handles vertical positioning
+  - The 24 products should fill ~6 rows in the 4-column grid
+
+  **Acceptance criteria:**
+  - `src/components/IconGrid.tsx` exists and exports a grid component
+  - `page.tsx` fetches and sorts products, passes them to IconGrid
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+  - All 6 existing tests pass (no regressions)
+  - Grid renders 24 icons in 4 columns within the phone frame (visual check in dev server)
+  - Icons show placeholder SVGs with names, deprecated product appears grayed out
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Ship-one-step handoff:** Implement only Step 2.5, validate it, then run `/ship` when done.
 
 ### Green
 - [ ] Step 2.6: Write regression tests covering acceptance criteria
