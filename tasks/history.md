@@ -246,6 +246,17 @@
 - Dock renders between IconGrid and HomeIndicator inside PhoneFrame
 - Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
 
+## 2026-05-15 — Phase 4, Step 4.3: Add iOS-style page indicator dots
+
+- Created `src/components/PageDots.tsx` — standalone accessible page indicator component
+- Props: `{ total, active, onChange }` — renders horizontal row of dots with `role="tablist"` and per-dot `role="tab"` + `aria-selected`
+- Active dot: 8px (`w-2 h-2`) `bg-white`, inactive: 6px (`w-1.5 h-1.5`) `bg-white/40`
+- `transition-all duration-200` for smooth size/opacity animation between states
+- Returns `null` when `total <= 1` (no dots needed for single page)
+- Updated `src/components/IconGrid.tsx`: replaced inline dot buttons with `<PageDots total={totalPages} active={page} onChange={goTo} />`
+- Kept same `-mt-[78px]` positioning between grid and dock
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, no test regressions
+
 ## 2026-05-15 — Phase 4, Step 4.2: Convert IconGrid to paginated client component with swipe navigation
 
 - Rewrote `src/components/IconGrid.tsx` from server component to `"use client"` paginated component
