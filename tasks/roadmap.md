@@ -340,24 +340,24 @@ GappHub is built in six serial phases, each layering new capability onto the pre
   - Files: create `src/__tests__/Dock.test.tsx`, create `src/__tests__/Pagination.test.tsx`, create `src/__tests__/Search.test.tsx`
 - Step 4.7: Run all tests, verify they pass, build succeeds
 
-### Milestone: Phase 4 — Dock, Pagination & Search
+### Milestone: Phase 4 — Dock, Pagination & Search ✓ (completed 2026-05-15)
 **Acceptance Criteria:**
-- [ ] Dock renders with frosted glass effect and 4 pinned app icons
-- [ ] Dock stays fixed across page swipes
-- [ ] Swiping horizontally navigates between icon pages with smooth transition
-- [ ] Page dots render correctly, highlighting the active page
-- [ ] Arrow keys navigate between pages
-- [ ] Pull-down gesture reveals search bar
-- [ ] Typing in search filters icons in real-time by name, badge, and tags
-- [ ] "No apps found" shows for empty search results
-- [ ] Escape or tap-outside dismisses search
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Dock renders with frosted glass effect and 4 pinned app icons
+- [x] Dock stays fixed across page swipes
+- [x] Swiping horizontally navigates between icon pages with smooth transition
+- [x] Page dots render correctly, highlighting the active page
+- [x] Arrow keys navigate between pages
+- [x] Pull-down gesture reveals search bar
+- [x] Typing in search filters icons in real-time by name, badge, and tags
+- [x] "No apps found" shows for empty search results
+- [x] Escape or tap-outside dismisses search
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase: yes/no
+- Deviations from plan: search integration tests use mouse drag instead of touch events (jsdom touch support limited)
+- Tech debt / follow-ups: none
+- Ready for next phase: yes
 
 ---
 

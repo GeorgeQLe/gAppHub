@@ -287,6 +287,27 @@
   - On dismiss: clears search term, returns to paginated grid at previous page
 - Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
 
+## 2026-05-15 — Phase 4, Steps 4.6–4.7: Regression tests and phase completion
+
+- Created `src/__tests__/Dock.test.tsx` with 4 tests:
+  - Dock renders 4 dock icons
+  - Frosted glass classes present (`backdrop-blur-[20px]`, `bg-white/60`)
+  - Dock icons hide badges (`hideBadge` prop — no badge span rendered)
+  - `splitDockProducts()` correctly separates dock from grid products
+- Created `src/__tests__/Pagination.test.tsx` with 6 tests:
+  - PageDots renders correct number of dots
+  - Active dot has `bg-white`, inactive has `bg-white/40`
+  - Returns null when `total <= 1`
+  - ArrowRight advances to next page (keyboard nav)
+  - ArrowLeft returns to previous page
+  - Mouse drag (swipe substitute) advances page
+- Created `src/__tests__/Search.test.tsx` with 8 tests:
+  - SearchOverlay standalone: calls onSearch on input, Escape calls onDismiss, backdrop click calls onDismiss
+  - Integration via IconGrid: pull-down opens search, filters by name, filters by badge label ("launch" → L), filters by category tag, "No apps found" for non-matching query
+- Key testing decisions: used explicit `cleanup()` in `beforeEach` (vitest auto-cleanup not configured); used mouse drag instead of touch events for swipe tests (jsdom touch support unreliable); tested SearchOverlay dismiss behaviors standalone for reliability
+- Step 4.7 no-op: 55/55 tests pass, `npx tsc --noEmit` clean, `npm run build` succeeds
+- All Phase 4 milestone acceptance criteria met — phase complete
+
 ## 2026-05-15 — Phase 4, Step 4.5: Wire up all components and refine integration
 
 - Verified all integration points — no code changes needed, architecture was already correct:
