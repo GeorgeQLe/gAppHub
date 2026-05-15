@@ -165,6 +165,17 @@
 - Navigation remains default `<a>` behavior
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
 
+## 2026-05-14 — Phase 3, Step 3.3: Add description tooltip on hover to AppIcon
+
+- Added `useState` for tooltip visibility + `useRef` for 400ms hover delay timer
+- Added `onMouseEnter`/`onMouseLeave` handlers on `<a>` element for delay-show/instant-hide
+- Tooltip markup: dark rounded rect (`bg-[#333]/90`, `text-white`, `text-xs`, `rounded-lg`, `max-w-[200px]`) positioned `absolute bottom-full` above the icon with `z-20`
+- Downward-pointing caret via CSS border trick (`border-4 border-transparent border-t-[#333]/90`)
+- Content: `product.description`, only rendered when tooltip state is true and description exists
+- Accessibility: unique `id` per tooltip, `role="tooltip"`, `aria-describedby` on the `<a>` (only set when tooltip visible)
+- Added `pointer-events-none` and `whitespace-normal` to tooltip for proper layout behavior
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 17/17 tests pass (no regressions)
+
 ## 2026-05-14 — Phase 2, Step 2.6: Write regression tests covering Phase 2 acceptance criteria
 
 - Created `src/__tests__/IconGrid.test.tsx` with 6 tests:

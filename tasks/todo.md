@@ -47,7 +47,7 @@
   - Use CSS transitions (no JS state needed for hover/press/focus — pure CSS pseudoclass approach)
   - Transition: `transition-transform duration-150 ease-out`
 
-- [ ] Step 3.3: Add description tooltip on hover
+- [x] Step 3.3: Add description tooltip on hover
   - Files: modify `src/components/AppIcon.tsx`
   - Add tooltip state: `useState` for visibility, `useRef` + `setTimeout` for 400ms hover delay
   - Tooltip markup: dark rounded rectangle (`bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5`) positioned above the icon with a small downward-pointing caret (CSS triangle via `after` pseudo-element or a `<span>`)
@@ -59,28 +59,33 @@
   - Position: absolute, above the icon container, with `z-20` to float above other icons
   - Accessible: `role="tooltip"`, linked via `aria-describedby` on the `<a>`
 
-  ### Step 3.3 Implementation Plan
+- [ ] Step 3.4: Build the BadgeLegend component
+  - Files: create `src/components/BadgeLegend.tsx`
+  - Horizontal row of badge examples, each showing the colored badge circle + label text
+  - Items: L=Live, B=Beta, N=New, W=Wishlist, plus a grayed-out icon example for Deprecated
+  - Typography: 12px regular, `text-[#86868b]` (muted secondary)
+  - Each badge uses the same colors as in AppIcon (L=#34C759, B=#FF9500, N=#007AFF, W=#AF52DE)
+  - Deprecated example: small grayed-out square icon + "Deprecated" label
+  - Spacing: `gap-4` or `gap-6` between items, flex row with wrap for small screens
+  - This is a client component (`"use client"`) to support legend tooltip hover
 
-  **What to build:** Add a description tooltip that appears on hover (400ms delay) above each AppIcon, showing `product.description`.
+  ### Step 3.4 Implementation Plan
 
-  **Context:** AppIcon (`src/components/AppIcon.tsx`) is now a client component (added `"use client"` in Step 3.2). It has CSS-only hover/press/focus interactions on the `<a>` element. The component renders an `<a>` wrapping a `relative` container (icon img + badge span) + name label. Need to add React state (`useState` for visibility, `useRef`+`setTimeout` for 400ms delay) and tooltip markup.
+  **What to build:** A `BadgeLegend` component that renders a horizontal row of badge type examples (L, B, N, W, Deprecated) below the phone frame with matching colors and labels.
+
+  **Context:** Badge colors are already defined in `src/components/AppIcon.tsx` as `badgeColorMap`. The legend is a standalone component that will be integrated into the page in Step 3.5. It needs `"use client"` because Step 3.5 will add hover tooltips.
 
   **Files:**
-  - **Modify:** `src/components/AppIcon.tsx` — add tooltip state, delay logic, tooltip markup, and accessibility attributes
+  - **Create:** `src/components/BadgeLegend.tsx`
 
   **Approach:**
-  1. Add `useState<boolean>(false)` for tooltip visibility
-  2. Add `useRef<ReturnType<typeof setTimeout> | null>(null)` for the delay timer
-  3. On the outer `<a>` element, add `onMouseEnter` handler: set a 400ms timeout that sets tooltip visible
-  4. On the outer `<a>` element, add `onMouseLeave` handler: clear the timeout and hide tooltip
-  5. Add tooltip markup inside the `relative` container div (sibling to `<img>` and badge `<span>`):
-     - Position: `absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20`
-     - Style: `bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-md max-w-[200px] text-center`
-     - Caret: small CSS triangle below the tooltip (downward-pointing, using border trick or `after` pseudo)
-     - Content: `product.description`
-     - Only rendered when tooltip state is true
-  6. Accessibility: add `id={tooltipId}` on the tooltip element, `aria-describedby={tooltipId}` on the `<a>`, `role="tooltip"` on the tooltip
-  7. Touch dismiss: tooltip hides on `onMouseLeave` which covers touch-away on mobile
+  1. Create a client component (`"use client"`) exporting `BadgeLegend`
+  2. Define legend items array: `[{ letter: "L", label: "Live", color: "#34C759" }, { letter: "B", label: "Beta", color: "#FF9500" }, { letter: "N", label: "New", color: "#007AFF" }, { letter: "W", label: "Wishlist", color: "#AF52DE" }]`
+  3. Render flex row (`flex flex-wrap items-center justify-center gap-4`) containing:
+     - For each badge item: a flex row with a 16px colored circle (matching badge color) containing the white letter + label text
+     - A deprecated example: small grayed-out square icon (`w-4 h-4 rounded bg-gray-300`) + "Deprecated" label
+  4. Typography: `text-xs text-[#86868b]` for labels
+  5. Badge circles: `w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white` with inline `backgroundColor`
 
   **Execution Profile:**
   - Parallel mode: serial
@@ -92,19 +97,9 @@
   - `npx tsc --noEmit` passes
   - `npm run build` succeeds
   - All 17 existing tests still pass (no regressions)
-  - Visual check: hover over icon, tooltip appears after ~400ms with description text above icon
+  - Visual check will happen in Step 3.5 when integrated into the page
 
-  **Ship-one-step handoff:** Implement only Step 3.3, validate it, then run `/ship` when done.
-
-- [ ] Step 3.4: Build the BadgeLegend component
-  - Files: create `src/components/BadgeLegend.tsx`
-  - Horizontal row of badge examples, each showing the colored badge circle + label text
-  - Items: L=Live, B=Beta, N=New, W=Wishlist, plus a grayed-out icon example for Deprecated
-  - Typography: 12px regular, `text-[#86868b]` (muted secondary)
-  - Each badge uses the same colors as in AppIcon (L=#34C759, B=#FF9500, N=#007AFF, W=#AF52DE)
-  - Deprecated example: small grayed-out square icon + "Deprecated" label
-  - Spacing: `gap-4` or `gap-6` between items, flex row with wrap for small screens
-  - This is a client component (`"use client"`) to support legend tooltip hover
+  **Ship-one-step handoff:** Implement only Step 3.4, validate it, then run `/ship` when done.
 
 - [ ] Step 3.5: Add legend tooltips and integrate BadgeLegend into the page
   - Files: modify `src/components/BadgeLegend.tsx`, modify `src/app/page.tsx`
