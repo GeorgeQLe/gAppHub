@@ -5,6 +5,14 @@ export const metadata: Metadata = {
   title: "GappHub — Lexcorp Products",
   description:
     "Lexcorp product portfolio launcher — Made in Boston, Building in Public",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
