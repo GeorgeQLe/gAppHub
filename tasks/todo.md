@@ -36,7 +36,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 5.1: Install Framer Motion and create shared page wrapper + reduced motion hook
+- [x] Step 5.1: Install Framer Motion and create shared page wrapper + reduced motion hook
   - Files: modify `package.json`, create `src/hooks/useReducedMotion.ts`, create `src/components/PageContent.tsx`, modify `src/app/page.tsx`
   - Install `framer-motion` as a dependency
   - Create `useReducedMotion` hook: listens to `prefers-reduced-motion` media query, returns boolean

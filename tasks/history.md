@@ -318,3 +318,12 @@
   - HomeIndicator renders below Dock in page.tsx composition order
   - Single page (20 grid products < 24 per page): PageDots returns null for `total <= 1`
 - Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
+
+## 2026-05-15 — Phase 5, Step 5.1: Install Framer Motion + shared page wrapper
+
+- Installed `framer-motion` as a dependency
+- Created `src/hooks/useReducedMotion.ts`: custom hook listening to `prefers-reduced-motion: reduce` media query, SSR-safe (defaults `false`, updates on mount)
+- Created `src/components/PageContent.tsx`: `"use client"` component extracting shared page content (logo, tagline, PhoneFrame children, BadgeLegend) with `variant` prop (`"none" | "boot" | "slide" | "assemble"`). For `variant="none"`, wraps content in a 200ms Framer Motion opacity fade-in; skips animation when reduced motion is preferred
+- Refactored `src/app/page.tsx` to thin server component: fetches products, passes to `<PageContent variant="none" />`
+- Created `src/__tests__/setup.ts` with `window.matchMedia` mock for jsdom test environment; wired into `vitest.config.ts` via `setupFiles`
+- Verified: `npx tsc --noEmit` clean, 55/55 tests pass (no regressions), `npm run build` succeeds
