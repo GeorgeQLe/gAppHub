@@ -382,3 +382,18 @@
 - Confirmed reduced motion support on all routes: animation sequences skipped, ≤200ms opacity fade applied
 - No code changes needed — all animations correct as-is
 - Verified: `npx tsc --noEmit` clean, 55/55 tests pass, lint only pre-existing warnings (not in modified files)
+
+## 2026-05-15 — Phase 5, Step 5.6: Write regression tests covering Phase 5 acceptance criteria
+
+- Created `src/__tests__/Animations.test.tsx` with 11 regression tests in 4 groups:
+  - **PageContent rendering (4 variants):** variant="none" renders final content immediately; boot/slide/assemble render same final content after advancing fake timers past animation duration (2200/1500/2300ms)
+  - **useReducedMotion hook (3 tests):** returns false by default; returns true when `prefers-reduced-motion: reduce` matches; updates reactively when media query change event fires
+  - **Reduced motion on animation variants (3 tests):** boot/slide/assemble with reduced motion skip animations and render final content immediately (no timer advancement needed)
+  - **Cross-route consistency (1 test):** all 4 variants render exactly 20 grid icons and 4 dock icons at settled state
+- Key testing decisions:
+  - `vi.setSystemTime(new Date(2026, 0, 1, 9, 41, 0))` pins StatusBar clock for deterministic assertions
+  - `vi.spyOn(window, "matchMedia").mockReturnValue(...)` overrides global setup mock for reduced motion tests
+  - `screen.queryAllByText("9:41 AM").length >= 1` handles framer-motion duplicate elements in JSDOM
+  - `.z-50.bg-black` selector distinguishes boot overlay from DynamicIsland's bg-black
+  - Explicit `cleanup()` in `beforeEach` prevents DOM leaking between describe blocks
+- Verified: 66/66 tests pass (55 existing + 11 new), `npx tsc --noEmit` clean, lint only pre-existing warnings

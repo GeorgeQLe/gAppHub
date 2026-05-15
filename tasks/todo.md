@@ -200,7 +200,7 @@
   **Ship-one-step handoff:** Implement only Step 5.6, validate it, then run `/ship` when done.
 
 ### Green
-- [ ] Step 5.6: Write regression tests covering Phase 5 acceptance criteria
+- [x] Step 5.6: Write regression tests covering Phase 5 acceptance criteria
   - Files: create `src/__tests__/Animations.test.tsx`
   - Test each route's page component renders without crashing
   - Test `useReducedMotion` hook returns correct value based on media query
