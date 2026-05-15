@@ -9,7 +9,7 @@ interface DockProps {
 
 export default function Dock({ products }: DockProps) {
   return (
-    <div className="absolute bottom-0 left-0 right-0 flex items-center justify-around px-4 pb-6 pt-3 border-t border-white/30 bg-white/60 backdrop-blur-[20px] rounded-b-[38px]">
+    <div role="toolbar" aria-label="Pinned apps" className="absolute bottom-0 left-0 right-0 flex items-center justify-around px-4 pb-6 pt-3 border-t border-white/30 bg-white/60 backdrop-blur-[20px] rounded-b-[38px]">
       {products.map((p) => (
         <AppIcon product={p} hideBadge key={p.id} />
       ))}

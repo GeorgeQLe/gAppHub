@@ -103,8 +103,8 @@ export default function IconGrid({ products }: IconGridProps) {
   return (
     <div
       className="overflow-hidden flex-1 relative"
-      role="region"
-      aria-label="App pages"
+      role="grid"
+      aria-label="Product apps"
       tabIndex={0}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}

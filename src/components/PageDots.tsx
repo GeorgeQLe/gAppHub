@@ -18,7 +18,7 @@ export default function PageDots({ total, active, onChange }: PageDotsProps) {
           key={i}
           role="tab"
           aria-selected={i === active}
-          aria-label={`Page ${i + 1}`}
+          aria-label={`Page ${i + 1} of ${total}`}
           onClick={() => onChange?.(i)}
           className={`rounded-full transition-all duration-200 ${
             i === active

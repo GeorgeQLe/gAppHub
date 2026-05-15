@@ -95,7 +95,7 @@ describe("Search filtering via IconGrid", () => {
   });
 
   function openSearchAndType(query: string) {
-    const region = screen.getByRole("region", { name: "App pages" });
+    const region = screen.getByRole("grid", { name: "Product apps" });
     fireEvent.mouseDown(region, { clientX: 100 });
     fireEvent.mouseUp(region, { clientX: 100 });
 

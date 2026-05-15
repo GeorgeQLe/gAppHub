@@ -54,7 +54,7 @@ describe("IconGrid keyboard navigation", () => {
 
   it("ArrowRight advances to next page", () => {
     render(<IconGrid products={products} />);
-    const region = screen.getByRole("region", { name: "App pages" });
+    const region = screen.getByRole("grid", { name: "Product apps" });
 
     expect(screen.getAllByRole("tab")[0]).toHaveAttribute(
       "aria-selected",
@@ -71,7 +71,7 @@ describe("IconGrid keyboard navigation", () => {
 
   it("ArrowLeft goes to previous page", () => {
     render(<IconGrid products={products} />);
-    const region = screen.getByRole("region", { name: "App pages" });
+    const region = screen.getByRole("grid", { name: "Product apps" });
 
     fireEvent.keyDown(region, { key: "ArrowRight" });
     expect(screen.getAllByRole("tab")[1]).toHaveAttribute(
@@ -94,7 +94,7 @@ describe("IconGrid swipe navigation", () => {
 
   it("swipe left advances to next page", () => {
     render(<IconGrid products={products} />);
-    const region = screen.getByRole("region", { name: "App pages" });
+    const region = screen.getByRole("grid", { name: "Product apps" });
 
     fireEvent.mouseDown(region, { clientX: 200 });
     fireEvent.mouseUp(region, { clientX: 100 });

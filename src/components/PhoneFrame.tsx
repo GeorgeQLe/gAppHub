@@ -9,6 +9,8 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
     return (
       <div className="w-[90vw] max-w-[400px] overflow-hidden rounded-3xl border-2 border-gray-300 shadow-md">
         <div
+          role="region"
+          aria-label="Lexcorp product launcher"
           className="relative min-h-0 w-full overflow-hidden"
           style={{
             aspectRatio: "375 / 812",
@@ -33,6 +35,8 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
       >
         <div className="flex min-h-0 flex-1 flex-col rounded-[48px] bg-[#1c1c1e] p-3">
           <div
+            role="region"
+            aria-label="Lexcorp product launcher"
             className="relative min-h-0 flex-1 w-[375px] overflow-hidden rounded-[38px]"
             style={{
               background: "linear-gradient(to bottom, #e8ecf4, #f5f0f6)",
