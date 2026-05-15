@@ -5,7 +5,14 @@
 
 ## Priority Task Queue
 
-- [ ] `/research-roadmap` - Scan documentation health because all 6 roadmap phases are complete and no documentation audit has been performed yet. Evidence: all 6 milestones checked in `tasks/roadmap.md`, no `## Priority Documentation Todo` section exists.
+- [x] `/research-roadmap` - Documentation scan complete (2026-05-15).
+
+## Priority Documentation Todo
+
+- [ ] `/spec-drift fix all` - Check spec-vs-implementation drift because `specs/ui-gapphub.md` (modified May 14 11:24) predates 18+ source commits through May 15. Known drift: badge colors darkened for WCAG AA (green #34C759→#15803d, orange #FF9500→#C2410C, blue #007AFF→#0066CC, purple #AF52DE→#8B3FC1), dock opacity changed (bg-white/60→bg-white/[0.72]), inset highlight shadow added, ARIA roles/labels added across all components, responsive breakpoint behavior added, keyboard navigation added, touch target sizing added.
+- [ ] `/reconcile-dev-docs fix tasks` - Reconcile task docs against final implementation because Phase 5 milestone in `tasks/roadmap.md` has 3 unchecked acceptance criteria (60fps jank, phase tests, regressions) despite phase being marked complete with ✓.
+
+> **Note:** Business research items (ICP, competitive analysis, positioning, GTM, monetization, metrics, landing copy, journey map) are not applicable — GappHub is a personal portfolio launcher, not a revenue-generating SaaS product. No concept-exploration needed; `research/concept-brief.md` already exists.
 
 ## Phase 6: Responsive, Accessibility & Polish (Complete)
 
