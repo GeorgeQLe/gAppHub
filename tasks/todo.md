@@ -122,3 +122,58 @@
 - Ready for next phase: yes/no
 
 ---
+
+## Next Step Plan — Step 4.4: Build pull-down search overlay
+
+### What to build
+
+Create a `SearchOverlay` component and integrate it into `IconGrid` to enable pull-down Spotlight-style search that filters icons in real-time.
+
+### Files
+
+- **Create:** `src/components/SearchOverlay.tsx` — search bar overlay component
+- **Modify:** `src/components/IconGrid.tsx` — add search state, pull-down gesture, filtering logic
+
+### Approach
+
+1. **SearchOverlay component** (`src/components/SearchOverlay.tsx`):
+   - Props: `{ onSearch: (term: string) => void, onDismiss: () => void, visible: boolean }`
+   - Client component with internal `searchTerm` state
+   - Input: text field with placeholder "Search apps...", `bg-white/80 backdrop-blur-[10px] rounded-xl`
+   - Slides down when `visible` via CSS transform + transition
+   - Dismiss: Escape keydown on input, click/tap on backdrop area
+   - Auto-focus input when visible
+
+2. **IconGrid integration** (`src/components/IconGrid.tsx`):
+   - Add `showSearch` boolean state
+   - Pull-down trigger: detect downward swipe (>30px) at top of grid via touch handlers
+   - When search active: filter products by name (case-insensitive substring), badge letter, and category tags
+   - Filtered results replace paginated grid (single page, no pagination)
+   - If no results: show "No apps found" centered text
+   - On dismiss: clear search, return to paginated grid at previous page
+   - Hide PageDots when search is active
+
+### Current state context
+
+- IconGrid is `"use client"` with page state, swipe handlers (touch + mouse), keyboard nav
+- Products are chunked into pages of 24 via `chunk()` helper
+- PageDots component already handles `total <= 1` by returning null
+- Dock is separate from IconGrid (in `page.tsx`), persists during search
+- Product type has: `name`, `badge` (`"L"|"B"|"N"|"W"|null`), `category` (string[])
+
+### Execution Profile
+
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Conflict risk:** medium (IconGrid touch handlers need careful extension for vertical vs horizontal swipe)
+- **Review gates:** none
+
+### Verification
+
+- `npx tsc --noEmit` passes
+- All 37 existing tests pass (no regressions)
+- `npm run build` succeeds
+- Dev server: pull-down gesture reveals search, typing filters icons, Escape dismisses
+- "No apps found" shows for non-matching search terms
+
+**Ship-one-step handoff:** Implement only Step 4.4, validate it, then run `/ship` when done.
