@@ -1,9 +1,13 @@
 import DynamicIsland from "@/components/DynamicIsland";
 import HomeIndicator from "@/components/HomeIndicator";
+import IconGrid from "@/components/IconGrid";
 import PhoneFrame from "@/components/PhoneFrame";
 import StatusBar from "@/components/StatusBar";
+import { getProducts, sortProducts } from "@/lib/products";
 
-export default function Home() {
+export default async function Home() {
+  const products = sortProducts(await getProducts());
+
   return (
     <main className="flex h-screen flex-col items-center px-4 py-4">
       <svg
@@ -36,6 +40,7 @@ export default function Home() {
         <PhoneFrame>
           <StatusBar />
           <DynamicIsland />
+          <IconGrid products={products} />
           <HomeIndicator />
         </PhoneFrame>
       </div>

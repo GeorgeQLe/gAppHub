@@ -58,13 +58,15 @@ describe("Home page", () => {
     vi.useRealTimers();
   });
 
-  it("renders LEXCORP text", () => {
-    render(<Home />);
+  it("renders LEXCORP text", async () => {
+    const jsx = await Home();
+    render(jsx);
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
   });
 
-  it("renders tagline", () => {
-    render(<Home />);
+  it("renders tagline", async () => {
+    const jsx = await Home();
+    render(jsx);
     expect(
       screen.getAllByText(/Made in Boston, Building in Public/).length
     ).toBeGreaterThan(0);
