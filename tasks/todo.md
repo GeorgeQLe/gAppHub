@@ -47,7 +47,7 @@
   - Verify: app still renders identically on `/`, all 55 tests pass, `npm run build` succeeds
 
 - [ ] Step 5.2: Build the `/boot` animation route
-  - Files: create `src/app/boot/page.tsx`
+  - Files: create `src/app/boot/page.tsx`, modify `src/components/PageContent.tsx`
   - Server component that fetches products and passes them + variant to `PageContent`
   - Animation sequence (all times from page load, using Framer Motion `useAnimate` or `AnimatePresence`):
     - 0–800ms: Black overlay fills phone screen, white Lexcorp logo SVG (80px wide) fades in at center with subtle scale pulse (1.0 → 1.05 → 1.0 loop)
@@ -57,6 +57,42 @@
     - 2200ms+: Settled, all transforms removed
   - Reduced motion: skip all, show final state with ≤200ms opacity fade
   - Verify: `/boot` plays full sequence and ends at identical state to `/`
+
+  **Implementation plan:**
+
+  1. **Create `src/app/boot/page.tsx`** — async server component identical to `src/app/page.tsx` but passes `variant="boot"` to `PageContent`
+
+  2. **Extend `PageContent` for `variant="boot"`** in `src/components/PageContent.tsx`:
+     - When `variant === "boot"` and `!reducedMotion`, orchestrate a multi-phase animation sequence:
+       - **Phase 1 (0–800ms):** Render a black overlay (`position: absolute`, `inset: 0`, `z-index: 50`) inside the PhoneFrame area. Center a white LEXCORP SVG (80px wide) with a looping scale pulse (`animate={{ scale: [1, 1.05, 1] }}`, `transition={{ repeat: Infinity, duration: 1 }}`). Both overlay and logo fade in from opacity 0.
+       - **Phase 2 (800–1200ms):** Logo fades out, black overlay fades out to reveal the wallpaper/content beneath.
+       - **Phase 3 (1200–1800ms):** StatusBar fades in. IconGrid icons stagger in row-by-row (4 per row, 50ms delay per icon). Each icon scales from 0.8 → 1.0 with spring bounce (`type: "spring"`, `bounce: 0.3`).
+       - **Phase 4 (1800–2200ms):** Dock slides up from `translateY(100%)` → `translateY(0)`. PageDots fade in.
+       - **Phase 5 (2200ms+):** Settled, all animation wrappers removed or at final values.
+     - Use `useState` for a phase counter or `useAnimate` from Framer Motion to orchestrate timing via `setTimeout` or Framer's `sequence` API.
+     - Children components (StatusBar, IconGrid, Dock) need to be individually wrapped in `motion.div` elements for staggered control. Consider passing animation state as props or using CSS visibility to initially hide elements.
+     - The boot overlay (black screen + logo) is an additional element layered on top of the phone content.
+
+  3. **Key patterns from Step 5.1:**
+     - `PageContent` already has the `variant` prop and `useReducedMotion` hook wired up
+     - When `reducedMotion` is true, skip all boot animation and render with ≤200ms opacity fade (same as `variant="none"`)
+     - Product type imported from `@/types/product`
+     - `matchMedia` mock in `src/__tests__/setup.ts` handles test environment
+
+  4. **Verification:**
+     - `npx tsc --noEmit` passes
+     - `npm run build` succeeds
+     - All 55 existing tests pass (no regressions)
+     - Dev server: `/boot` plays the full 2.2s boot sequence
+     - Dev server: `/boot` ends at the identical visual state as `/`
+     - Dev server: toggling `prefers-reduced-motion` in DevTools shows instant render on `/boot`
+
+  ### Execution Profile
+  **Parallel mode:** serial
+  **Integration owner:** main agent
+  **Conflict risk:** low (new route file + extending existing PageContent)
+
+  **Ship-one-step handoff:** Implement only Step 5.2, validate it, then run `/ship` when done.
 
 - [ ] Step 5.3: Build the `/slide` animation route
   - Files: create `src/app/slide/page.tsx`
