@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Product } from "@/types/product";
 import AppIcon from "@/components/AppIcon";
+import PageDots from "@/components/PageDots";
 
 const ICONS_PER_PAGE = 24;
 
@@ -92,20 +93,9 @@ export default function IconGrid({ products }: IconGridProps) {
           </div>
         ))}
       </div>
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-1.5 -mt-[78px]" aria-hidden>
-          {pages.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className={`w-[6px] h-[6px] rounded-full transition-colors ${
-                i === page ? "bg-white" : "bg-white/40"
-              }`}
-              aria-label={`Go to page ${i + 1}`}
-            />
-          ))}
-        </div>
-      )}
+      <div className="-mt-[78px]">
+        <PageDots total={totalPages} active={page} onChange={goTo} />
+      </div>
     </div>
   );
 }
