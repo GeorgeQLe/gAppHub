@@ -245,3 +245,17 @@
 - Updated `src/app/page.tsx`: calls `splitDockProducts` after sort, passes `dock` to `<Dock>` and `grid` to `<IconGrid>`
 - Dock renders between IconGrid and HomeIndicator inside PhoneFrame
 - Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
+
+## 2026-05-15 — Phase 4, Step 4.2: Convert IconGrid to paginated client component with swipe navigation
+
+- Rewrote `src/components/IconGrid.tsx` from server component to `"use client"` paginated component
+- Added `chunk()` helper to split products into pages of 24 icons each
+- Layout: outer `overflow-hidden flex-1` container, inner flex row of page panels with `translateX(-${page * 100}%)` slide animation (300ms ease-out)
+- Each page panel: `w-full flex-shrink-0` with existing 4-col grid layout + `content-start` alignment
+- Touch swipe: `onTouchStart`/`onTouchEnd` with 50px threshold, ignores vertical swipes (`Math.abs(dy) > Math.abs(dx)`)
+- Mouse drag: `onMouseDown`/`onMouseUp` with 50px threshold, `onMouseLeave` cancels drag
+- Keyboard: `onKeyDown` for ArrowLeft/ArrowRight with `preventDefault`, container `tabIndex={0}`, `role="region"`, `aria-label="App pages"`
+- Page clamping via `goTo` callback: `Math.max(0, Math.min(p, totalPages - 1))`
+- Added inline page indicator dots (6px circles, `bg-white`/`bg-white/40`) — shown only when `totalPages > 1`
+- Props interface unchanged (`{ products: Product[] }`) — no breaking changes to page.tsx
+- Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds

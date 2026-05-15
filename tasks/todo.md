@@ -42,7 +42,7 @@
   - In `page.tsx`: call `splitDockProducts` after sort, pass `dock` to `<Dock>`, pass `grid` to `<IconGrid>`
   - Update IconGrid's `pb-[90px]` bottom padding to account for dock overlap if needed
 
-- [ ] Step 4.2: Convert IconGrid to paginated client component with swipe navigation
+- [x] Step 4.2: Convert IconGrid to paginated client component with swipe navigation
   - Files: rewrite `src/components/IconGrid.tsx`
   - Convert to `"use client"` component
   - Page state: `useState<number>(0)` for current page index
@@ -106,9 +106,9 @@
 **Acceptance Criteria:**
 - [x] Dock renders with frosted glass effect and 4 pinned app icons
 - [ ] Dock stays fixed across page swipes
-- [ ] Swiping horizontally navigates between icon pages with smooth transition
+- [x] Swiping horizontally navigates between icon pages with smooth transition
 - [ ] Page dots render correctly, highlighting the active page
-- [ ] Arrow keys navigate between pages
+- [x] Arrow keys navigate between pages
 - [ ] Pull-down gesture reveals search bar
 - [ ] Typing in search filters icons in real-time by name, badge, and tags
 - [ ] "No apps found" shows for empty search results
@@ -123,43 +123,44 @@
 
 ---
 
-## Next Step Plan — Step 4.2: Convert IconGrid to paginated client component with swipe navigation
+## Next Step Plan — Step 4.3: Add iOS-style page indicator dots
 
 ### What to build
 
-Rewrite `src/components/IconGrid.tsx` from a static server component into a `"use client"` paginated component with horizontal swipe navigation and keyboard support.
+Create a `PageDots` component and integrate it into `IconGrid` to show iOS-style page indicator dots between the grid and the dock.
 
 ### Files
 
-- **Modify:** `src/components/IconGrid.tsx` — full rewrite to client component with pagination
+- **Create:** `src/components/PageDots.tsx` — standalone page indicator component
+- **Modify:** `src/components/IconGrid.tsx` — integrate PageDots, pass page state
 
 ### Approach
 
-1. Add `"use client"` directive and import `useState`, `useRef`, `useCallback`
-2. **Page calculation:** chunk grid products into pages of 24 icons each (`Math.ceil(products.length / 24)`). With 20 grid products currently, this produces 1 page — but the logic must support multiple pages when products grow.
-3. **Layout structure:**
-   - Outer container: `overflow-hidden` with `relative` positioning, fills available height between status bar area and dock
-   - Inner sliding container: flex row of page panels, each `w-full flex-shrink-0`
-   - Slide via `transform: translateX(-${page * 100}%)` with `transition: transform 300ms ease-out`
-   - Each page panel: existing 4-col grid layout (`grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4`)
-4. **Touch swipe:** `onTouchStart/Move/End` handlers tracking horizontal delta. Threshold ~50px to trigger page change. Store touch start position in a ref.
-5. **Mouse drag:** `onMouseDown/Move/Up` handlers for desktop swipe support. Track `isDragging` state in ref.
-6. **Keyboard:** `onKeyDown` for ArrowLeft/ArrowRight. Make container focusable with `tabIndex={0}`, `role="region"`, `aria-label="App pages"`.
-7. **Page clamping:** `Math.max(0, Math.min(page, totalPages - 1))`
-8. Keep existing `products` prop interface — no breaking changes to `page.tsx`.
+1. **PageDots component:**
+   - Props: `{ total: number, active: number, onChange?: (page: number) => void }`
+   - Render a horizontal row of dots centered below the grid, above the dock
+   - Active dot: 8px diameter, `bg-white` fully opaque
+   - Inactive dots: 6px diameter, `bg-white/40` semi-transparent
+   - Transition between sizes: `transition-all duration-200`
+   - Accessibility: `role="tablist"` with `aria-label="Page indicator"`, each dot `role="tab"` with `aria-selected`
+   - Clicking a dot navigates to that page via `onChange`
+2. **IconGrid integration:**
+   - Replace the inline dot buttons currently in IconGrid with `<PageDots>` component
+   - Pass `total={totalPages}`, `active={page}`, `onChange={goTo}`
+   - Position PageDots between grid bottom and dock (current `-mt-[78px]` area)
 
 ### Current state context
 
-- `IconGrid` currently: server component, single `grid grid-cols-4` div, `pt-[76px] pb-[90px] px-4` padding
-- `AppIcon` is already a client component (hover tooltips) — no issues composing in a client parent
-- Dock is absolute-positioned at bottom-0, separate from IconGrid — no conflict
-- Currently 20 grid products (4 dock separated) = 1 page. Need to test with mock data for multi-page.
+- IconGrid already has inline page dots (basic 6px buttons with `bg-white`/`bg-white/40`) — replace with proper PageDots component
+- IconGrid is a `"use client"` component with `page` state and `goTo` callback already wired up
+- Dock is absolute-positioned at bottom-0, PageDots sit visually above it
+- Currently 20 grid products = 1 page, so dots only show when `totalPages > 1`
 
 ### Execution Profile
 
 - **Parallel mode:** serial
 - **Integration owner:** main agent
-- **Conflict risk:** low (single file rewrite, no shared state changes)
+- **Conflict risk:** low
 - **Review gates:** none
 
 ### Verification
@@ -167,7 +168,7 @@ Rewrite `src/components/IconGrid.tsx` from a static server component into a `"us
 - `npx tsc --noEmit` passes
 - All 37 existing tests pass (no regressions)
 - `npm run build` succeeds
-- Dev server shows grid with swipe/keyboard navigation working
-- Arrow keys change pages when grid is focused
+- Dev server shows page dots with correct active/inactive styling
+- Clicking a dot navigates to the corresponding page
 
-**Ship-one-step handoff:** Implement only Step 4.2, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** Implement only Step 4.3, validate it, then run `/ship` when done.
