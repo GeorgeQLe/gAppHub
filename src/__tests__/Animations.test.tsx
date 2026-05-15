@@ -51,7 +51,7 @@ function mockReducedMotion(enabled: boolean) {
   } as unknown as MediaQueryList;
 
   vi.spyOn(window, "matchMedia").mockReturnValue(mockMql);
-  return listeners;
+  return { listeners, mockMql };
 }
 
 function renderPageContent(variant: "none" | "boot" | "slide" | "assemble") {
@@ -133,12 +133,13 @@ describe("useReducedMotion hook", () => {
   });
 
   it("updates when media query change event fires", () => {
-    const listeners = mockReducedMotion(false);
+    const { listeners, mockMql } = mockReducedMotion(false);
     const { container } = renderPageContent("boot");
 
     expect(container.querySelector(".z-50.bg-black")).toBeInTheDocument();
 
     act(() => {
+      (mockMql as { matches: boolean }).matches = true;
       listeners.forEach((cb) => cb({ matches: true } as MediaQueryListEvent));
     });
 

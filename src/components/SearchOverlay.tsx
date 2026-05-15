@@ -18,6 +18,7 @@ export default function SearchOverlay({
 
   useEffect(() => {
     if (visible) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset when overlay opens
       setSearchTerm("");
       onSearch("");
       const id = requestAnimationFrame(() => inputRef.current?.focus());

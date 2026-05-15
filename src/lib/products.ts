@@ -24,8 +24,6 @@ export function splitDockProducts(products: Product[]): {
   };
 }
 
-const BADGE_ORDER: Record<string, number> = { L: 0, B: 1, W: 2 };
-
 export function sortProducts(products: Product[]): Product[] {
   const featured = products
     .filter((p) => p.featured)
