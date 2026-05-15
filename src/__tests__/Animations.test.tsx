@@ -1,0 +1,207 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, act, cleanup } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
+import PageContent from "@/components/PageContent";
+import type { Product } from "@/types/product";
+
+function makeProduct(overrides: Partial<Product> = {}): Product {
+  return {
+    id: "test-id",
+    name: "Test App",
+    url: "https://example.com",
+    icon: "/icons/test.png",
+    description: "A test product",
+    badge: "L",
+    category: ["tools"],
+    featured: false,
+    dock: false,
+    order: 1,
+    ...overrides,
+  };
+}
+
+function makeGridProducts(count: number): Product[] {
+  return Array.from({ length: count }, (_, i) =>
+    makeProduct({ id: `grid-${i}`, name: `Grid App ${i}`, order: i }),
+  );
+}
+
+function makeDockProducts(count: number): Product[] {
+  return Array.from({ length: count }, (_, i) =>
+    makeProduct({ id: `dock-${i}`, name: `Dock App ${i}`, dock: true, order: i }),
+  );
+}
+
+const gridProducts = makeGridProducts(20);
+const dockProducts = makeDockProducts(4);
+
+function mockReducedMotion(enabled: boolean) {
+  const listeners: Array<(e: MediaQueryListEvent) => void> = [];
+  const mockMql = {
+    matches: enabled,
+    media: "(prefers-reduced-motion: reduce)",
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn((event: string, cb: (e: MediaQueryListEvent) => void) => {
+      if (event === "change") listeners.push(cb);
+    }),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(() => false),
+  } as unknown as MediaQueryList;
+
+  vi.spyOn(window, "matchMedia").mockReturnValue(mockMql);
+  return listeners;
+}
+
+function renderPageContent(variant: "none" | "boot" | "slide" | "assemble") {
+  return render(
+    <PageContent
+      variant={variant}
+      gridProducts={gridProducts}
+      dockProducts={dockProducts}
+    />,
+  );
+}
+
+function expectFinalContent() {
+  expect(screen.queryAllByText("9:41 AM").length).toBeGreaterThanOrEqual(1);
+  expect(screen.getAllByAltText(/Grid App/)).toHaveLength(20);
+  expect(screen.getAllByAltText(/Dock App/)).toHaveLength(4);
+}
+
+describe("PageContent rendering (4 variants)", () => {
+  beforeEach(() => {
+    cleanup();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 9, 41, 0));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it('variant="none" renders StatusBar, DynamicIsland, IconGrid, Dock, HomeIndicator', () => {
+    renderPageContent("none");
+    expectFinalContent();
+  });
+
+  it('variant="boot" renders same final content after animation completes', () => {
+    renderPageContent("boot");
+    act(() => { vi.advanceTimersByTime(2200); });
+    expectFinalContent();
+  });
+
+  it('variant="slide" renders same final content after animation completes', () => {
+    renderPageContent("slide");
+    act(() => { vi.advanceTimersByTime(1500); });
+    expectFinalContent();
+  });
+
+  it('variant="assemble" renders same final content after animation completes', () => {
+    renderPageContent("assemble");
+    act(() => { vi.advanceTimersByTime(2300); });
+    expectFinalContent();
+  });
+});
+
+describe("useReducedMotion hook", () => {
+  beforeEach(() => {
+    cleanup();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 9, 41, 0));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it("returns false when prefers-reduced-motion does not match", () => {
+    mockReducedMotion(false);
+    const { container } = renderPageContent("boot");
+
+    expect(container.querySelector(".z-50.bg-black")).toBeInTheDocument();
+  });
+
+  it("returns true when prefers-reduced-motion: reduce matches", () => {
+    mockReducedMotion(true);
+    const { container } = renderPageContent("boot");
+
+    expect(container.querySelector(".z-50.bg-black")).not.toBeInTheDocument();
+  });
+
+  it("updates when media query change event fires", () => {
+    const listeners = mockReducedMotion(false);
+    const { container } = renderPageContent("boot");
+
+    expect(container.querySelector(".z-50.bg-black")).toBeInTheDocument();
+
+    act(() => {
+      listeners.forEach((cb) => cb({ matches: true } as MediaQueryListEvent));
+    });
+
+    expect(container.querySelector(".z-50.bg-black")).not.toBeInTheDocument();
+  });
+});
+
+describe("Reduced motion on animation variants", () => {
+  beforeEach(() => {
+    cleanup();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 9, 41, 0));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it("boot with reduced motion skips animation and renders final content immediately", () => {
+    mockReducedMotion(true);
+    renderPageContent("boot");
+    expectFinalContent();
+  });
+
+  it("slide with reduced motion skips animation and renders final content immediately", () => {
+    mockReducedMotion(true);
+    renderPageContent("slide");
+    expectFinalContent();
+  });
+
+  it("assemble with reduced motion skips animation and renders final content immediately", () => {
+    mockReducedMotion(true);
+    renderPageContent("assemble");
+    expectFinalContent();
+  });
+});
+
+describe("Cross-route consistency", () => {
+  beforeEach(() => {
+    cleanup();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 1, 9, 41, 0));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it("all 4 variants render same number of grid icons (20) and dock icons (4)", () => {
+    const variants = ["none", "boot", "slide", "assemble"] as const;
+    const timings = { none: 0, boot: 2200, slide: 1500, assemble: 2300 };
+
+    for (const variant of variants) {
+      const { unmount } = renderPageContent(variant);
+
+      act(() => { vi.advanceTimersByTime(timings[variant]); });
+
+      expect(screen.getAllByAltText(/Grid App/)).toHaveLength(20);
+      expect(screen.getAllByAltText(/Dock App/)).toHaveLength(4);
+
+      unmount();
+    }
+  });
+});
