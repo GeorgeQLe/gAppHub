@@ -472,3 +472,23 @@
 - Suppressed `set-state-in-effect` in `src/components/SearchOverlay.tsx` (intentional reset-on-open pattern)
 - Updated `src/__tests__/Animations.test.tsx`: `mockReducedMotion` now returns `{ listeners, mockMql }` to support `useSyncExternalStore` snapshot mutation
 - Verified: 0 lint errors, 66/66 tests pass
+
+## 2026-05-15 — Phase 6, Step 6.6: Write Phase 6 regression tests (Responsive + Accessibility)
+
+- Created `src/__tests__/Responsive.test.tsx` with 6 tests:
+  - Mobile PhoneFrame: `border-2`, `rounded-3xl`, `w-[90vw]`, no metallic gradient inline style
+  - Desktop PhoneFrame: `rounded-[50px]`, metallic `linear-gradient` in inline style
+  - Both branches: `role="region"` with `aria-label="Lexcorp product launcher"`
+  - Mocked `useIsMobile` hook via `vi.mock('@/hooks/useIsMobile')` to control mobile/desktop rendering
+- Created `src/__tests__/Accessibility.test.tsx` with 10 tests:
+  - PhoneFrame `role="region"` + `aria-label="Lexcorp product launcher"`
+  - IconGrid `role="grid"` + `aria-label="Product apps"`
+  - AppIcon composite `aria-label` ("Alpha, Live") and deprecated label ("Legacy, Deprecated")
+  - Badge `aria-hidden="true"` on badge span
+  - StatusBar `aria-hidden="true"` on outer div
+  - Dock `role="toolbar"` + `aria-label="Pinned apps"`, frosted glass + inset highlight classes
+  - PageDots 44×44px minimum touch targets (`min-w-[44px]`, `min-h-[44px]`), correct `aria-selected` state
+- Verified: 82/82 tests pass (66 existing + 16 new), `npx tsc --noEmit` clean, lint only pre-existing `<img>` warning
+- Step 6.7 no-op: all validation already passed during 6.6
+- All Phase 6 milestone acceptance criteria met — phase complete
+- **All 6 phases complete** — project at deferred/future work stage
