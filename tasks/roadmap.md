@@ -264,22 +264,22 @@ GappHub is built in six serial phases, each layering new capability onto the pre
   - Files: create `src/__tests__/Interactions.test.tsx`, create `src/__tests__/BadgeLegend.test.tsx`
 - Step 3.7: Run all tests, verify they pass, build succeeds
 
-### Milestone: Phase 3 — Interactions & Badges
+### Milestone: Phase 3 — Interactions & Badges ✓ (completed 2026-05-15)
 **Acceptance Criteria:**
-- [ ] Icons scale up on hover and press-in on click with smooth transitions
-- [ ] Keyboard focus shows visible blue outline ring
-- [ ] Badges render in correct colors with white letter, positioned at icon top-right with white border
-- [ ] Deprecated icons are visually grayed out and dimmed
-- [ ] Tooltips appear on hover after 400ms delay with product description text
-- [ ] Badge legend renders below the phone with all four states + deprecated example
-- [ ] Legend badges show tooltip descriptions on hover
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Icons scale up on hover and press-in on click with smooth transitions
+- [x] Keyboard focus shows visible blue outline ring
+- [x] Badges render in correct colors with white letter, positioned at icon top-right with white border
+- [x] Deprecated icons are visually grayed out and dimmed
+- [x] Tooltips appear on hover after 400ms delay with product description text
+- [x] Badge legend renders below the phone with all four states + deprecated example
+- [x] Legend badges show tooltip descriptions on hover
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase: yes/no
+- Deviations from plan: none
+- Tech debt / follow-ups: none
+- Ready for next phase: yes
 
 ---
 
@@ -312,6 +312,47 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 **Parallelization:** serial
 
 **Coordination Notes:** This is the most complex phase — dock positioning affects grid layout, pagination restructures how icons are grouped, and search needs access to the full product data set. Keep it serial.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** none
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 4.1: Build the Dock component and separate dock products from the grid
+  - Files: create `src/components/Dock.tsx`, modify `src/app/page.tsx`, modify `src/lib/products.ts`
+- Step 4.2: Convert IconGrid to paginated client component with swipe navigation
+  - Files: rewrite `src/components/IconGrid.tsx`
+- Step 4.3: Add iOS-style page indicator dots
+  - Files: create `src/components/PageDots.tsx`, modify `src/components/IconGrid.tsx`
+- Step 4.4: Build pull-down search overlay
+  - Files: create `src/components/SearchOverlay.tsx`, modify `src/components/IconGrid.tsx`
+- Step 4.5: Wire up all components and refine integration
+  - Files: modify `src/app/page.tsx`, modify `src/components/IconGrid.tsx`
+
+### Green
+- Step 4.6: Write regression tests covering Phase 4 acceptance criteria
+  - Files: create `src/__tests__/Dock.test.tsx`, create `src/__tests__/Pagination.test.tsx`, create `src/__tests__/Search.test.tsx`
+- Step 4.7: Run all tests, verify they pass, build succeeds
+
+### Milestone: Phase 4 — Dock, Pagination & Search
+**Acceptance Criteria:**
+- [ ] Dock renders with frosted glass effect and 4 pinned app icons
+- [ ] Dock stays fixed across page swipes
+- [ ] Swiping horizontally navigates between icon pages with smooth transition
+- [ ] Page dots render correctly, highlighting the active page
+- [ ] Arrow keys navigate between pages
+- [ ] Pull-down gesture reveals search bar
+- [ ] Typing in search filters icons in real-time by name, badge, and tags
+- [ ] "No apps found" shows for empty search results
+- [ ] Escape or tap-outside dismisses search
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
 
 **On Completion:**
 - Deviations from plan:
