@@ -62,7 +62,7 @@
 - [x] Step 6.2: Add comprehensive ARIA roles and labels for screen readers
   - Files: modify `src/components/PhoneFrame.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`, modify `src/components/StatusBar.tsx`, modify `src/components/PageDots.tsx`
 
-- [ ] Step 6.3: Implement full keyboard navigation for icon grid and dock
+- [x] Step 6.3: Implement full keyboard navigation for icon grid and dock
   - Files: modify `src/components/IconGrid.tsx`, modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`
   - **IconGrid keyboard navigation:**
     - Currently supports ArrowLeft/ArrowRight for page navigation on the grid container
@@ -113,6 +113,29 @@
     - Deprecated label: `text-gray-400` on wallpaper — verify or darken
     - Fix any contrast failures found
   - **Verification:** All tap targets ≥44px, all text passes 4.5:1 contrast ratio
+  - **Implementation plan (Step 6.4):**
+    - `src/components/PageDots.tsx`:
+      - Each dot button is currently 6-8px. Add `min-w-[44px] min-h-[44px]` to each button (or use padding) so the clickable area meets 44×44px minimum while keeping the visual dot small inside.
+      - The dot `<span>` inside stays at its current size — the button wrapper gets the larger hit target.
+    - **Color contrast audit procedure:**
+      - Calculate contrast ratios for each text/background combination:
+        - `#333` on `#e8ecf4` (icon labels on wallpaper) — should be ~9:1 (pass)
+        - `#86868b` on `#f5f5f7` (tagline on page bg) — calculate; if <4.5:1, darken to `#6e6e73` or similar
+        - White `#fff` on `#34C759` (Live badge) — calculate; green may need darkening
+        - White `#fff` on `#FF9500` (Beta badge) — calculate; orange may need darkening
+        - White `#fff` on `#007AFF` (New badge) — likely passes
+        - White `#fff` on `#AF52DE` (Wishlist badge) — calculate
+        - `text-gray-400` (`#9ca3af`) on wallpaper gradient — may need darkening to `text-gray-500`
+        - `#1d1d1f` on wallpaper — high contrast, skip
+      - For badge text: 11px bold qualifies as "large text" under WCAG if ≥14px bold, so 11px bold does NOT qualify — must meet 4.5:1 ratio
+      - Fix any failures by adjusting the lighter color (darken backgrounds or text as appropriate)
+    - **Files likely modified:** `src/components/PageDots.tsx` (touch target), possibly `src/components/BadgeLegend.tsx`, `src/components/AppIcon.tsx`, `src/app/globals.css` or `src/components/PageContent.tsx` (contrast fixes)
+    - **Key context from prior steps:**
+      - AppIcon uses `forwardRef` now (Step 6.3) — careful with any prop changes
+      - PageDots uses `role="tablist"` / `role="tab"` + `aria-selected` (Step 6.2) — preserve ARIA attributes when modifying button sizing
+      - Dock and IconGrid have roving tabindex (Step 6.3) — don't break `tabIndex` forwarding
+    - **Acceptance criteria:** `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass, PageDot buttons have ≥44px tap targets, all text passes WCAG AA 4.5:1 contrast ratio
+    - **Ship-one-step handoff:** Implement only Step 6.4, validate it, then run `/ship` when done.
 
 - [ ] Step 6.5: Visual polish pass — verify spec conformance
   - Files: modify any component files as needed

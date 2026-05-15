@@ -410,6 +410,16 @@
 - Updated 2 test files (`Pagination.test.tsx`, `Search.test.tsx`) to match new role/name queries (`grid` / `"Product apps"`)
 - Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings, 66/66 tests pass (no regressions)
 
+## 2026-05-15 — Phase 6, Step 6.3: Implement full keyboard navigation for icon grid and dock
+
+- Implemented roving tabindex keyboard navigation pattern across IconGrid and Dock components
+- `AppIcon.tsx`: Converted to `forwardRef`, accepts `tabIndex` prop forwarded to the `<a>` element
+- `IconGrid.tsx`: Added `focusedIndex` state with 4-directional arrow key navigation (Right/Left/Up/Down) respecting 4-column grid layout. Page changes occur at boundaries (ArrowRight past last icon → next page, ArrowUp from top row → previous page same column). Home/End jump to first/last icon across all pages. Removed `tabIndex={0}` from container div. Uses `useEffect` + refs for programmatic `.focus()`.
+- `Dock.tsx`: Added `focusedIndex` state with Left/Right + Home/End arrow key navigation. Each dock icon gets a ref for programmatic focus.
+- Updated `Pagination.test.tsx`: 2 tests updated — ArrowRight/Left now navigate icons within page, page change requires arrowing past all icons on current page
+- Pattern: only one element per group has `tabIndex={0}`, rest have `tabIndex={-1}`. Arrow keys move focus within group, Tab moves between groups (grid → dock → legend).
+- Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings, 66/66 tests pass (no regressions)
+
 ## 2026-05-15 — Phase 6, Step 6.1: Add responsive breakpoints to PhoneFrame and page layout
 
 - Created `src/hooks/useIsMobile.ts`: `useSyncExternalStore`-based hook detecting `(max-width: 767px)` breakpoint, SSR-safe with server snapshot returning `false`
