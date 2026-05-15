@@ -237,6 +237,45 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 **Coordination Notes:** Builds directly on the icon component from Phase 2.
 
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** low
+**Review gates:** none
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 3.1: Add notification badges to AppIcon
+  - Files: modify `src/components/AppIcon.tsx`
+- Step 3.2: Convert AppIcon to client component and add hover/press/focus interactions
+  - Files: modify `src/components/AppIcon.tsx`
+- Step 3.3: Add description tooltip on hover
+  - Files: modify `src/components/AppIcon.tsx`
+- Step 3.4: Build the BadgeLegend component
+  - Files: create `src/components/BadgeLegend.tsx`
+- Step 3.5: Add legend tooltips and integrate BadgeLegend into the page
+  - Files: modify `src/components/BadgeLegend.tsx`, modify `src/app/page.tsx`
+
+### Green
+- Step 3.6: Write regression tests covering acceptance criteria
+  - Files: create `src/__tests__/Interactions.test.tsx`, create `src/__tests__/BadgeLegend.test.tsx`
+- Step 3.7: Run all tests, verify they pass, build succeeds
+
+### Milestone: Phase 3 — Interactions & Badges
+**Acceptance Criteria:**
+- [ ] Icons scale up on hover and press-in on click with smooth transitions
+- [ ] Keyboard focus shows visible blue outline ring
+- [ ] Badges render in correct colors with white letter, positioned at icon top-right with white border
+- [ ] Deprecated icons are visually grayed out and dimmed
+- [ ] Tooltips appear on hover after 400ms delay with product description text
+- [ ] Badge legend renders below the phone with all four states + deprecated example
+- [ ] Legend badges show tooltip descriptions on hover
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
+
 **On Completion:**
 - Deviations from plan:
 - Tech debt / follow-ups:
