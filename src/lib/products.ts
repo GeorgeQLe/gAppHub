@@ -14,6 +14,16 @@ export async function getProducts(): Promise<Product[]> {
   }
 }
 
+export function splitDockProducts(products: Product[]): {
+  dock: Product[];
+  grid: Product[];
+} {
+  return {
+    dock: products.filter((p) => p.dock),
+    grid: products.filter((p) => !p.dock),
+  };
+}
+
 const BADGE_ORDER: Record<string, number> = { L: 0, B: 1, W: 2 };
 
 export function sortProducts(products: Product[]): Product[] {

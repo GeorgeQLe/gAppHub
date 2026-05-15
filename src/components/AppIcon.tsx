@@ -5,6 +5,7 @@ import { Product } from "@/types/product";
 
 interface AppIconProps {
   product: Product;
+  hideBadge?: boolean;
 }
 
 const badgeColorMap: Record<string, string> = {
@@ -14,7 +15,7 @@ const badgeColorMap: Record<string, string> = {
   W: "bg-[#AF52DE]",
 };
 
-export default function AppIcon({ product }: AppIconProps) {
+export default function AppIcon({ product, hideBadge }: AppIconProps) {
   const deprecated = product.badge === null;
   const [showTooltip, setShowTooltip] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,7 +48,7 @@ export default function AppIcon({ product }: AppIconProps) {
           height={60}
           className={`rounded-[22.5%] overflow-hidden${deprecated ? " grayscale opacity-50" : ""}`}
         />
-        {product.badge && (
+        {product.badge && !hideBadge && (
           <span
             className={`absolute -top-[3px] -right-[3px] flex items-center justify-center w-[20px] h-[20px] rounded-full border-2 border-white text-white text-[11px] font-bold leading-none ${badgeColorMap[product.badge]}`}
           >

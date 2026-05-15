@@ -1,13 +1,15 @@
 import BadgeLegend from "@/components/BadgeLegend";
+import Dock from "@/components/Dock";
 import DynamicIsland from "@/components/DynamicIsland";
 import HomeIndicator from "@/components/HomeIndicator";
 import IconGrid from "@/components/IconGrid";
 import PhoneFrame from "@/components/PhoneFrame";
 import StatusBar from "@/components/StatusBar";
-import { getProducts, sortProducts } from "@/lib/products";
+import { getProducts, sortProducts, splitDockProducts } from "@/lib/products";
 
 export default async function Home() {
-  const products = sortProducts(await getProducts());
+  const sorted = sortProducts(await getProducts());
+  const { dock, grid } = splitDockProducts(sorted);
 
   return (
     <main className="flex h-screen flex-col items-center px-4 py-4">
@@ -41,7 +43,8 @@ export default async function Home() {
         <PhoneFrame>
           <StatusBar />
           <DynamicIsland />
-          <IconGrid products={products} />
+          <IconGrid products={grid} />
+          <Dock products={dock} />
           <HomeIndicator />
         </PhoneFrame>
         <div className="mt-4">
