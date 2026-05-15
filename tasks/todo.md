@@ -28,7 +28,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 4.1: Build the Dock component and separate dock products from the grid
+- [x] Step 4.1: Build the Dock component and separate dock products from the grid
   - Files: create `src/components/Dock.tsx`, modify `src/app/page.tsx`, modify `src/lib/products.ts`
   - Build `Dock.tsx` as a client component (`"use client"`)
   - Props: `{ products: Product[] }` — expects the 4 dock-flagged products
@@ -104,7 +104,7 @@
 
 ### Milestone: Phase 4 — Dock, Pagination & Search
 **Acceptance Criteria:**
-- [ ] Dock renders with frosted glass effect and 4 pinned app icons
+- [x] Dock renders with frosted glass effect and 4 pinned app icons
 - [ ] Dock stays fixed across page swipes
 - [ ] Swiping horizontally navigates between icon pages with smooth transition
 - [ ] Page dots render correctly, highlighting the active page
@@ -120,3 +120,54 @@
 - Deviations from plan:
 - Tech debt / follow-ups:
 - Ready for next phase: yes/no
+
+---
+
+## Next Step Plan — Step 4.2: Convert IconGrid to paginated client component with swipe navigation
+
+### What to build
+
+Rewrite `src/components/IconGrid.tsx` from a static server component into a `"use client"` paginated component with horizontal swipe navigation and keyboard support.
+
+### Files
+
+- **Modify:** `src/components/IconGrid.tsx` — full rewrite to client component with pagination
+
+### Approach
+
+1. Add `"use client"` directive and import `useState`, `useRef`, `useCallback`
+2. **Page calculation:** chunk grid products into pages of 24 icons each (`Math.ceil(products.length / 24)`). With 20 grid products currently, this produces 1 page — but the logic must support multiple pages when products grow.
+3. **Layout structure:**
+   - Outer container: `overflow-hidden` with `relative` positioning, fills available height between status bar area and dock
+   - Inner sliding container: flex row of page panels, each `w-full flex-shrink-0`
+   - Slide via `transform: translateX(-${page * 100}%)` with `transition: transform 300ms ease-out`
+   - Each page panel: existing 4-col grid layout (`grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4`)
+4. **Touch swipe:** `onTouchStart/Move/End` handlers tracking horizontal delta. Threshold ~50px to trigger page change. Store touch start position in a ref.
+5. **Mouse drag:** `onMouseDown/Move/Up` handlers for desktop swipe support. Track `isDragging` state in ref.
+6. **Keyboard:** `onKeyDown` for ArrowLeft/ArrowRight. Make container focusable with `tabIndex={0}`, `role="region"`, `aria-label="App pages"`.
+7. **Page clamping:** `Math.max(0, Math.min(page, totalPages - 1))`
+8. Keep existing `products` prop interface — no breaking changes to `page.tsx`.
+
+### Current state context
+
+- `IconGrid` currently: server component, single `grid grid-cols-4` div, `pt-[76px] pb-[90px] px-4` padding
+- `AppIcon` is already a client component (hover tooltips) — no issues composing in a client parent
+- Dock is absolute-positioned at bottom-0, separate from IconGrid — no conflict
+- Currently 20 grid products (4 dock separated) = 1 page. Need to test with mock data for multi-page.
+
+### Execution Profile
+
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Conflict risk:** low (single file rewrite, no shared state changes)
+- **Review gates:** none
+
+### Verification
+
+- `npx tsc --noEmit` passes
+- All 37 existing tests pass (no regressions)
+- `npm run build` succeeds
+- Dev server shows grid with swipe/keyboard navigation working
+- Arrow keys change pages when grid is focused
+
+**Ship-one-step handoff:** Implement only Step 4.2, validate it, then run `/ship` when done.

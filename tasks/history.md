@@ -234,3 +234,14 @@
   - Tooltip hides on mouse leave
 - Used `vi.useFakeTimers()` for AppIcon tooltip delay, `within()` for scoped queries to handle StrictMode double renders
 - Verified: 37/37 tests pass (20 new + 17 existing), `npx tsc --noEmit` clean, `npm run build` succeeds
+
+## 2026-05-15 — Phase 4, Step 4.1: Build the Dock component and separate dock products from the grid
+
+- Created `src/components/Dock.tsx` — client component rendering 4 dock-flagged products in a frosted-glass bar
+- Dock layout: `absolute bottom-0 left-0 right-0`, frosted glass `bg-white/60 backdrop-blur-[20px]`, subtle `border-t border-white/30` separator
+- Icons evenly spaced via `justify-around`, `rounded-b-[38px]` to match PhoneFrame screen corners
+- Added `hideBadge` optional prop to `AppIcon` — dock icons render without badge indicators
+- Added `splitDockProducts()` helper to `src/lib/products.ts` — splits products by `dock` field into `{ dock, grid }`
+- Updated `src/app/page.tsx`: calls `splitDockProducts` after sort, passes `dock` to `<Dock>` and `grid` to `<IconGrid>`
+- Dock renders between IconGrid and HomeIndicator inside PhoneFrame
+- Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
