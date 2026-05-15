@@ -98,6 +98,41 @@
   - Deprecated state: apply `grayscale(100%)` + `opacity: 0.5` to icon, gray label text
   - No hover/press animations yet (Phase 3)
 
+  ### Step 2.4 Implementation Plan
+
+  **What to build:**
+  A presentational `AppIcon` component that renders a single product app icon with its name label, matching iOS home screen icon style.
+
+  **Files:**
+  - Create: `src/components/AppIcon.tsx`
+
+  **Technical details:**
+  - Server component (no `"use client"` needed — no interactivity in this step)
+  - Import `Product` type from `@/types/product`
+  - Props: `{ product: Product }`
+  - Structure: `<a href={product.url} target="_blank" rel="noopener noreferrer">` wrapping:
+    - `<img src={product.icon} alt={product.name} />` — 60×60px, `border-radius: 22.5%`, `overflow: hidden`
+    - `<span>` for name label — centered, 11px, font-medium, `#333`, single-line truncation (max-width 74px)
+  - Container: flex column, items-center, 4px gap between icon and label
+  - Deprecated state (`product.badge === null`): apply `grayscale(100%) opacity-50` to the icon image, `text-gray-400` to label
+  - Use Tailwind classes throughout, matching the existing component patterns (see `PhoneFrame.tsx`, `StatusBar.tsx`)
+  - Use Next.js `<Image>` is optional — since icons are local SVGs, a plain `<img>` with explicit width/height is simpler and avoids optimization overhead for tiny static assets
+
+  **Acceptance criteria:**
+  - `src/components/AppIcon.tsx` exists and exports a default or named component
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+  - All 6 existing tests pass (no regressions)
+  - Component renders correctly when manually tested in browser (verify in Step 2.5 integration)
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Ship-one-step handoff:** Implement only Step 2.4, validate it, then run `/ship` when done.
+
 - [ ] Step 2.5: Build the IconGrid component and integrate into the page
   - Files: create `src/components/IconGrid.tsx`, modify `src/app/page.tsx`
   - IconGrid accepts `products: Product[]` (already sorted)
