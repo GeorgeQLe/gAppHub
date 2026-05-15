@@ -98,7 +98,7 @@
   - Deprecated state: apply `grayscale(100%)` + `opacity: 0.5` to icon, gray label text
   - No hover/press animations yet (Phase 3)
 
-- [ ] Step 2.5: Build the IconGrid component and integrate into the page
+- [x] Step 2.5: Build the IconGrid component and integrate into the page
   - Files: create `src/components/IconGrid.tsx`, modify `src/app/page.tsx`
   - IconGrid accepts `products: Product[]` (already sorted)
   - Renders a 4-column CSS grid inside the phone screen area
@@ -110,49 +110,6 @@
   - In `page.tsx`: call `getProducts()` + `sortProducts()` at the server component level, pass sorted products to IconGrid
   - Verify grid renders 24 icons properly within the phone frame without overflow
 
-  ### Step 2.5 Implementation Plan
-
-  **What to build:**
-  Create the `IconGrid` component that renders a 4-column CSS grid of `AppIcon` components, then integrate it into `page.tsx` with real data from the fetch layer.
-
-  **Files:**
-  - Create: `src/components/IconGrid.tsx`
-  - Modify: `src/app/page.tsx`
-
-  **Technical details:**
-  - `IconGrid.tsx` — server component (no `"use client"`)
-    - Import `Product` from `@/types/product` and `AppIcon` from `@/components/AppIcon`
-    - Props: `{ products: Product[] }` (expects already-sorted array)
-    - Render a CSS grid: `grid grid-cols-4` with `gap-x-5 gap-y-7` (~20px h-gap, ~28px v-gap)
-    - Apply `pt-[76px]` (clear status bar + Dynamic Island) and `pb-[90px]` (reserve dock space)
-    - Add `px-4` horizontal padding to center the grid within the 375px screen
-    - Map over products, render `<AppIcon product={p} key={p.id} />`
-  - `page.tsx` — convert `Home()` to `async` server component
-    - Import `getProducts` and `sortProducts` from `@/lib/products`
-    - Import `IconGrid` from `@/components/IconGrid`
-    - Call `const products = sortProducts(await getProducts())` at the top of the function
-    - Add `<IconGrid products={products} />` as a child of `<PhoneFrame>`, between DynamicIsland and HomeIndicator
-  - Current `page.tsx` structure: `<PhoneFrame>` wraps `<StatusBar />`, `<DynamicIsland />`, `<HomeIndicator />` — IconGrid goes between DynamicIsland and HomeIndicator
-  - `PhoneFrame` uses `relative` positioning with `overflow-hidden` on the screen area; IconGrid's padding handles vertical positioning
-  - The 24 products should fill ~6 rows in the 4-column grid
-
-  **Acceptance criteria:**
-  - `src/components/IconGrid.tsx` exists and exports a grid component
-  - `page.tsx` fetches and sorts products, passes them to IconGrid
-  - `npx tsc --noEmit` passes
-  - `npm run build` succeeds
-  - All 6 existing tests pass (no regressions)
-  - Grid renders 24 icons in 4 columns within the phone frame (visual check in dev server)
-  - Icons show placeholder SVGs with names, deprecated product appears grayed out
-
-  **Execution Profile:**
-  - Parallel mode: serial
-  - Integration owner: main agent
-  - Conflict risk: low
-  - Review gates: none
-
-  **Ship-one-step handoff:** Implement only Step 2.5, validate it, then run `/ship` when done.
-
 ### Green
 - [ ] Step 2.6: Write regression tests covering acceptance criteria
   - Files: create `src/__tests__/IconGrid.test.tsx`, modify or extend `src/__tests__/PhoneFrame.test.tsx`
@@ -163,6 +120,60 @@
   - Test: Long product names are truncated (element has truncation CSS classes)
   - Test: Deprecated products have grayscale styling
   - Test: Data layer falls back to static JSON when fetch fails (mock fetch failure)
+
+  ### Step 2.6 Implementation Plan
+
+  **What to build:**
+  Write regression tests for Phase 2 acceptance criteria. These tests cover the IconGrid component, AppIcon component, sortProducts logic, and the data fetch fallback layer.
+
+  **Files:**
+  - Create: `src/__tests__/IconGrid.test.tsx`
+  - Modify: `src/__tests__/PhoneFrame.test.tsx` (if needed for integration-level assertions)
+
+  **Technical details:**
+
+  **`src/__tests__/IconGrid.test.tsx`** — new test file:
+  1. Import `IconGrid` from `@/components/IconGrid`, `AppIcon` from `@/components/AppIcon`, types from `@/types/product`
+  2. Create a helper `makeProduct(overrides)` to generate test `Product` objects with sensible defaults
+  3. Tests:
+     - "renders correct number of icons" — pass 24 products to IconGrid, assert 24 `<a>` elements rendered
+     - "each icon displays product name" — pass 3 products with known names, assert each name appears in the DOM
+     - "icon links have target=_blank and correct href" — pass products with known URLs, assert `<a>` elements have `target="_blank"` and matching `href`
+     - "long names are truncated" — render AppIcon with a long-name product, assert the label element has `truncate` class
+     - "deprecated products have grayscale styling" — render AppIcon with `badge: null`, assert icon `<img>` has `grayscale` class
+     - "non-deprecated products do not have grayscale" — render AppIcon with `badge: "L"`, assert no `grayscale` class
+
+  **`src/__tests__/products.test.tsx`** (or `.ts`) — new test file for data layer:
+  4. Import `sortProducts` from `@/lib/products`
+  5. Tests:
+     - "sorts featured first by order" — create mix of featured/non-featured, assert featured come first sorted by order asc
+     - "newest non-featured come after featured" — verify the next 4 entries are highest-order non-featured products
+     - "groups by badge L → B → W → null, alphabetical within" — verify remaining products follow badge ordering
+     - "fallback: getProducts returns static data when fetch fails" — mock `fetch` to throw, call `getProducts()`, assert it returns products array from static JSON
+
+  **Existing tests in `src/__tests__/PhoneFrame.test.tsx`:**
+  - Already updated to handle async `Home` component (done in Step 2.5)
+  - No further changes expected unless integration assertions are added
+
+  **Patterns established:**
+  - Test framework: Vitest + React Testing Library + jsdom
+  - Config: `vitest.config.ts` with `@/` path alias and react plugin
+  - Fake timers used for StatusBar time tests (wrap in `beforeEach`/`afterEach`)
+  - Async server components: call `const jsx = await Component()` then `render(jsx)`
+
+  **Acceptance criteria:**
+  - All new tests pass
+  - All 6 existing tests still pass (no regressions)
+  - `npx tsc --noEmit` passes
+  - `npm run build` succeeds
+
+  **Execution Profile:**
+  - Parallel mode: serial
+  - Integration owner: main agent
+  - Conflict risk: low
+  - Review gates: none
+
+  **Ship-one-step handoff:** Implement only Step 2.6, validate it, then run `/ship` when done.
 
 - [ ] Step 2.7: Run all tests, verify they pass, build succeeds with `npm run build`
 

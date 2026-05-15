@@ -125,6 +125,15 @@
 - Plain `<img>` (not Next.js `<Image>`) — local static SVGs don't need optimization
 - Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
 
+## 2026-05-14 — Phase 2, Step 2.5: Build IconGrid component and integrate into page
+
+- Created `src/components/IconGrid.tsx` — server component rendering a 4-column CSS grid (`grid-cols-4`, `gap-x-5 gap-y-7`) of `AppIcon` components
+- Grid padding: `pt-[76px]` (clear status bar + Dynamic Island), `pb-[90px]` (dock reservation), `px-4`
+- Props: `{ products: Product[] }` — expects pre-sorted array, maps to `<AppIcon>` with `key={p.id}`
+- Updated `src/app/page.tsx`: converted `Home()` to async, calls `sortProducts(await getProducts())`, passes products to `<IconGrid>` between `<DynamicIsland>` and `<HomeIndicator>`
+- Updated `src/__tests__/PhoneFrame.test.tsx`: Home page tests now await the async component (`const jsx = await Home(); render(jsx)`)
+- Verified: `npx tsc --noEmit` clean, `npm run build` succeeds, 6/6 tests pass (no regressions)
+
 ## 2026-05-14 — Phase 2, Step 2.2: Build the data fetch layer with static fallback
 
 - Created `src/lib/products.ts` with two exported functions
