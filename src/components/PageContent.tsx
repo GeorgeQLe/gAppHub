@@ -21,6 +21,7 @@ interface PageContentProps {
 }
 
 type BootPhase = 0 | 1 | 2 | 3 | 4 | 5;
+type SlidePhase = 0 | 1 | 2 | 3 | 4;
 
 export default function PageContent({
   dockProducts,
@@ -31,12 +32,15 @@ export default function PageContent({
   const [bootPhase, setBootPhase] = useState<BootPhase>(
     variant === "boot" ? 0 : 5,
   );
+  const [slidePhase, setSlidePhase] = useState<SlidePhase>(
+    variant === "slide" ? 0 : 4,
+  );
 
   useEffect(() => {
     if (variant !== "boot" || reducedMotion) return;
 
-    setBootPhase(1);
     const timers = [
+      setTimeout(() => setBootPhase(1), 0),
       setTimeout(() => setBootPhase(2), 800),
       setTimeout(() => setBootPhase(3), 1200),
       setTimeout(() => setBootPhase(4), 1800),
@@ -45,7 +49,20 @@ export default function PageContent({
     return () => timers.forEach(clearTimeout);
   }, [variant, reducedMotion]);
 
+  useEffect(() => {
+    if (variant !== "slide" || reducedMotion) return;
+
+    const timers = [
+      setTimeout(() => setSlidePhase(1), 0),
+      setTimeout(() => setSlidePhase(2), 600),
+      setTimeout(() => setSlidePhase(3), 1200),
+      setTimeout(() => setSlidePhase(4), 1500),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [variant, reducedMotion]);
+
   const isBoot = variant === "boot" && !reducedMotion;
+  const isSlide = variant === "slide" && !reducedMotion;
   const shouldAnimate = variant === "none" && !reducedMotion;
 
   const content = (
@@ -84,6 +101,12 @@ export default function PageContent({
               gridProducts={gridProducts}
               dockProducts={dockProducts}
             />
+          ) : isSlide ? (
+            <SlidePhoneContent
+              phase={slidePhase}
+              gridProducts={gridProducts}
+              dockProducts={dockProducts}
+            />
           ) : (
             <>
               <StatusBar />
@@ -113,7 +136,7 @@ export default function PageContent({
     );
   }
 
-  if (variant === "boot" && reducedMotion) {
+  if ((variant === "boot" || variant === "slide") && reducedMotion) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -230,5 +253,59 @@ function BootPhoneContent({
 
       <HomeIndicator />
     </>
+  );
+}
+
+function SlidePhoneContent({
+  phase,
+  gridProducts,
+  dockProducts,
+}: {
+  phase: SlidePhase;
+  gridProducts: Product[];
+  dockProducts: Product[];
+}) {
+  return (
+    <motion.div
+      className="flex h-full flex-col"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{
+        y: phase >= 1 ? 0 : 100,
+        opacity: phase >= 1 ? 1 : 0,
+      }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: phase >= 2 ? 1 : 0 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      >
+        <StatusBar />
+      </motion.div>
+
+      <DynamicIsland />
+
+      <motion.div
+        className="flex-1 overflow-hidden"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{
+          opacity: phase >= 2 ? 1 : 0,
+          scale: phase >= 2 ? 1 : 0.9,
+        }}
+        transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
+      >
+        <IconGrid products={gridProducts} />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: phase >= 3 ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        <Dock products={dockProducts} />
+      </motion.div>
+
+      <HomeIndicator />
+    </motion.div>
   );
 }
