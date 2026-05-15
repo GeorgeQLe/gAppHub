@@ -343,3 +343,17 @@
 - `AnimatePresence` wraps the boot overlay for clean exit animation
 - Note: `npm run build` static generation timeout is pre-existing on `main` (relative fetch URL in `getProducts` hangs during build); not introduced by this change
 - Verified: `npx tsc --noEmit` clean, 55/55 tests pass (no regressions), dev server renders `/boot` correctly
+
+## 2026-05-15 — Phase 5, Step 5.3: Build the `/slide` animation route
+
+- Created `src/app/slide/page.tsx` — thin async server component passing `variant="slide"` to PageContent
+- Extended `src/components/PageContent.tsx` with slide animation orchestration:
+  - Phase 1 (0–600ms): Entire content slides up from `translateY(100px)` + `opacity: 0` → final position + full opacity, ease-out
+  - Phase 2 (600–1200ms): StatusBar fades in (200ms), icons scale from 0.9→1.0 + fade with stagger delay
+  - Phase 3 (1200–1500ms): Dock fades in
+  - Phase 4 (1500ms+): Settled at final state
+- Extracted `SlidePhoneContent` sub-component for slide-specific animation wrappers
+- Uses `useState<SlidePhase>` (0–4) with `useEffect` scheduling `setTimeout` chain (same pattern as boot)
+- Reduced motion: skips slide animation, renders with 200ms opacity fade
+- Fixed pre-existing lint error: synchronous `setState` in effect bodies (boot + slide) — deferred to `setTimeout(..., 0)`
+- Verified: `npx tsc --noEmit` clean, `npm run lint` clean, 55/55 tests pass (no regressions)

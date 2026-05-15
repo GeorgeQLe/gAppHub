@@ -94,7 +94,7 @@
 
   **Ship-one-step handoff:** Implement only Step 5.2, validate it, then run `/ship` when done.
 
-- [ ] Step 5.3: Build the `/slide` animation route
+- [x] Step 5.3: Build the `/slide` animation route
   - Files: create `src/app/slide/page.tsx`, modify `src/components/PageContent.tsx`
   - Server component that fetches products and passes them + variant to `PageContent`
   - Animation sequence:
@@ -141,7 +141,7 @@
   **Ship-one-step handoff:** Implement only Step 5.3, validate it, then run `/ship` when done.
 
 - [ ] Step 5.4: Build the `/assemble` animation route
-  - Files: create `src/app/assemble/page.tsx`
+  - Files: create `src/app/assemble/page.tsx`, modify `src/components/PageContent.tsx`
   - Server component that fetches products and passes them + variant to `PageContent`
   - Animation sequence:
     - 0–400ms: Phone frame split into left/right halves (using clip-path or separate divs), sliding in from off-screen horizontally. Top/bottom edges slide in vertically
@@ -154,6 +154,48 @@
   - Reduced motion: skip all, show final state with ≤200ms opacity fade
   - This is the most complex variant — may need to simplify the frame-split effect if CSS clip-path approach proves unwieldy. Fallback: frame fades from transparent → opaque instead of splitting
   - Verify: `/assemble` plays full sequence and ends at identical state to `/`
+
+  **Implementation plan:**
+
+  1. **`src/app/assemble/page.tsx`:** Thin async server component identical to boot/slide — fetches products, passes `variant="assemble"` to PageContent
+
+  2. **Extend `PageContent` for assemble variant** in `src/components/PageContent.tsx`:
+     - Add `AssemblePhase` type (0–7) and `assemblePhase` state, initialized to 0 when `variant === "assemble"`, else 7
+     - `useEffect` with `setTimeout` chain: phase 1 at 0ms, phase 2 at 400ms, phase 3 at 700ms, phase 4 at 900ms, phase 5 at 1400ms, phase 6 at 2000ms, phase 7 at 2300ms
+     - Use same `setTimeout(..., 0)` pattern for initial phase to avoid lint error
+     - Add `isAssemble` flag + conditional rendering for `AssemblePhoneContent` in the PhoneFrame ternary chain
+     - Add reduced motion handling alongside boot/slide
+
+  3. **Create `AssemblePhoneContent` sub-component:**
+     - **Phase 1 (0–400ms):** Frame assembly effect — use `clip-path: inset()` on two overlapping `motion.div` containers to split the phone content into left/right halves sliding in from off-screen. If clip-path proves too complex in testing, fallback to a simpler fade from `opacity: 0` → `opacity: 1` on the entire content area.
+     - **Phase 2 (400–700ms):** White flash overlay (`absolute inset-0 bg-white`) with quick opacity pulse (0→0.6→0) along seam lines
+     - **Phase 3 (700–900ms):** Screen area transitions from black bg to wallpaper (opacity crossfade on a black overlay)
+     - **Phase 4 (900–1400ms):** DynamicIsland pops in with spring (`scale: 0 → 1`, `type: "spring"`, `bounce: 0.4`). StatusBar slides in from sides (`translateX(±30px) → 0` + fade)
+     - **Phase 5 (1400–2000ms):** Icons drop from above (`translateY(-30px) → 0`, 30ms stagger) with soft bounce. Wrap IconGrid contents or use Framer Motion `staggerChildren`
+     - **Phase 6 (2000–2300ms):** Dock slides up from `translateY(80px)` with spring. PageDots fade in
+     - **Phase 7 (2300ms+):** Settled
+
+  4. **Key patterns from Steps 5.2–5.3:**
+     - Phase state + setTimeout chain (boot, slide)
+     - Sub-component pattern: `BootPhoneContent`, `SlidePhoneContent` → `AssemblePhoneContent`
+     - `motion.div` wrappers with phase-gated `animate` props
+     - Spring physics for bouncy elements (boot dock used `stiffness: 300, damping: 25`)
+     - `AnimatePresence` only needed for mount/unmount transitions (boot overlay used it; assemble flash overlay may need it too)
+
+  5. **Verification:**
+     - `npx tsc --noEmit` passes
+     - `npm run lint` clean
+     - All 55 existing tests pass (no regressions)
+     - Dev server: `/assemble` plays the full ~2.3s assembly sequence
+     - Dev server: `/assemble` ends at the identical visual state as `/`
+     - Dev server: toggling `prefers-reduced-motion` shows instant render on `/assemble`
+
+  ### Execution Profile
+  **Parallel mode:** serial
+  **Integration owner:** main agent
+  **Conflict risk:** low (new route file + extending existing PageContent)
+
+  **Ship-one-step handoff:** Implement only Step 5.4, validate it, then run `/ship` when done.
 
 - [ ] Step 5.5: Polish animations and verify cross-route consistency
   - Files: modify `src/components/PageContent.tsx` (if needed), any animation route files
