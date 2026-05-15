@@ -270,3 +270,19 @@
 - Added inline page indicator dots (6px circles, `bg-white`/`bg-white/40`) — shown only when `totalPages > 1`
 - Props interface unchanged (`{ products: Product[] }`) — no breaking changes to page.tsx
 - Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds
+
+## 2026-05-15 — Phase 4, Step 4.4: Build pull-down search overlay
+
+- Created `src/components/SearchOverlay.tsx` — client component with slide-down search bar
+- Props: `{ onSearch, onDismiss, visible }` — internal `searchTerm` state, auto-focus on show
+- Input: `bg-white/80 backdrop-blur-[10px] rounded-xl`, placeholder "Search apps..."
+- Slide animation via CSS transform + transition (`-translate-y-full` → `translate-y-0`)
+- Dismiss: Escape keydown on input, click/tap on backdrop area (full-screen transparent div)
+- Updated `src/components/IconGrid.tsx` with search integration:
+  - Pull-down gesture: downward swipe >30px (dy > dx) triggers `showSearch` state
+  - `filterProducts()` helper: case-insensitive match on product name, badge label (L→launch, B→beta, N→new, W→waitlist), and category tags
+  - Search active: filtered results replace paginated grid in single flat grid, PageDots hidden
+  - "No apps found" centered text for empty results
+  - Horizontal swipe and keyboard nav disabled during search (early returns)
+  - On dismiss: clears search term, returns to paginated grid at previous page
+- Verified: `npx tsc --noEmit` clean, 37/37 tests pass (no regressions), `npm run build` succeeds

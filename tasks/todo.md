@@ -68,7 +68,7 @@
   - Clicking a dot navigates to that page
   - Integrate into IconGrid — render PageDots below the pages container, pass page state
 
-- [ ] Step 4.4: Build pull-down search overlay
+- [x] Step 4.4: Build pull-down search overlay
   - Files: create `src/components/SearchOverlay.tsx`, modify `src/components/IconGrid.tsx`
   - SearchOverlay client component:
     - Input: text field with placeholder "Search apps...", `bg-white/80 backdrop-blur-[10px] rounded-xl`
@@ -109,10 +109,10 @@
 - [x] Swiping horizontally navigates between icon pages with smooth transition
 - [x] Page dots render correctly, highlighting the active page
 - [x] Arrow keys navigate between pages
-- [ ] Pull-down gesture reveals search bar
-- [ ] Typing in search filters icons in real-time by name, badge, and tags
-- [ ] "No apps found" shows for empty search results
-- [ ] Escape or tap-outside dismisses search
+- [x] Pull-down gesture reveals search bar
+- [x] Typing in search filters icons in real-time by name, badge, and tags
+- [x] "No apps found" shows for empty search results
+- [x] Escape or tap-outside dismisses search
 - [ ] All phase tests pass
 - [ ] No regressions in previous phase tests
 
@@ -123,49 +123,56 @@
 
 ---
 
-## Next Step Plan — Step 4.4: Build pull-down search overlay
+## Next Step Plan — Step 4.5: Wire up all components and refine integration
 
 ### What to build
 
-Create a `SearchOverlay` component and integrate it into `IconGrid` to enable pull-down Spotlight-style search that filters icons in real-time.
+Verify and refine the integration of dock, pagination, search, and page dots. Ensure dock persists across page swipes and during search, page dots hide during search, touch events don't conflict, and keyboard navigation works correctly.
 
 ### Files
 
-- **Create:** `src/components/SearchOverlay.tsx` — search bar overlay component
-- **Modify:** `src/components/IconGrid.tsx` — add search state, pull-down gesture, filtering logic
+- **Modify:** `src/app/page.tsx` — verify component composition order
+- **Modify:** `src/components/IconGrid.tsx` — refine touch conflict handling if needed
 
 ### Approach
 
-1. **SearchOverlay component** (`src/components/SearchOverlay.tsx`):
-   - Props: `{ onSearch: (term: string) => void, onDismiss: () => void, visible: boolean }`
-   - Client component with internal `searchTerm` state
-   - Input: text field with placeholder "Search apps...", `bg-white/80 backdrop-blur-[10px] rounded-xl`
-   - Slides down when `visible` via CSS transform + transition
-   - Dismiss: Escape keydown on input, click/tap on backdrop area
-   - Auto-focus input when visible
+1. **Dock persistence verification:**
+   - Dock is already rendered separately from IconGrid in `page.tsx` — confirm it persists across page swipes and during search mode
+   - HomeIndicator should still render below dock
 
-2. **IconGrid integration** (`src/components/IconGrid.tsx`):
-   - Add `showSearch` boolean state
-   - Pull-down trigger: detect downward swipe (>30px) at top of grid via touch handlers
-   - When search active: filter products by name (case-insensitive substring), badge letter, and category tags
-   - Filtered results replace paginated grid (single page, no pagination)
-   - If no results: show "No apps found" centered text
-   - On dismiss: clear search, return to paginated grid at previous page
-   - Hide PageDots when search is active
+2. **Page dots during search:**
+   - Already implemented: PageDots are hidden when search is active (search branch doesn't render the `<>` fragment with PageDots)
+   - Verify visually
+
+3. **Touch event conflict check:**
+   - Horizontal swipe (>50px dx, dx > dy) → page change
+   - Vertical pull-down (>30px dy, dy > dx) → open search
+   - Search active → swipe gestures disabled (early return in handleTouchEnd)
+   - Confirm no conflicting states
+
+4. **Keyboard navigation:**
+   - ArrowLeft/Right for pages (disabled during search via early return)
+   - Escape dismisses search (handled by SearchOverlay's onKeyDown)
+   - Verify all paths
+
+5. **Test with current data:**
+   - 24 total products, 4 dock = 20 grid products = 1 page
+   - PageDots returns null for single page (correct)
+   - Verify search works across all 20 grid products
 
 ### Current state context
 
-- IconGrid is `"use client"` with page state, swipe handlers (touch + mouse), keyboard nav
-- Products are chunked into pages of 24 via `chunk()` helper
-- PageDots component already handles `total <= 1` by returning null
-- Dock is separate from IconGrid (in `page.tsx`), persists during search
-- Product type has: `name`, `badge` (`"L"|"B"|"N"|"W"|null`), `category` (string[])
+- Dock is in `page.tsx`, separate from IconGrid — already persists
+- SearchOverlay has backdrop click dismiss and Escape key dismiss
+- IconGrid search mode: skips horizontal swipe handlers, hides PageDots
+- PageDots `total <= 1` → returns null
+- All 37 tests pass, tsc clean, build succeeds
 
 ### Execution Profile
 
 - **Parallel mode:** serial
 - **Integration owner:** main agent
-- **Conflict risk:** medium (IconGrid touch handlers need careful extension for vertical vs horizontal swipe)
+- **Conflict risk:** low (mostly verification with minor tweaks)
 - **Review gates:** none
 
 ### Verification
@@ -173,7 +180,7 @@ Create a `SearchOverlay` component and integrate it into `IconGrid` to enable pu
 - `npx tsc --noEmit` passes
 - All 37 existing tests pass (no regressions)
 - `npm run build` succeeds
-- Dev server: pull-down gesture reveals search, typing filters icons, Escape dismisses
-- "No apps found" shows for non-matching search terms
+- Dev server: dock persists across pages and search, page dots hidden during search, no touch conflicts
+- Keyboard: ArrowLeft/Right paginate, Escape dismisses search
 
-**Ship-one-step handoff:** Implement only Step 4.4, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** Implement only Step 4.5, validate it, then run `/ship` when done.
