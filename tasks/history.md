@@ -473,6 +473,17 @@
 - Updated `src/__tests__/Animations.test.tsx`: `mockReducedMotion` now returns `{ listeners, mockMql }` to support `useSyncExternalStore` snapshot mutation
 - Verified: 0 lint errors, 66/66 tests pass
 
+## 2026-05-15 — Reduced-motion support for AppIcon hover/press states
+
+- Added `@media (prefers-reduced-motion: reduce)` block in `src/app/globals.css` targeting `[role="gridcell"] a` and `[role="toolbar"] a`
+- Hover: `transform: none !important; box-shadow: none !important` — disables `hover:scale-105`, `hover:shadow-lg`, `hover:-translate-y-0.5`
+- Active/press: `transform: none !important; opacity: 0.7` — replaces `active:scale-[0.92]` with opacity dim
+- Transition scoped to `opacity` only under reduced motion
+- Added test in `Accessibility.test.tsx` verifying the CSS media query content
+- Removed TODO markers from `specs/ui-gapphub.md` § Reduced Motion
+- Marked implementation task complete in `tasks/todo.md`
+- Zero runtime cost — pure CSS, no React changes
+
 ## 2026-05-15 — Phase 6, Step 6.6: Write Phase 6 regression tests (Responsive + Accessibility)
 
 - Created `src/__tests__/Responsive.test.tsx` with 6 tests:

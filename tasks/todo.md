@@ -14,7 +14,7 @@
 
 ## Implementation Tasks (from spec drift)
 
-- [ ] Add `prefers-reduced-motion` support to AppIcon hover/press states — disable `hover:scale-105` and replace `active:scale-[0.92]` with opacity dim when reduced motion is active. File: `src/components/AppIcon.tsx`. Spec ref: `specs/ui-gapphub.md` § Reduced Motion.
+- [x] Add `prefers-reduced-motion` support to AppIcon hover/press states — disable `hover:scale-105` and replace `active:scale-[0.92]` with opacity dim when reduced motion is active. File: `src/components/AppIcon.tsx`. Spec ref: `specs/ui-gapphub.md` § Reduced Motion.
   - **Implementation plan:**
     - Add a CSS `@media (prefers-reduced-motion: reduce)` block in `src/app/globals.css` that overrides AppIcon interactive states:
       - Disable `hover:scale-105`, `hover:shadow-lg`, `hover:-translate-y-0.5` — set `transform: none !important; box-shadow: none !important` on hover
