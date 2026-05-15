@@ -207,6 +207,56 @@
   - Test that all animation routes render the same final content (same number of icons, same dock, same status bar)
   - Test that reduced motion class/attribute is applied when `prefers-reduced-motion` is active
   - Use `vi.stubGlobal` or `window.matchMedia` mock for reduced motion testing
+
+  **Implementation plan:**
+
+  1. **Create `src/__tests__/Animations.test.tsx`** with these test groups:
+
+     **PageContent rendering (4 variants):**
+     - `variant="none"` renders StatusBar, DynamicIsland, IconGrid, Dock, HomeIndicator, BadgeLegend
+     - `variant="boot"` renders same final content (at settled phase 5)
+     - `variant="slide"` renders same final content (at settled phase 4)
+     - `variant="assemble"` renders same final content (at settled phase 7)
+     - All 4 variants render the LEXCORP SVG logo and tagline text
+
+     **useReducedMotion hook:**
+     - Returns `false` when `prefers-reduced-motion` media query doesn't match
+     - Returns `true` when `prefers-reduced-motion: reduce` matches
+     - Updates when media query changes (simulate via `change` event on mql mock)
+
+     **Reduced motion behavior on animation variants:**
+     - When reduced motion is active, boot/slide/assemble variants skip animation phases (render at final state immediately)
+     - The wrapping `motion.div` gets `opacity` animation with `duration: 0.2`
+
+     **Cross-route consistency:**
+     - All 4 variants render the same number of app icons (20 grid icons)
+     - All 4 variants render the same number of dock icons (4)
+     - StatusBar time display present in all variants at settled state
+
+  2. **Testing approach:**
+     - Mock `window.matchMedia` per-test to control reduced motion state (override the global mock from `src/__tests__/setup.ts`)
+     - Use `vi.useFakeTimers()` and `vi.advanceTimersByTime()` to fast-forward animation phases to settled state
+     - Import `PageContent` directly (not the async route pages) — pass mock product data
+     - Use `makeProduct()` helper (same pattern as existing test files) for test data
+     - The existing `src/__tests__/setup.ts` already mocks `matchMedia` with `matches: false` — override with `vi.spyOn` for reduced-motion tests
+
+  3. **Key files:**
+     - Create: `src/__tests__/Animations.test.tsx`
+     - Read (reference): `src/components/PageContent.tsx`, `src/hooks/useReducedMotion.ts`, `src/__tests__/setup.ts`
+
+  4. **Verification:**
+     - `npx tsc --noEmit` passes
+     - `npm run lint` — only pre-existing warnings
+     - All tests pass (55 existing + new animation tests)
+     - No regressions in any existing test file
+
+  ### Execution Profile
+  **Parallel mode:** serial
+  **Integration owner:** main agent
+  **Conflict risk:** low (new test file only, no source changes)
+
+  **Ship-one-step handoff:** Implement only Step 5.6, validate it, then run `/ship` when done.
+
 - [ ] Step 5.7: Run all tests, verify they pass, build succeeds with `npm run build` _(will be no-op if 5.6 tests pass)_
 
 ### Milestone: Phase 5 — Loading Animations
