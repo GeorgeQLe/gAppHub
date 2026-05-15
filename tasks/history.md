@@ -443,3 +443,14 @@
   - Deprecated icon labels (`AppIcon.tsx`): `text-gray-400` → `text-gray-500` for better contrast on wallpaper
 - **Tests updated:** Badge color assertions in `Interactions.test.tsx` (4 tests), PageDots dot class assertions in `Pagination.test.tsx` (1 test) — now query child `<span>` instead of button
 - Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings (not in modified files), 66/66 tests pass (no regressions)
+
+## 2026-05-15 — Phase 6, Step 6.5: Visual polish pass — verify spec conformance
+
+- **Dock glass opacity:** `bg-white/60` → `bg-white/[0.72]` per spec token `--dock-blur-bg: rgba(255,255,255,0.72)`
+- **Dock inset highlight:** Added `shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]` per spec
+- **Tooltip shadows (AppIcon + BadgeLegend):** Replaced `shadow-md` (Tailwind default `0 4px 6px -1px...`) with spec-exact `shadow-[0_4px_12px_rgba(0,0,0,0.15)]`
+- **Phone frame shadows:** Already matched spec (3-layer: primary, secondary, edge highlight) — no change needed
+- **Typography audit:** All correct — icon labels 11px, tagline 13px/11px, legend 12px, tooltip 12px, status bar 12px
+- **Reduced motion:** No new CSS transitions introduced in Phase 6 — no changes needed
+- **Test update:** `Dock.test.tsx` assertion updated from `bg-white/60` to `bg-white/[0.72]`
+- Verified: `npx tsc --noEmit` clean, lint only pre-existing warnings (not in modified files), 66/66 tests pass (no regressions)

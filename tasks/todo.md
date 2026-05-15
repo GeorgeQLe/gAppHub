@@ -101,18 +101,8 @@
 - [x] Step 6.4: Ensure touch targets meet 44×44px minimum and verify contrast
   - Files: modified `src/components/PageDots.tsx`, `src/components/AppIcon.tsx`, `src/components/BadgeLegend.tsx`, `src/components/PageContent.tsx`
 
-- [ ] Step 6.5: Visual polish pass — verify spec conformance
-  - Files: modify `src/components/Dock.tsx`, possibly `src/components/AppIcon.tsx`, `src/components/BadgeLegend.tsx`, `src/components/PhoneFrame.tsx`
-  - **Implementation plan (Step 6.5):**
-    - **Dock glass opacity:** Currently `bg-white/60` (0.60), spec says `rgba(255,255,255,0.72)`. Change to `bg-white/[0.72]` in `src/components/Dock.tsx`. Also add dock inset highlight `shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]` if missing.
-    - **Tooltip shadow:** Spec says `0 4px 12px rgba(0,0,0,0.15)`. AppIcon tooltip currently uses `shadow-md` — verify it matches or replace with `shadow-[0_4px_12px_rgba(0,0,0,0.15)]`. Same for BadgeLegend Tooltip.
-    - **Phone frame shadows:** Spec says primary `0 20px 60px rgba(0,0,0,0.15)`, secondary `0 2px 8px rgba(0,0,0,0.08)`, edge highlight `inset 0 1px 0 rgba(255,255,255,0.3)`. Verify `src/components/PhoneFrame.tsx` matches.
-    - **Typography audit:** Icon labels 11px ✓, tagline 13px (desktop) / 11px (mobile) ✓, legend should be 12px (currently `text-xs` = 12px ✓), tooltip 12px (currently `text-xs` = 12px ✓), status bar 12px (currently `text-xs` ✓).
-    - **Reduced motion:** Phase 5 already handles this; verify no new CSS transitions were introduced in Phase 6 without `motion-safe` guards.
-    - **Key context:** Badge colors changed in Step 6.4 to WCAG AA compliant values. Dock has roving tabindex (Step 6.3). Tests check for `bg-white/60` and `backdrop-blur-[20px]` — update if dock glass class changes.
-    - **Acceptance criteria:** `npx tsc --noEmit` passes, `npm run lint` only pre-existing warnings, all 66 tests pass, visual output matches spec tokens.
-    - **Ship-one-step handoff:** Implement only Step 6.5, validate it, then run `/ship` when done.
-  - **Execution Profile:** serial, main agent, low conflict risk
+- [x] Step 6.5: Visual polish pass — verify spec conformance
+  - Files: modified `src/components/Dock.tsx`, `src/components/AppIcon.tsx`, `src/components/BadgeLegend.tsx`, `src/__tests__/Dock.test.tsx`
 
 ### Green
 - [ ] Step 6.6: Write regression tests covering Phase 6 acceptance criteria
