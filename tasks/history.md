@@ -511,3 +511,10 @@
 - Added X (close) button to search overlay: styled as subtle gray circle with × character in `SearchOverlay.tsx`
 - Added swipe-up-to-dismiss for search: modified `handleTouchEnd` in `IconGrid.tsx` to detect upward swipe when search is open
 - Verified: `npx tsc --noEmit` clean, `npm run lint` only pre-existing `<img>` warning
+
+## 2026-05-16 — Fix: Phone screen showing >24 apps on mobile
+
+- Added `flex flex-col` to both mobile and desktop PhoneFrame inner "screen" divs
+- Root cause: IconGrid's `flex-1` had no effect outside a flex container, so `h-full` on the pages container resolved to `auto`, breaking pagination on initial render
+- Animated variants (boot/slide/assemble) were unaffected because they already wrap content in flex containers
+- Verified: `npx tsc --noEmit` clean, `npm run lint` clean
