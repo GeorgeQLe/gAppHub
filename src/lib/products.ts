@@ -2,7 +2,11 @@ import type { Product, ProductsResponse } from "@/types/product";
 import staticData from "../../public/data/products.json";
 
 export async function getProducts(): Promise<Product[]> {
-  const url = process.env.NEXT_PUBLIC_PRODUCTS_URL || "/data/products.json";
+  const url = process.env.NEXT_PUBLIC_PRODUCTS_URL;
+
+  if (!url) {
+    return (staticData as ProductsResponse).products;
+  }
 
   try {
     const res = await fetch(url);

@@ -107,6 +107,7 @@ describe("sortProducts", () => {
 
 describe("getProducts", () => {
   beforeEach(() => {
+    vi.unstubAllEnvs();
     vi.stubGlobal(
       "fetch",
       vi.fn().mockRejectedValue(new Error("network error"))
@@ -115,13 +116,24 @@ describe("getProducts", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
-  it("returns static data when fetch fails", async () => {
+  it("returns static data without fetching when no product URL is configured", async () => {
     const products = await getProducts();
     expect(Array.isArray(products)).toBe(true);
     expect(products.length).toBeGreaterThan(0);
     expect(products[0]).toHaveProperty("id");
     expect(products[0]).toHaveProperty("name");
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("returns static data when configured fetch fails", async () => {
+    vi.stubEnv("NEXT_PUBLIC_PRODUCTS_URL", "https://example.com/products.json");
+
+    const products = await getProducts();
+    expect(Array.isArray(products)).toBe(true);
+    expect(products.length).toBeGreaterThan(0);
+    expect(fetch).toHaveBeenCalledWith("https://example.com/products.json");
   });
 });
