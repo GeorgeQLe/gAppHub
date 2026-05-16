@@ -68,7 +68,12 @@ export default function IconGrid({ products }: IconGridProps) {
       return;
     }
 
-    if (showSearch) return;
+    if (showSearch) {
+      if (dy < -PULL_DOWN_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
+        handleDismissSearch();
+      }
+      return;
+    }
     if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
     goTo(page + (dx < 0 ? 1 : -1));
   };

@@ -48,7 +48,7 @@ export default function SearchOverlay({
         onClick={onDismiss}
         aria-hidden
       />
-      <div className="relative px-4 pt-3 pb-2">
+      <div className="relative px-4 pt-3 pb-2 flex items-center gap-2">
         <input
           ref={inputRef}
           type="text"
@@ -57,8 +57,16 @@ export default function SearchOverlay({
           onKeyDown={handleKeyDown}
           placeholder="Search apps..."
           aria-label="Search apps"
-          className="w-full h-9 px-3 text-sm text-black placeholder:text-black/40 bg-white/80 backdrop-blur-[10px] rounded-xl outline-none"
+          className="flex-1 h-9 px-3 text-sm text-black placeholder:text-black/40 bg-white/80 backdrop-blur-[10px] rounded-xl outline-none"
         />
+        <button
+          type="button"
+          onClick={onDismiss}
+          aria-label="Close search"
+          className="flex items-center justify-center w-7 h-7 rounded-full bg-white/30 text-white/70 text-base leading-none active:bg-white/50"
+        >
+          ×
+        </button>
       </div>
     </div>
   );
