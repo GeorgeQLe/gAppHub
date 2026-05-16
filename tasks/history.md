@@ -512,6 +512,14 @@
 - Added swipe-up-to-dismiss for search: modified `handleTouchEnd` in `IconGrid.tsx` to detect upward swipe when search is open
 - Verified: `npx tsc --noEmit` clean, `npm run lint` only pre-existing `<img>` warning
 
+## 2026-05-16 — Adopt real app icons from Lexcorp product repos
+
+- Downloaded real app icon PNGs from 4 Lexcorp product repos (War Room, Pitwall, GSkillPacks, gBlockParty)
+- Resized all to 120×120px (2× retina for 60px display) using `sips`, placed in `public/icons/products/`
+- Updated `src/components/AppIcon.tsx`: added `CUSTOM_ICON_IDS` Set constant, conditional rendering that shows `<img>` for products with custom icons and falls back to Lucide icons for others
+- Convention-based approach: no changes to `products.json` or `Product` type — the Set identifies which IDs have custom icons
+- Deprecated styling (grayscale + opacity) applies correctly to custom icons via className
+
 ## 2026-05-16 — Fix: Phone screen showing >24 apps on mobile
 
 - Added `flex flex-col` to both mobile and desktop PhoneFrame inner "screen" divs

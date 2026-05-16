@@ -25,6 +25,8 @@ const badgeLabelMap: Record<string, string> = {
   C: "Concept",
 };
 
+const CUSTOM_ICON_IDS = new Set(["war-room", "pitwall", "gskillpacks", "gblockparty"]);
+
 function getIcon(name: string): LucideIcon | null {
   const pascalName = name
     .split("-")
@@ -74,15 +76,26 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
         className="flex flex-col items-center gap-1 rounded-2xl transition-all duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
       >
         <div className="relative">
-          <div
-            className={`w-[60px] h-[60px] rounded-[22.5%] flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900${deprecated ? " grayscale opacity-50" : ""}`}
-          >
-            {IconComponent ? (
-              <IconComponent size={28} className="text-white" strokeWidth={1.5} />
-            ) : (
-              <span className="text-white text-2xl font-bold">{firstLetter}</span>
-            )}
-          </div>
+          {CUSTOM_ICON_IDS.has(product.id) ? (
+            <img
+              src={`/icons/products/${product.id}.png`}
+              alt=""
+              width={60}
+              height={60}
+              className={`w-[60px] h-[60px] rounded-[22.5%] object-cover${deprecated ? " grayscale opacity-50" : ""}`}
+              draggable={false}
+            />
+          ) : (
+            <div
+              className={`w-[60px] h-[60px] rounded-[22.5%] flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900${deprecated ? " grayscale opacity-50" : ""}`}
+            >
+              {IconComponent ? (
+                <IconComponent size={28} className="text-white" strokeWidth={1.5} />
+              ) : (
+                <span className="text-white text-2xl font-bold">{firstLetter}</span>
+              )}
+            </div>
+          )}
           {product.badge && !hideBadge && (
             <span
               aria-hidden="true"
