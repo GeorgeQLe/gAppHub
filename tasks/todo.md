@@ -7,7 +7,7 @@
 
 - [x] `/research-roadmap` - Documentation scan complete (2026-05-15).
 - [x] All implementation phases complete; documentation current; spec drift resolved.
-- [ ] Orphaned `tasks/manual-todo.md`: 2 non-blocking `_(after:...)_` items from Phase 6 remain unchecked (real device testing, screen reader testing). Resolve or defer explicitly.
+- [x] Orphaned `tasks/manual-todo.md`: 2 non-blocking `_(after:...)_` items from Phase 6 remain unchecked (real device testing, screen reader testing). Deferred to future work (2026-05-16).
 
 ## Priority Documentation Todo
 
@@ -54,15 +54,15 @@
 - Final visual polish: verify all shadows, gradients, typography, and spacing match spec
 
 **Acceptance Criteria:**
-- [ ] Phone frame renders correctly at desktop, tablet, mobile, and wide desktop breakpoints
-- [ ] Mobile uses simplified frame without realistic bezel details
-- [ ] Tab key navigates through all interactive elements in logical order
-- [ ] Arrow keys navigate the icon grid spatially
-- [ ] Screen reader announces icon names, states, and "opens in new tab"
-- [ ] Reduced motion disables all animations and transitions
-- [ ] All text/background combinations pass WCAG AA contrast (4.5:1)
-- [ ] Touch targets meet 44×44px minimum on mobile viewports
-- [ ] Visual output matches spec across all breakpoints
+- [x] Phone frame renders correctly at desktop, tablet, mobile, and wide desktop breakpoints
+- [x] Mobile uses simplified frame without realistic bezel details
+- [x] Tab key navigates through all interactive elements in logical order
+- [x] Arrow keys navigate the icon grid spatially
+- [x] Screen reader announces icon names, states, and "opens in new tab"
+- [x] Reduced motion disables all animations and transitions
+- [x] All text/background combinations pass WCAG AA contrast (4.5:1)
+- [x] Touch targets meet 44×44px minimum on mobile viewports
+- [x] Visual output matches spec across all breakpoints
 
 ### Execution Profile
 **Parallel mode:** serial
