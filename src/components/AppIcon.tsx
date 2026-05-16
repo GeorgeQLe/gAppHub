@@ -2,6 +2,8 @@
 
 import { useRef, useState, forwardRef } from "react";
 import { Product } from "@/types/product";
+import * as icons from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface AppIconProps {
   product: Product;
@@ -10,18 +12,26 @@ interface AppIconProps {
 }
 
 const badgeColorMap: Record<string, string> = {
-  L: "bg-[#15803d]",
-  B: "bg-[#C2410C]",
-  N: "bg-[#0066CC]",
-  W: "bg-[#8B3FC1]",
+  L: "bg-[#22c55e]",
+  B: "bg-[#eab308]",
+  N: "bg-[#3b82f6]",
+  C: "bg-[#ef4444]",
 };
 
 const badgeLabelMap: Record<string, string> = {
   L: "Live",
   B: "Beta",
   N: "New",
-  W: "Wishlist",
+  C: "Concept",
 };
+
+function getIcon(name: string): LucideIcon | null {
+  const pascalName = name
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join("");
+  return (icons as unknown as Record<string, LucideIcon>)[pascalName] ?? null;
+}
 
 const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
   { product, hideBadge, tabIndex },
@@ -46,6 +56,9 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
     : "Deprecated";
   const compositeLabel = `${product.name}, ${statusLabel}`;
 
+  const IconComponent = getIcon(product.icon);
+  const firstLetter = product.name.charAt(0).toUpperCase();
+
   return (
     <div role="gridcell">
       <a
@@ -61,13 +74,15 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
         className="flex flex-col items-center gap-1 rounded-2xl transition-all duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
       >
         <div className="relative">
-          <img
-            src={product.icon}
-            alt={product.name}
-            width={60}
-            height={60}
-            className={`rounded-[22.5%] overflow-hidden${deprecated ? " grayscale opacity-50" : ""}`}
-          />
+          <div
+            className={`w-[60px] h-[60px] rounded-[22.5%] flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900${deprecated ? " grayscale opacity-50" : ""}`}
+          >
+            {IconComponent ? (
+              <IconComponent size={28} className="text-white" strokeWidth={1.5} />
+            ) : (
+              <span className="text-white text-2xl font-bold">{firstLetter}</span>
+            )}
+          </div>
           {product.badge && !hideBadge && (
             <span
               aria-hidden="true"

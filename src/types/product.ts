@@ -4,7 +4,7 @@ export interface Product {
   url: string;
   icon: string;
   description: string;
-  badge: "L" | "B" | "N" | "W" | null;
+  badge: "L" | "B" | "N" | "C" | null;
   category: string[];
   featured: boolean;
   dock: boolean;

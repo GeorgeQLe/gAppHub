@@ -25,7 +25,7 @@ const products = [
   makeProduct({ id: "1", name: "Alpha", badge: "L", category: ["design"] }),
   makeProduct({ id: "2", name: "Bravo", badge: "B", category: ["dev"] }),
   makeProduct({ id: "3", name: "Charlie", badge: "N", category: ["design"] }),
-  makeProduct({ id: "4", name: "Delta", badge: "W", category: ["marketing"] }),
+  makeProduct({ id: "4", name: "Delta", badge: "C", category: ["marketing"] }),
 ];
 
 describe("SearchOverlay standalone", () => {
@@ -132,7 +132,7 @@ describe("Search filtering via IconGrid", () => {
 
   it("filters by badge label", () => {
     render(<IconGrid products={products} />);
-    openSearchAndType("launch");
+    openSearchAndType("live");
 
     expect(screen.getByText("Alpha")).toBeInTheDocument();
     expect(screen.queryByText("Bravo")).toBeNull();

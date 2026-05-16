@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 const legendItems = [
-  { letter: "L", label: "Live", color: "#15803d", description: "Product is live and available" },
-  { letter: "B", label: "Beta", color: "#C2410C", description: "Product is in beta testing" },
-  { letter: "N", label: "New", color: "#0066CC", description: "Recently launched product" },
-  { letter: "W", label: "Wishlist", color: "#8B3FC1", description: "Product on the wishlist — coming soon" },
+  { letter: "L", label: "Live", color: "#22c55e", description: "Product is live and available" },
+  { letter: "B", label: "Beta", color: "#eab308", description: "Product is actively building" },
+  { letter: "N", label: "New", color: "#3b82f6", description: "Recently launched product" },
+  { letter: "C", label: "Concept", color: "#ef4444", description: "Product is planned or incubating" },
 ];
 
 const deprecatedDescription = "Product has been retired";
@@ -57,7 +57,7 @@ export default function BadgeLegend() {
         aria-describedby={hovered === "deprecated" ? "tooltip-deprecated" : undefined}
       >
         {hovered === "deprecated" && <Tooltip id="tooltip-deprecated" text={deprecatedDescription} />}
-        <span className="flex items-center justify-center w-4 h-4 rounded-[3px] bg-[#d2d2d7]">
+        <span className="flex items-center justify-center w-4 h-4 rounded-[3px] bg-[#1c1c1e]">
           <svg
             width="10"
             height="10"
@@ -65,7 +65,7 @@ export default function BadgeLegend() {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <rect width="10" height="10" rx="2" fill="#8E8E93" />
+            <rect width="10" height="10" rx="2" fill="#000000" />
           </svg>
         </span>
         <span className="text-xs text-[#6e6e73]">Deprecated</span>

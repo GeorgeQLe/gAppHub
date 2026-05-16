@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, act, within, cleanup } from "@testing-library/react";
+import { render, fireEvent, act, within, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import AppIcon from "@/components/AppIcon";
 import type { Product } from "@/types/product";
@@ -27,16 +27,16 @@ describe("AppIcon badge rendering", () => {
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("L");
-    expect(badge.className).toContain("bg-[#15803d]");
+    expect(badge.className).toContain("bg-[#22c55e]");
   });
 
-  it("renders orange badge with letter B", () => {
+  it("renders yellow badge with letter B", () => {
     const { container } = render(
       <AppIcon product={makeProduct({ badge: "B" })} />
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("B");
-    expect(badge.className).toContain("bg-[#C2410C]");
+    expect(badge.className).toContain("bg-[#eab308]");
   });
 
   it("renders blue badge with letter N", () => {
@@ -45,16 +45,16 @@ describe("AppIcon badge rendering", () => {
     );
     const badge = container.querySelector("span.rounded-full")!;
     expect(badge).toHaveTextContent("N");
-    expect(badge.className).toContain("bg-[#0066CC]");
+    expect(badge.className).toContain("bg-[#3b82f6]");
   });
 
-  it("renders purple badge with letter W", () => {
+  it("renders red badge with letter C", () => {
     const { container } = render(
-      <AppIcon product={makeProduct({ badge: "W" })} />
+      <AppIcon product={makeProduct({ badge: "C" })} />
     );
     const badge = container.querySelector("span.rounded-full")!;
-    expect(badge).toHaveTextContent("W");
-    expect(badge.className).toContain("bg-[#8B3FC1]");
+    expect(badge).toHaveTextContent("C");
+    expect(badge.className).toContain("bg-[#ef4444]");
   });
 
   it("does not render badge for deprecated products", () => {
@@ -150,23 +150,23 @@ describe("AppIcon tooltip", () => {
 
 describe("AppIcon deprecated styling", () => {
   it("applies grayscale and opacity to deprecated product icon", () => {
-    render(
+    const { container } = render(
       <AppIcon
         product={makeProduct({ name: "Old App", badge: null })}
       />
     );
-    const img = screen.getByAltText("Old App");
-    expect(img.className).toContain("grayscale");
-    expect(img.className).toContain("opacity-50");
+    const iconDiv = container.querySelector(".rounded-\\[22\\.5\\%\\]")!;
+    expect(iconDiv.className).toContain("grayscale");
+    expect(iconDiv.className).toContain("opacity-50");
   });
 
   it("does not apply grayscale to active product icon", () => {
-    render(
+    const { container } = render(
       <AppIcon
         product={makeProduct({ name: "New App", badge: "L" })}
       />
     );
-    const img = screen.getByAltText("New App");
-    expect(img.className).not.toContain("grayscale");
+    const iconDiv = container.querySelector(".rounded-\\[22\\.5\\%\\]")!;
+    expect(iconDiv.className).not.toContain("grayscale");
   });
 });

@@ -54,7 +54,7 @@ export function sortProducts(products: Product[]): Product[] {
     ...newest,
     ...byBadge("L"),
     ...byBadge("B"),
-    ...byBadge("W"),
+    ...byBadge("C"),
     ...byBadge(null),
   ];
 }

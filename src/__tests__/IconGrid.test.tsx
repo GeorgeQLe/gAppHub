@@ -69,17 +69,17 @@ describe("IconGrid", () => {
     const products = [
       makeProduct({ id: "dep", name: "Deprecated", badge: null }),
     ];
-    render(<IconGrid products={products} />);
-    const img = screen.getByAltText("Deprecated");
-    expect(img.className).toContain("grayscale");
+    const { container } = render(<IconGrid products={products} />);
+    const iconDiv = container.querySelector(".rounded-\\[22\\.5\\%\\]")!;
+    expect(iconDiv.className).toContain("grayscale");
   });
 
   it("does not apply grayscale class to non-deprecated product icon", () => {
     const products = [
       makeProduct({ id: "active", name: "Active", badge: "L" }),
     ];
-    render(<IconGrid products={products} />);
-    const img = screen.getByAltText("Active");
-    expect(img.className).not.toContain("grayscale");
+    const { container } = render(<IconGrid products={products} />);
+    const iconDiv = container.querySelector(".rounded-\\[22\\.5\\%\\]")!;
+    expect(iconDiv.className).not.toContain("grayscale");
   });
 });

@@ -14,16 +14,16 @@ describe("BadgeLegend", () => {
     expect(view.getByText("Live")).toBeInTheDocument();
     expect(view.getByText("Beta")).toBeInTheDocument();
     expect(view.getByText("New")).toBeInTheDocument();
-    expect(view.getByText("Wishlist")).toBeInTheDocument();
+    expect(view.getByText("Concept")).toBeInTheDocument();
     expect(view.getByText("Deprecated")).toBeInTheDocument();
   });
 
-  it("renders badge letters L, B, N, W", () => {
+  it("renders badge letters L, B, N, C", () => {
     const view = renderLegend();
     expect(view.getByText("L")).toBeInTheDocument();
     expect(view.getByText("B")).toBeInTheDocument();
     expect(view.getByText("N")).toBeInTheDocument();
-    expect(view.getByText("W")).toBeInTheDocument();
+    expect(view.getByText("C")).toBeInTheDocument();
   });
 
   it("shows tooltip on hover for Live badge", () => {
@@ -38,7 +38,7 @@ describe("BadgeLegend", () => {
     const view = renderLegend();
     fireEvent.mouseEnter(view.getByText("Beta").closest("div")!);
     expect(view.getByRole("tooltip")).toHaveTextContent(
-      "Product is in beta testing"
+      "Product is actively building"
     );
   });
 
@@ -50,11 +50,11 @@ describe("BadgeLegend", () => {
     );
   });
 
-  it("shows tooltip on hover for Wishlist badge", () => {
+  it("shows tooltip on hover for Concept badge", () => {
     const view = renderLegend();
-    fireEvent.mouseEnter(view.getByText("Wishlist").closest("div")!);
+    fireEvent.mouseEnter(view.getByText("Concept").closest("div")!);
     expect(view.getByRole("tooltip")).toHaveTextContent(
-      "Product on the wishlist — coming soon"
+      "Product is planned or incubating"
     );
   });
 

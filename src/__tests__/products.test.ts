@@ -56,9 +56,9 @@ describe("sortProducts", () => {
     ]);
   });
 
-  it("groups remaining by badge L → B → W → null, alphabetical within", () => {
+  it("groups remaining by badge L → B → C → null, alphabetical within", () => {
     const products = [
-      makeProduct({ id: "w1", badge: "W", name: "Zeta", order: 1 }),
+      makeProduct({ id: "w1", badge: "C", name: "Zeta", order: 1 }),
       makeProduct({ id: "l1", badge: "L", name: "Beta", order: 2 }),
       makeProduct({ id: "n1", badge: null, name: "Alpha", order: 3 }),
       makeProduct({ id: "b1", badge: "B", name: "Gamma", order: 4 }),
@@ -83,7 +83,7 @@ describe("sortProducts", () => {
       })
     );
     const remaining = [
-      makeProduct({ id: "w1", badge: "W", name: "Whiskey", order: 1 }),
+      makeProduct({ id: "w1", badge: "C", name: "Whiskey", order: 1 }),
       makeProduct({ id: "l1", badge: "L", name: "Lima", order: 2 }),
       makeProduct({ id: "n1", badge: null, name: "Null", order: 3 }),
       makeProduct({ id: "b1", badge: "B", name: "Bravo", order: 4 }),

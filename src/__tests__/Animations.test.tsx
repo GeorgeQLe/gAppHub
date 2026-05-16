@@ -66,8 +66,8 @@ function renderPageContent(variant: "none" | "boot" | "slide" | "assemble") {
 
 function expectFinalContent() {
   expect(screen.queryAllByText("9:41 AM").length).toBeGreaterThanOrEqual(1);
-  expect(screen.getAllByAltText(/Grid App/)).toHaveLength(20);
-  expect(screen.getAllByAltText(/Dock App/)).toHaveLength(4);
+  expect(screen.getAllByLabelText(/Grid App/)).toHaveLength(20);
+  expect(screen.getAllByLabelText(/Dock App/)).toHaveLength(4);
 }
 
 describe("PageContent rendering (4 variants)", () => {
@@ -199,8 +199,8 @@ describe("Cross-route consistency", () => {
 
       act(() => { vi.advanceTimersByTime(timings[variant]); });
 
-      expect(screen.getAllByAltText(/Grid App/)).toHaveLength(20);
-      expect(screen.getAllByAltText(/Dock App/)).toHaveLength(4);
+      expect(screen.getAllByLabelText(/Grid App/)).toHaveLength(20);
+      expect(screen.getAllByLabelText(/Dock App/)).toHaveLength(4);
 
       unmount();
     }

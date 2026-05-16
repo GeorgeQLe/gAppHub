@@ -11,10 +11,10 @@ const COLS = 4;
 const PULL_DOWN_THRESHOLD = 30;
 
 const BADGE_LABELS: Record<string, string> = {
-  L: "launch",
+  L: "live",
   B: "beta",
   N: "new",
-  W: "waitlist",
+  C: "concept",
 };
 
 interface IconGridProps {
