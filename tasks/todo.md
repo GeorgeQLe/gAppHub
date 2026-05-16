@@ -8,6 +8,7 @@
 - [x] `/research-roadmap` - Documentation scan complete (2026-05-15).
 - [x] All implementation phases complete; documentation current; spec drift resolved.
 - [x] Orphaned `tasks/manual-todo.md`: 2 non-blocking `_(after:...)_` items from Phase 6 remain unchecked (real device testing, screen reader testing). Deferred to future work (2026-05-16).
+- [x] Task pipeline is healthy; no issues found.
 
 ## Priority Documentation Todo
 
