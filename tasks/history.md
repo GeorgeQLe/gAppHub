@@ -503,3 +503,11 @@
 - Step 6.7 no-op: all validation already passed during 6.6
 - All Phase 6 milestone acceptance criteria met — phase complete
 - **All 6 phases complete** — project at deferred/future work stage
+
+## 2026-05-16 — Post-completion: Mobile UX fixes (legend spacing, scroll bounce, search dismissal)
+
+- Fixed legend covered by iPhone home indicator: increased bottom padding from `pb-4` to `pb-8` on legend wrapper in `PageContent.tsx`
+- Disabled iOS elastic/bounce scroll: added `overscroll-behavior: none` to `html` and `body` in `globals.css`
+- Added X (close) button to search overlay: styled as subtle gray circle with × character in `SearchOverlay.tsx`
+- Added swipe-up-to-dismiss for search: modified `handleTouchEnd` in `IconGrid.tsx` to detect upward swipe when search is open
+- Verified: `npx tsc --noEmit` clean, `npm run lint` only pre-existing `<img>` warning
