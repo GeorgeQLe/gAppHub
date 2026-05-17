@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { Product } from "@/types/product";
 import { useAvailableRows } from "@/hooks/useAvailableRows";
 import AppIcon from "@/components/AppIcon";
@@ -39,11 +39,10 @@ export default function IconGrid({ products }: IconGridProps) {
     [totalPages],
   );
 
-  useEffect(() => {
-    if (page >= totalPages && totalPages > 0) {
-      setPage(totalPages - 1);
-    }
-  }, [page, totalPages]);
+  const safePage = useMemo(
+    () => (totalPages > 0 ? Math.min(page, totalPages - 1) : 0),
+    [page, totalPages],
+  );
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term);
@@ -103,7 +102,7 @@ export default function IconGrid({ products }: IconGridProps) {
     dragRef.current = null;
   };
 
-  const currentPageIcons = pages[page] ?? [];
+  const currentPageIcons = pages[safePage] ?? [];
   const iconCount = currentPageIcons.length;
 
   useEffect(() => {
@@ -129,9 +128,9 @@ export default function IconGrid({ products }: IconGridProps) {
         e.preventDefault();
         if (focusedIndex > 0) {
           setFocusedIndex(focusedIndex - 1);
-        } else if (page > 0) {
-          goTo(page - 1);
-          const prevCount = pages[page - 1].length;
+        } else if (safePage > 0) {
+          goTo(safePage - 1);
+          const prevCount = pages[safePage - 1].length;
           setFocusedIndex(prevCount - 1);
         }
         break;
@@ -141,9 +140,9 @@ export default function IconGrid({ products }: IconGridProps) {
         const next = focusedIndex + COLS;
         if (next < iconCount) {
           setFocusedIndex(next);
-        } else if (page < totalPages - 1) {
-          goTo(page + 1);
-          setFocusedIndex(Math.min(col, (pages[page + 1]?.length ?? 1) - 1));
+        } else if (safePage < totalPages - 1) {
+          goTo(safePage + 1);
+          setFocusedIndex(Math.min(col, (pages[safePage + 1]?.length ?? 1) - 1));
         }
         break;
       }
@@ -152,9 +151,9 @@ export default function IconGrid({ products }: IconGridProps) {
         const prev = focusedIndex - COLS;
         if (prev >= 0) {
           setFocusedIndex(prev);
-        } else if (page > 0) {
-          goTo(page - 1);
-          const prevPageCount = pages[page - 1].length;
+        } else if (safePage > 0) {
+          goTo(safePage - 1);
+          const prevPageCount = pages[safePage - 1].length;
           const lastRow = Math.floor((prevPageCount - 1) / COLS);
           const target = lastRow * COLS + col;
           setFocusedIndex(Math.min(target, prevPageCount - 1));
@@ -170,7 +169,7 @@ export default function IconGrid({ products }: IconGridProps) {
       case "End": {
         e.preventDefault();
         const lastPage = totalPages - 1;
-        if (page !== lastPage) goTo(lastPage);
+        if (safePage !== lastPage) goTo(lastPage);
         setFocusedIndex((pages[lastPage]?.length ?? 1) - 1);
         break;
       }
@@ -214,7 +213,7 @@ export default function IconGrid({ products }: IconGridProps) {
         <>
           <div
             className="flex h-full transition-transform duration-300 ease-out"
-            style={{ transform: `translateX(-${page * 100}%)` }}
+            style={{ transform: `translateX(-${safePage * 100}%)` }}
           >
             {pages.map((pageProducts, i) => (
               <div
@@ -222,7 +221,7 @@ export default function IconGrid({ products }: IconGridProps) {
                 className="w-full flex-shrink-0 grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4 content-start"
               >
                 {pageProducts.map((p, j) =>
-                  i === page ? (
+                  i === safePage ? (
                     <AppIcon
                       product={p}
                       key={p.id}
