@@ -13,7 +13,7 @@ const MAX_ROWS = 6;
 const COLS = 4;
 
 export function useAvailableRows(containerRef: RefObject<HTMLElement | null>): number {
-  const [iconsPerPage, setIconsPerPage] = useState(MAX_ROWS * COLS);
+  const [iconsPerPage, setIconsPerPage] = useState(0);
 
   useEffect(() => {
     const el = containerRef.current;
