@@ -536,3 +536,12 @@
 - Added `ResizeObserver` mock to `src/__tests__/setup.ts` for test environment
 - Root cause: no height-based adaptation existed — only width breakpoints at 768px and 1024px
 - Verified: `npx tsc --noEmit` clean, 84/84 tests pass
+
+## 2026-05-17 — Fix: Phone frame flicker and sizing on desktop
+
+- Root cause: desktop PhoneFrame had no intrinsic height (purely content-driven), creating a circular dependency with the `useAvailableRows` ResizeObserver hook — measure height → change icon count → height changes → re-measure
+- `PhoneFrame.tsx`: Added `aspectRatio: "375 / 812"` to desktop screen div for stable intrinsic height; moved `h-full` to `tablet-scale` wrapper; added `max-h-full` to chrome div to prevent overflow
+- `PageContent.tsx`: Added `flex flex-col items-center` to phone wrapper div so PhoneFrame's `h-full` resolves correctly
+- `useAvailableRows.ts`: Switched from `useEffect` to `useLayoutEffect` (runs before paint); default initial state changed from `0` to `MAX_ROWS * COLS` (24); removed `h === 0` fallback branch (just returns to keep default)
+- `IconGrid.tsx`: Removed `measured` variable, conditional `invisible` class, and empty-array fallback — icons always chunked with iconsPerPage
+- Verified: `npx tsc --noEmit` clean, 84/84 tests pass
