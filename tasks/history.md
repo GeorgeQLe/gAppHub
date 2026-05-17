@@ -565,3 +565,10 @@
 - Root cause: The `motion.div` wrapper around `IconGrid` in `SlidePhoneContent`, `BootPhoneContent`, and `AssemblePhoneContent` had `flex-1 overflow-hidden` but was not a flex container itself, so `IconGrid`'s `flex-1` had no effect and `useAvailableRows` measured content height instead of available space
 - Fix: Added `flex flex-col` to the `motion.div` wrapping `IconGrid` in all three animation variants (PageContent.tsx lines 257, 317, 447)
 - Verified: lint clean, build succeeds
+
+## 2026-05-17 — Fix: Remove unwanted focus outline on Dock mount
+
+- Root cause: `Dock.tsx` `useEffect` calls `.focus()` on the first icon (index 0) on every render including initial mount, triggering `focus-visible:outline-blue-500` styling on War Room icon
+- Fix: Added `userInteracted` ref (initialized `false`), set to `true` in `handleKeyDown`, guarded `useEffect` focus call so `.focus()` only fires after keyboard interaction
+- File: `src/components/Dock.tsx`
+- Verified: 85/85 tests pass, lint clean
