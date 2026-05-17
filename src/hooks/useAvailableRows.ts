@@ -21,7 +21,10 @@ export function useAvailableRows(containerRef: RefObject<HTMLElement | null>): n
 
     function compute() {
       const h = el!.clientHeight;
-      if (h === 0) return;
+      if (h === 0) {
+        setIconsPerPage(MAX_ROWS * COLS);
+        return;
+      }
       const available = h - PT - PB;
       const rows = Math.floor((available + GAP_Y) / ROW_HEIGHT);
       const clamped = Math.max(MIN_ROWS, Math.min(MAX_ROWS, rows));
