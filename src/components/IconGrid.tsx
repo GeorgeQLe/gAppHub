@@ -2,11 +2,11 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Product } from "@/types/product";
+import { useAvailableRows } from "@/hooks/useAvailableRows";
 import AppIcon from "@/components/AppIcon";
 import PageDots from "@/components/PageDots";
 import SearchOverlay from "@/components/SearchOverlay";
 
-const ICONS_PER_PAGE = 24;
 const COLS = 4;
 const PULL_DOWN_THRESHOLD = 30;
 
@@ -22,7 +22,9 @@ interface IconGridProps {
 }
 
 export default function IconGrid({ products }: IconGridProps) {
-  const pages = chunk(products, ICONS_PER_PAGE);
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const iconsPerPage = useAvailableRows(gridContainerRef);
+  const pages = chunk(products, iconsPerPage);
   const totalPages = pages.length;
   const [page, setPage] = useState(0);
   const [focusedIndex, setFocusedIndex] = useState(0);
@@ -36,6 +38,12 @@ export default function IconGrid({ products }: IconGridProps) {
     (p: number) => setPage(Math.max(0, Math.min(p, totalPages - 1))),
     [totalPages],
   );
+
+  useEffect(() => {
+    if (page >= totalPages && totalPages > 0) {
+      setPage(totalPages - 1);
+    }
+  }, [page, totalPages]);
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term);
@@ -173,6 +181,7 @@ export default function IconGrid({ products }: IconGridProps) {
 
   return (
     <div
+      ref={gridContainerRef}
       className="overflow-hidden flex-1 relative"
       role="grid"
       aria-label="Product apps"

@@ -88,7 +88,7 @@ export default function PageContent({
   const shouldAnimate = variant === "none" && !reducedMotion;
 
   const content = (
-    <main className="flex h-screen flex-col items-center overflow-x-hidden px-4 py-4">
+    <main className="flex h-screen max-h-screen flex-col items-center overflow-hidden px-4 py-4">
       <svg
         width={isMobile ? 100 : 140}
         height={isMobile ? 24 : 32}
