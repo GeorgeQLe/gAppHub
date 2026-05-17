@@ -545,3 +545,9 @@
 - `useAvailableRows.ts`: Switched from `useEffect` to `useLayoutEffect` (runs before paint); default initial state changed from `0` to `MAX_ROWS * COLS` (24); removed `h === 0` fallback branch (just returns to keep default)
 - `IconGrid.tsx`: Removed `measured` variable, conditional `invisible` class, and empty-array fallback — icons always chunked with iconsPerPage
 - Verified: `npx tsc --noEmit` clean, 84/84 tests pass
+
+## 2026-05-17 — Fix: Assemble animation gray gradient overlay persists
+
+- Root cause: Two z-40 gray gradient overlays in `AssemblePhoneContent` (PageContent.tsx:353-374) animate clip-path to slide in during phase 1 but never fade out. A separate z-30 overlay fades at phase 2, but sits below the z-40 layers so has no visible effect.
+- Fix: Added `opacity: phase >= 2 ? 0 : 1` to both z-40 overlay `animate` props so they fade out with the seam flash
+- Verified: lint clean, 84/84 tests pass, build succeeds
