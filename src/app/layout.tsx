@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GappHub — Lexcorp Products",
+  title: "gAppHub",
   description:
-    "Lexcorp product portfolio launcher — Made in Boston, Building in Public",
+    "gAppHub — Made in Boston, Building in Public",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },

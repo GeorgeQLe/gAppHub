@@ -1,7 +1,7 @@
 {
-  "name": "GappHub",
-  "short_name": "GappHub",
-  "description": "Lexcorp product portfolio launcher",
+  "name": "gAppHub",
+  "short_name": "gAppHub",
+  "description": "gAppHub — Made in Boston, Building in Public",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
