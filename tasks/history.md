@@ -572,3 +572,11 @@
 - Fix: Added `userInteracted` ref (initialized `false`), set to `true` in `handleKeyDown`, guarded `useEffect` focus call so `.focus()` only fires after keyboard interaction
 - File: `src/components/Dock.tsx`
 - Verified: 85/85 tests pass, lint clean
+
+## 2026-05-17 — Fix: Remove unwanted focus outline on IconGrid mount
+
+- Root cause: `IconGrid.tsx` `useEffect` calls `.focus()` on the focused icon on every render including initial mount, triggering `focus-visible` outline on Draft Stonk (first grid icon at index 0) — same bug pattern as Dock (fixed in commit b4fb84c)
+- Fix: Added `userInteracted` ref (initialized `false`), set to `true` in `handleKeyDown`, guarded `useEffect` focus call with `if (userInteracted.current)` so `.focus()` only fires after keyboard interaction
+- Mirrors exact pattern from `Dock.tsx:14-23`
+- File: `src/components/IconGrid.tsx`
+- Verified: 85/85 tests pass, lint clean
