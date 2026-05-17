@@ -33,6 +33,7 @@ export default function IconGrid({ products }: IconGridProps) {
   const touchRef = useRef<{ startX: number; startY: number } | null>(null);
   const dragRef = useRef<{ startX: number; dragging: boolean } | null>(null);
   const iconRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const userInteracted = useRef(false);
 
   const goTo = useCallback(
     (p: number) => setPage(Math.max(0, Math.min(p, totalPages - 1))),
@@ -106,10 +107,11 @@ export default function IconGrid({ products }: IconGridProps) {
   const iconCount = currentPageIcons.length;
 
   useEffect(() => {
-    iconRefs.current[focusedIndex]?.focus();
+    if (userInteracted.current) iconRefs.current[focusedIndex]?.focus();
   }, [focusedIndex]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    userInteracted.current = true;
     if (showSearch) return;
     const col = focusedIndex % COLS;
 
