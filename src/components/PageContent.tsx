@@ -254,7 +254,7 @@ function BootPhoneContent({
 
       {/* Phase 3+: Icons appear row by row with spring bounce */}
       <motion.div
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden flex flex-col"
         initial={{ opacity: 0 }}
         animate={{ opacity: phase >= 3 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
@@ -314,7 +314,7 @@ function SlidePhoneContent({
       <DynamicIsland />
 
       <motion.div
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden flex flex-col"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{
           opacity: phase >= 2 ? 1 : 0,
@@ -444,7 +444,7 @@ function AssemblePhoneContent({
 
       {/* Phase 5: Icons drop from above with stagger */}
       <motion.div
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden flex flex-col"
         initial={{ opacity: 0, y: -40 }}
         animate={{
           opacity: phase >= 5 ? 1 : 0,

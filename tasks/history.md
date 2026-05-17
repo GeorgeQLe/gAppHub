@@ -551,3 +551,9 @@
 - Root cause: Two z-40 gray gradient overlays in `AssemblePhoneContent` (PageContent.tsx:353-374) animate clip-path to slide in during phase 1 but never fade out. A separate z-30 overlay fades at phase 2, but sits below the z-40 layers so has no visible effect.
 - Fix: Added `opacity: phase >= 2 ? 0 : 1` to both z-40 overlay `animate` props so they fade out with the seam flash
 - Verified: lint clean, 84/84 tests pass, build succeeds
+
+## 2026-05-17 — Fix: Slide/Boot/Assemble pages show fewer apps than root
+
+- Root cause: The `motion.div` wrapper around `IconGrid` in `SlidePhoneContent`, `BootPhoneContent`, and `AssemblePhoneContent` had `flex-1 overflow-hidden` but was not a flex container itself, so `IconGrid`'s `flex-1` had no effect and `useAvailableRows` measured content height instead of available space
+- Fix: Added `flex flex-col` to the `motion.div` wrapping `IconGrid` in all three animation variants (PageContent.tsx lines 257, 317, 447)
+- Verified: lint clean, build succeeds
