@@ -11,12 +11,16 @@ interface DockProps {
 export default function Dock({ products }: DockProps) {
   const [focusedIndex, setFocusedIndex] = useState(0);
   const iconRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const userInteracted = useRef(false);
 
   useEffect(() => {
-    iconRefs.current[focusedIndex]?.focus();
+    if (userInteracted.current) {
+      iconRefs.current[focusedIndex]?.focus();
+    }
   }, [focusedIndex]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    userInteracted.current = true;
     switch (e.key) {
       case "ArrowRight": {
         e.preventDefault();
