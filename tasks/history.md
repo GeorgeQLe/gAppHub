@@ -552,6 +552,14 @@
 - Fix: Added `opacity: phase >= 2 ? 0 : 1` to both z-40 overlay `animate` props so they fade out with the seam flash
 - Verified: lint clean, 84/84 tests pass, build succeeds
 
+## 2026-05-17 — Test: Split reduced-motion AppIcon test into 2 focused tests
+
+- Split single "globals.css contains prefers-reduced-motion" test into 2 distinct tests in `Accessibility.test.tsx`:
+  - "disables hover scale and shadow transforms under reduced motion" — verifies `transform: none !important` and `box-shadow: none !important` in hover rules
+  - "replaces active scale with opacity dim under reduced motion" — verifies active state has `transform: none !important`, `opacity: 0.7`, and `transition-property: opacity`
+- Total tests: 85 (was 84)
+- Verified: tsc clean, lint clean (1 pre-existing warning), all 85 tests pass
+
 ## 2026-05-17 — Fix: Slide/Boot/Assemble pages show fewer apps than root
 
 - Root cause: The `motion.div` wrapper around `IconGrid` in `SlidePhoneContent`, `BootPhoneContent`, and `AssemblePhoneContent` had `flex-1 overflow-hidden` but was not a flex container itself, so `IconGrid`'s `flex-1` had no effect and `useAvailableRows` measured content height instead of available space

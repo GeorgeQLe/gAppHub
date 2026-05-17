@@ -103,7 +103,7 @@ describe("Dock accessibility", () => {
 });
 
 describe("Reduced motion on AppIcon", () => {
-  it("globals.css contains prefers-reduced-motion media query for AppIcon links", async () => {
+  it("disables hover scale and shadow transforms under reduced motion", async () => {
     const fs = await import("fs");
     const path = await import("path");
     const css = fs.readFileSync(
@@ -114,7 +114,23 @@ describe("Reduced motion on AppIcon", () => {
     expect(css).toContain('[role="gridcell"] a');
     expect(css).toContain('[role="toolbar"] a');
     expect(css).toContain("transform: none !important");
-    expect(css).toContain("opacity: 0.7");
+    expect(css).toContain("box-shadow: none !important");
+  });
+
+  it("replaces active scale with opacity dim under reduced motion", async () => {
+    const fs = await import("fs");
+    const path = await import("path");
+    const css = fs.readFileSync(
+      path.resolve(__dirname, "../app/globals.css"),
+      "utf-8",
+    );
+    const reducedMotionBlock = css.slice(
+      css.indexOf("@media (prefers-reduced-motion: reduce)"),
+    );
+    expect(reducedMotionBlock).toContain("a:active");
+    expect(reducedMotionBlock).toContain("transform: none !important");
+    expect(reducedMotionBlock).toContain("opacity: 0.7");
+    expect(reducedMotionBlock).toContain("transition-property: opacity");
   });
 });
 
