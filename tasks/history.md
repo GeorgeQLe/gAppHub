@@ -606,3 +606,25 @@
 - Residual risk: no automated screenshot/video assertion proves subjective splash readability across all devices; physical mobile/tablet verification remains deferred in `tasks/manual-todo.md`.
 - Rollback note: revert the PageContent boot timing/text changes and StatusBar percentage removal, plus the associated test/doc changes.
 - Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.
+
+## 2026-05-17 — Polish: Stack boot splash text instead of replacing it
+
+- Updated `src/components/PageContent.tsx`: `/boot` splash now keeps previous lines visible while each new line fades in underneath:
+  - `Lexcorp`
+  - `made with love`
+  - `by George "G" Le`
+- Updated `src/__tests__/Animations.test.tsx`: renamed the splash test and asserted accumulated lines remain present after each phase.
+- Updated `tasks/lessons.md` with the correction that stacked splash copy should use persistent lines, not a single swapped text node.
+
+### Ship Manifest
+
+- User goal: make the boot splash text appear one on top of each other rather than sequentially replacing the previous phrase.
+- Changed files: `src/components/PageContent.tsx`, `src/__tests__/Animations.test.tsx`, `tasks/history.md`, `tasks/lessons.md`.
+- Per-file purpose: `PageContent.tsx` renders persistent stacked splash lines; `Animations.test.tsx` verifies accumulated text visibility; docs record the correction and shipping boundary.
+- User-goal mapping: each splash line now fades in while earlier lines stay visible, matching the requested stacked behavior.
+- Tests run: `pnpm test src/__tests__/Animations.test.tsx` (12 passed), `pnpm run lint` (0 errors, 1 accepted warning), `pnpm test` (86 passed), `pnpm exec tsc --noEmit` (passed), `pnpm run build` (passed).
+- Skipped tests: none relevant; focused animation test, full test suite, typecheck, lint, and production build were run.
+- Adversarial review: checked that the splash lines accumulate instead of swapping, that final-state boot timing remains unchanged, and that reduced-motion behavior still bypasses the boot animation. Accepted warning remains `@next/next/no-img-element` for local product icon PNGs in `AppIcon.tsx`.
+- Residual risk: no screenshot/video assertion verifies subjective visual spacing on physical devices; deferred real-device responsive testing remains in `tasks/manual-todo.md`.
+- Rollback note: revert this stacked-line change and the corresponding animation test/docs if the single-line sequence is wanted again.
+- Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.

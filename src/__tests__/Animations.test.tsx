@@ -94,15 +94,18 @@ describe("PageContent rendering (4 variants)", () => {
     expectFinalContent();
   });
 
-  it("boot splash cycles through the intro text sequence", () => {
+  it("boot splash stacks the intro text sequence", () => {
     renderPageContent("boot");
 
     expect(screen.getByText("Lexcorp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(1100); });
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
     expect(screen.getByText("made with love")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(1100); });
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByText("made with love")).toBeInTheDocument();
     expect(screen.getByText('by George "G" Le')).toBeInTheDocument();
   });
 
