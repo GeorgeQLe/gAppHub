@@ -215,7 +215,7 @@ function BootPhoneContent({
                 animate={{ opacity: phase >= 2 ? 1 : 0, scale: phase >= 2 ? 1 : 0.94, y: phase >= 2 ? 0 : 8 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
               >
-                made with love
+                made with ♥
               </motion.div>
               <motion.div
                 className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"

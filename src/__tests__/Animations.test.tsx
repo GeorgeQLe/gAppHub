@@ -101,11 +101,11 @@ describe("PageContent rendering (4 variants)", () => {
 
     act(() => { vi.advanceTimersByTime(1100); });
     expect(screen.getByText("Lexcorp")).toBeInTheDocument();
-    expect(screen.getByText("made with love")).toBeInTheDocument();
+    expect(screen.getByText("made with ♥")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(1100); });
     expect(screen.getByText("Lexcorp")).toBeInTheDocument();
-    expect(screen.getByText("made with love")).toBeInTheDocument();
+    expect(screen.getByText("made with ♥")).toBeInTheDocument();
     expect(screen.getByText('by George "G" Le')).toBeInTheDocument();
   });
 

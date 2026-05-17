@@ -628,3 +628,21 @@
 - Residual risk: no screenshot/video assertion verifies subjective visual spacing on physical devices; deferred real-device responsive testing remains in `tasks/manual-todo.md`.
 - Rollback note: revert this stacked-line change and the corresponding animation test/docs if the single-line sequence is wanted again.
 - Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.
+
+## 2026-05-17 — Polish: Use heart symbol in boot splash
+
+- Updated `src/components/PageContent.tsx`: changed the second `/boot` splash line from `made with love` to `made with ♥`.
+- Updated `src/__tests__/Animations.test.tsx`: changed the boot splash assertion to match the heart-symbol copy.
+
+### Ship Manifest
+
+- User goal: replace the word `love` in the boot splash with a heart symbol.
+- Changed files: `src/components/PageContent.tsx`, `src/__tests__/Animations.test.tsx`, `tasks/history.md`.
+- Per-file purpose: `PageContent.tsx` changes the visible splash copy; `Animations.test.tsx` keeps the copy regression test aligned; `tasks/history.md` records the shipping boundary.
+- User-goal mapping: the stacked splash now reads `Lexcorp`, `made with ♥`, `by George "G" Le`.
+- Tests run: `pnpm test src/__tests__/Animations.test.tsx` (12 passed), `pnpm test` (86 passed), `pnpm exec tsc --noEmit` (passed), `pnpm run lint` (0 errors, 1 accepted warning), `pnpm run build` (passed).
+- Skipped tests: none relevant; focused animation test, full test suite, typecheck, lint, and production build were run.
+- Adversarial review: checked that only text copy changed, boot timing and stacked visibility remain unchanged, and the test verifies the exact visible phrase. Accepted warning remains `@next/next/no-img-element` for local product icon PNGs in `AppIcon.tsx`.
+- Residual risk: heart glyph rendering depends on platform font but should be covered by system fonts; no physical-device screenshot verification was run.
+- Rollback note: change the splash text and test assertion back to `made with love`.
+- Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.
