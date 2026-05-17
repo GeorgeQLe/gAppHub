@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, RefObject } from "react";
+import { useState, useLayoutEffect, RefObject } from "react";
 
 const ICON_HEIGHT = 60;
 const LABEL_HEIGHT = 20;
@@ -13,18 +13,15 @@ const MAX_ROWS = 6;
 const COLS = 4;
 
 export function useAvailableRows(containerRef: RefObject<HTMLElement | null>): number {
-  const [iconsPerPage, setIconsPerPage] = useState(0);
+  const [iconsPerPage, setIconsPerPage] = useState(MAX_ROWS * COLS);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     function compute() {
       const h = el!.clientHeight;
-      if (h === 0) {
-        setIconsPerPage(MAX_ROWS * COLS);
-        return;
-      }
+      if (h === 0) return;
       const available = h - PT - PB;
       const rows = Math.floor((available + GAP_Y) / ROW_HEIGHT);
       const clamped = Math.max(MIN_ROWS, Math.min(MAX_ROWS, rows));

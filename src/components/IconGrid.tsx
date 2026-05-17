@@ -24,8 +24,7 @@ interface IconGridProps {
 export default function IconGrid({ products }: IconGridProps) {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const iconsPerPage = useAvailableRows(gridContainerRef);
-  const measured = iconsPerPage > 0;
-  const pages = measured ? chunk(products, iconsPerPage) : [];
+  const pages = chunk(products, iconsPerPage);
   const totalPages = pages.length;
   const [page, setPage] = useState(0);
   const [focusedIndex, setFocusedIndex] = useState(0);
@@ -183,7 +182,7 @@ export default function IconGrid({ products }: IconGridProps) {
   return (
     <div
       ref={gridContainerRef}
-      className={`overflow-hidden flex-1 relative${measured ? "" : " invisible"}`}
+      className="overflow-hidden flex-1 relative"
       role="grid"
       aria-label="Product apps"
       onTouchStart={handleTouchStart}

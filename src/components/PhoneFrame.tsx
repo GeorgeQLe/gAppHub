@@ -24,9 +24,9 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
   }
 
   return (
-    <div className="tablet-scale">
+    <div className="tablet-scale h-full flex flex-col items-center">
       <div
-        className="flex h-full w-fit flex-col rounded-[50px] p-[3px]"
+        className="flex w-fit flex-col rounded-[50px] p-[3px] max-h-full"
         style={{
           background: "linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0)",
           boxShadow:
@@ -39,6 +39,7 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
             aria-label="Lexcorp product launcher"
             className="relative min-h-0 flex-1 w-[375px] overflow-hidden rounded-[38px] flex flex-col"
             style={{
+              aspectRatio: "375 / 812",
               background: "linear-gradient(to bottom, #e8ecf4, #f5f0f6)",
             }}
           >

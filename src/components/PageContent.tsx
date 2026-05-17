@@ -115,7 +115,7 @@ export default function PageContent({
         Made in Boston, Building in Public
       </p>
 
-      <div className="mt-3 min-h-0 flex-1 pb-8">
+      <div className="mt-3 min-h-0 flex-1 flex flex-col items-center pb-8">
         <PhoneFrame>
           {isBoot ? (
             <BootPhoneContent
