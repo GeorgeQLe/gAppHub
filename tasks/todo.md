@@ -177,5 +177,5 @@
 
 **On Completion:**
 - Deviations from plan: none
-- Tech debt / follow-ups: `npm run build` static generation timeout on `/boot` and `/` (pre-existing, relative fetch URL in `getProducts` hangs during build); `<img>` lint warning in AppIcon (intentional, local SVGs don't need next/image)
+- Tech debt / follow-ups: `<img>` lint warning in AppIcon (intentional, local product icon PNGs do not need `next/image`)
 - Ready for next phase: yes

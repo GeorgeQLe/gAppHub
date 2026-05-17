@@ -34,6 +34,7 @@ function makeDockProducts(count: number): Product[] {
 
 const gridProducts = makeGridProducts(20);
 const dockProducts = makeDockProducts(4);
+const BOOT_DURATION = 3700;
 
 function mockReducedMotion(enabled: boolean) {
   const listeners: Array<(e: MediaQueryListEvent) => void> = [];
@@ -89,8 +90,20 @@ describe("PageContent rendering (4 variants)", () => {
 
   it('variant="boot" renders same final content after animation completes', () => {
     renderPageContent("boot");
-    act(() => { vi.advanceTimersByTime(2200); });
+    act(() => { vi.advanceTimersByTime(BOOT_DURATION); });
     expectFinalContent();
+  });
+
+  it("boot splash cycles through the intro text sequence", () => {
+    renderPageContent("boot");
+
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(1100); });
+    expect(screen.getByText("made with love")).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(1100); });
+    expect(screen.getByText('by George "G" Le')).toBeInTheDocument();
   });
 
   it('variant="slide" renders same final content after animation completes', () => {
@@ -192,7 +205,7 @@ describe("Cross-route consistency", () => {
 
   it("all 4 variants render same number of grid icons (20) and dock icons (4)", () => {
     const variants = ["none", "boot", "slide", "assemble"] as const;
-    const timings = { none: 0, boot: 2200, slide: 1500, assemble: 2300 };
+    const timings = { none: 0, boot: BOOT_DURATION, slide: 1500, assemble: 2300 };
 
     for (const variant of variants) {
       const { unmount } = renderPageContent(variant);

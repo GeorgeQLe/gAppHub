@@ -580,3 +580,29 @@
 - Mirrors exact pattern from `Dock.tsx:14-23`
 - File: `src/components/IconGrid.tsx`
 - Verified: 85/85 tests pass, lint clean
+
+## 2026-05-17 — Polish: Boot splash copy and status bar battery
+
+- Updated `src/components/StatusBar.tsx`: removed the redundant `100%` text while keeping the full battery icon.
+- Updated `src/components/PageContent.tsx`: changed `/boot` from a single Lexcorp logo pulse into a three-beat splash sequence:
+  - `Lexcorp`
+  - `made with love`
+  - `by George "G" Le`
+- Extended the boot splash duration to 3.7s with ~1.1s per text beat, then status/icons reveal at phase 4 and dock reveal at phase 5.
+- Reduced splash text tracking and constrained the text width so `Lexcorp` does not clip inside the phone screen.
+- Updated `src/__tests__/Animations.test.tsx`: added `BOOT_DURATION`, updated boot final-state timing, and added coverage for the splash copy sequence.
+- Added `tasks/lessons.md` entry for the user correction: readable splash timing and clipping must be visually considered, not only state-tested.
+- Cleared stale task-doc note about build static-generation timeout; `pnpm run build` now succeeds.
+
+### Ship Manifest
+
+- User goal: make the boot screen show pop-in text (`Lexcorp`, `made with love`, `by George "G" Le`) and remove redundant battery percentage text.
+- Changed files: `src/components/PageContent.tsx`, `src/components/StatusBar.tsx`, `src/__tests__/Animations.test.tsx`, `tasks/todo.md`, `tasks/roadmap.md`, `tasks/phases/phase-6.md`, `tasks/history.md`, `tasks/lessons.md`.
+- Per-file purpose: `PageContent.tsx` implements the readable boot splash sequence; `StatusBar.tsx` removes `100%`; `Animations.test.tsx` verifies boot timing/final state and copy sequence; task docs record validation, stale build-note cleanup, and the correction lesson.
+- User-goal mapping: boot route now presents the requested three text beats before UI reveal; battery cluster no longer duplicates full charge via text.
+- Tests run: `pnpm test src/__tests__/Animations.test.tsx src/__tests__/PhoneFrame.test.tsx src/__tests__/Accessibility.test.tsx` (30 passed), `pnpm test` (86 passed), `pnpm exec tsc --noEmit` (passed), `pnpm run lint` (0 errors, 1 accepted warning), `pnpm run build` (passed).
+- Skipped tests: none relevant; full automated test, typecheck, lint, and production build were run.
+- Adversarial review: checked phase timing against user-visible readability, clipping risk from letter spacing inside the phone frame, reduced-motion behavior boundary, and final-state route consistency. The only warning is the accepted `@next/next/no-img-element` warning for local product icon PNGs in `AppIcon.tsx`.
+- Residual risk: no automated screenshot/video assertion proves subjective splash readability across all devices; physical mobile/tablet verification remains deferred in `tasks/manual-todo.md`.
+- Rollback note: revert the PageContent boot timing/text changes and StatusBar percentage removal, plus the associated test/doc changes.
+- Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.

@@ -47,10 +47,10 @@ export default function PageContent({
 
     const timers = [
       setTimeout(() => setBootPhase(1), 0),
-      setTimeout(() => setBootPhase(2), 800),
-      setTimeout(() => setBootPhase(3), 1200),
-      setTimeout(() => setBootPhase(4), 1800),
-      setTimeout(() => setBootPhase(5), 2200),
+      setTimeout(() => setBootPhase(2), 1100),
+      setTimeout(() => setBootPhase(3), 2200),
+      setTimeout(() => setBootPhase(4), 3300),
+      setTimeout(() => setBootPhase(5), 3700),
     ];
     return () => timers.forEach(clearTimeout);
   }, [variant, reducedMotion]);
@@ -188,63 +188,38 @@ function BootPhoneContent({
   gridProducts: Product[];
   dockProducts: Product[];
 }) {
+  const splashText =
+    phase >= 3 ? 'by George "G" Le' : phase >= 2 ? "made with love" : "Lexcorp";
+
   return (
     <>
-      {/* Phase 1–2: Black overlay with LEXCORP logo */}
+      {/* Phase 1–3: Boot splash copy sequence */}
       <AnimatePresence>
-        {phase <= 2 && (
+        {phase <= 3 && (
           <motion.div
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black"
+            className="absolute inset-0 z-50 flex items-center justify-center overflow-hidden bg-black px-6"
             initial={{ opacity: 1 }}
-            animate={{ opacity: phase >= 2 ? 0 : 1 }}
+            animate={{ opacity: phase >= 4 ? 0 : 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <motion.svg
-              width="160"
-              height="40"
-              viewBox="0 0 160 40"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              animate={
-                phase === 1
-                  ? {
-                      scale: [1, 1.06, 1],
-                    }
-                  : { scale: 1, opacity: 0 }
-              }
-              transition={
-                phase === 1
-                  ? {
-                      duration: 1.6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }
-                  : { duration: 0.3 }
-              }
+            <motion.div
+              key={splashText}
+              className="w-full max-w-[300px] text-center text-[24px] font-semibold leading-tight tracking-[0.04em] text-white"
+              initial={{ opacity: 0, scale: 0.94, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
             >
-              <text
-                x="50%"
-                y="50%"
-                dominantBaseline="central"
-                textAnchor="middle"
-                fill="white"
-                fontSize="28"
-                fontWeight="600"
-                fontFamily="-apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
-                letterSpacing="0.25em"
-              >
-                LEXCORP
-              </text>
-            </motion.svg>
+              {splashText}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Phase 3+: StatusBar fades in */}
+      {/* Phase 4+: StatusBar fades in */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: phase >= 3 ? 1 : 0 }}
+        animate={{ opacity: phase >= 4 ? 1 : 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <StatusBar />
@@ -252,22 +227,22 @@ function BootPhoneContent({
 
       <DynamicIsland />
 
-      {/* Phase 3+: Icons appear row by row with spring bounce */}
+      {/* Phase 4+: Icons appear row by row with spring bounce */}
       <motion.div
         className="flex-1 overflow-hidden flex flex-col"
         initial={{ opacity: 0 }}
-        animate={{ opacity: phase >= 3 ? 1 : 0 }}
+        animate={{ opacity: phase >= 4 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <IconGrid products={gridProducts} />
       </motion.div>
 
-      {/* Phase 4+: Dock slides up */}
+      {/* Phase 5+: Dock slides up */}
       <motion.div
         initial={{ y: 80, opacity: 0 }}
         animate={{
-          y: phase >= 4 ? 0 : 80,
-          opacity: phase >= 4 ? 1 : 0,
+          y: phase >= 5 ? 0 : 80,
+          opacity: phase >= 5 ? 1 : 0,
         }}
         transition={{
           type: "spring",

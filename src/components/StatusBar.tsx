@@ -95,7 +95,6 @@ export default function StatusBar() {
           />
         </svg>
 
-        <span className="text-[10px] font-semibold text-[#1d1d1f]">100%</span>
       </div>
     </div>
   );

@@ -509,7 +509,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 **On Completion:**
 - Deviations from plan: none
-- Tech debt / follow-ups: `npm run build` static generation timeout (pre-existing); `<img>` lint warning in AppIcon (intentional)
+- Tech debt / follow-ups: `<img>` lint warning in AppIcon (intentional, local product icon PNGs do not need `next/image`)
 - Ready for next phase: all phases complete — project at deferred/future work stage
 
 ---
