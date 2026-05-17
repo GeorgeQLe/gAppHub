@@ -355,9 +355,10 @@ function AssemblePhoneContent({
         style={{
           background: "linear-gradient(145deg, #c0c0c0, #808080, #a0a0a0)",
         }}
-        initial={{ clipPath: "inset(0 50% 0 0)" }}
+        initial={{ clipPath: "inset(0 50% 0 0)", opacity: 1 }}
         animate={{
           clipPath: phase >= 1 ? "inset(0 0% 0 0)" : "inset(0 50% 0 0)",
+          opacity: phase >= 2 ? 0 : 1,
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       />
@@ -366,9 +367,10 @@ function AssemblePhoneContent({
         style={{
           background: "linear-gradient(215deg, #c0c0c0, #808080, #a0a0a0)",
         }}
-        initial={{ clipPath: "inset(0 0 0 50%)" }}
+        initial={{ clipPath: "inset(0 0 0 50%)", opacity: 1 }}
         animate={{
           clipPath: phase >= 1 ? "inset(0 0 0 0%)" : "inset(0 0 0 50%)",
+          opacity: phase >= 2 ? 0 : 1,
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       />
