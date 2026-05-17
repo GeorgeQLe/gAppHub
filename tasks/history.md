@@ -526,3 +526,13 @@
 - Root cause: IconGrid's `flex-1` had no effect outside a flex container, so `h-full` on the pages container resolved to `auto`, breaking pagination on initial render
 - Animated variants (boot/slide/assemble) were unaffected because they already wrap content in flex containers
 - Verified: `npx tsc --noEmit` clean, `npm run lint` clean
+
+## 2026-05-16 — Fix: Height-responsive phone frame (dynamic icon rows + CSS scaling)
+
+- Created `src/hooks/useAvailableRows.ts`: ResizeObserver-based hook that measures container height and computes optimal rows (3–6) of icons per page dynamically
+- Updated `src/components/IconGrid.tsx`: replaced fixed `ICONS_PER_PAGE = 24` with dynamic value from `useAvailableRows`; added page-bounds clamping on resize
+- Updated `src/components/PageContent.tsx`: changed main to `overflow-hidden` + `max-h-screen` to prevent page-level scroll
+- Added height media queries in `src/app/globals.css`: `scale(0.9)` at ≤820px viewport height, `scale(0.8)` at ≤700px
+- Added `ResizeObserver` mock to `src/__tests__/setup.ts` for test environment
+- Root cause: no height-based adaptation existed — only width breakpoints at 768px and 1024px
+- Verified: `npx tsc --noEmit` clean, 84/84 tests pass
