@@ -646,3 +646,12 @@
 - Residual risk: heart glyph rendering depends on platform font but should be covered by system fonts; no physical-device screenshot verification was run.
 - Rollback note: change the splash text and test assertion back to `made with love`.
 - Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.
+
+## 2026-05-17 — Fix: App icon tooltips clipped by grid overflow
+
+- Confirmed user report: app-icon tooltips were rendered above each icon inside the `IconGrid` scroll/pagination container, whose `overflow-hidden` clips content at the grid boundary.
+- Root cause: `src/components/AppIcon.tsx` positioned tooltips absolutely inside the icon subtree, while `src/components/IconGrid.tsx` needs `overflow-hidden` for page sliding and search containment.
+- Fix: `AppIcon` now renders tooltips through a `createPortal` attached to `document.body`, with fixed viewport positioning and top/bottom placement based on the icon's bounding rect.
+- Also adjusted dynamic Lucide icon rendering to use `createElement`, resolving the `react-hooks/static-components` lint error surfaced during validation.
+- Updated `src/__tests__/Interactions.test.tsx` to query portal-rendered tooltips through `screen` and assert the tooltip uses fixed positioning.
+- Verified: focused interactions test passes, typecheck clean, lint has only the accepted local-icon `<img>` warning.

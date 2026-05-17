@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, fireEvent, act, within, cleanup } from "@testing-library/react";
+import { render, fireEvent, act, cleanup, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import AppIcon from "@/components/AppIcon";
 import type { Product } from "@/types/product";
@@ -112,18 +112,18 @@ describe("AppIcon tooltip", () => {
         product={makeProduct({ description: "My cool app" })}
       />
     );
-    const view = within(container);
     const link = container.querySelector("a")!;
 
     fireEvent.mouseEnter(link);
-    expect(view.queryByRole("tooltip")).toBeNull();
+    expect(screen.queryByRole("tooltip")).toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(400);
     });
 
-    const tooltip = view.getByRole("tooltip");
+    const tooltip = screen.getByRole("tooltip");
     expect(tooltip).toHaveTextContent("My cool app");
+    expect(tooltip.className).toContain("fixed");
   });
 
   it("hides tooltip on mouse leave", () => {
@@ -132,19 +132,18 @@ describe("AppIcon tooltip", () => {
         product={makeProduct({ description: "My cool app" })}
       />
     );
-    const view = within(container);
     const link = container.querySelector("a")!;
 
     fireEvent.mouseEnter(link);
     act(() => {
       vi.advanceTimersByTime(400);
     });
-    expect(view.getByRole("tooltip")).toBeInTheDocument();
+    expect(screen.getByRole("tooltip")).toBeInTheDocument();
 
     act(() => {
       fireEvent.mouseLeave(link);
     });
-    expect(view.queryByRole("tooltip")).toBeNull();
+    expect(screen.queryByRole("tooltip")).toBeNull();
   });
 });
 

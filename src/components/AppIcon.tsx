@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, forwardRef } from "react";
+import { createElement, useRef, useState, forwardRef } from "react";
+import { createPortal } from "react-dom";
 import { Product } from "@/types/product";
 import * as icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -26,6 +27,13 @@ const badgeLabelMap: Record<string, string> = {
 };
 
 const CUSTOM_ICON_IDS = new Set(["war-room", "pitwall", "gskillpacks", "gblockparty"]);
+const TOOLTIP_OFFSET = 8;
+
+type TooltipPosition = {
+  left: number;
+  top: number;
+  placement: "top" | "bottom";
+};
 
 function getIcon(name: string): LucideIcon | null {
   const pascalName = name
@@ -41,16 +49,25 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
 ) {
   const deprecated = product.badge === null;
   const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = `tooltip-${product.name.replace(/\s+/g, "-").toLowerCase()}`;
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const placement = rect.top < 80 ? "bottom" : "top";
+    setTooltipPosition({
+      left: rect.left + rect.width / 2,
+      top: placement === "top" ? rect.top - TOOLTIP_OFFSET : rect.bottom + TOOLTIP_OFFSET,
+      placement,
+    });
     timerRef.current = setTimeout(() => setShowTooltip(true), 400);
   };
 
   const handleMouseLeave = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
     setShowTooltip(false);
+    setTooltipPosition(null);
   };
 
   const statusLabel = product.badge
@@ -58,7 +75,7 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
     : "Deprecated";
   const compositeLabel = `${product.name}, ${statusLabel}`;
 
-  const IconComponent = getIcon(product.icon);
+  const icon = getIcon(product.icon);
   const firstLetter = product.name.charAt(0).toUpperCase();
 
   return (
@@ -89,8 +106,12 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
             <div
               className={`w-[60px] h-[60px] rounded-[22.5%] flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900${deprecated ? " grayscale opacity-50" : ""}`}
             >
-              {IconComponent ? (
-                <IconComponent size={28} className="text-white" strokeWidth={1.5} />
+              {icon ? (
+                createElement(icon, {
+                  size: 28,
+                  className: "text-white",
+                  strokeWidth: 1.5,
+                })
               ) : (
                 <span className="text-white text-2xl font-bold">{firstLetter}</span>
               )}
@@ -104,16 +125,6 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
               {product.badge}
             </span>
           )}
-          {showTooltip && product.description && (
-            <span
-              id={tooltipId}
-              role="tooltip"
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20 bg-[#333]/90 text-white text-xs rounded-lg px-2 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.15)] max-w-[200px] text-center whitespace-normal pointer-events-none"
-            >
-              {product.description}
-              <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#333]/90" />
-            </span>
-          )}
         </div>
         <span
           className={`text-[11px] font-medium text-center leading-tight truncate max-w-[74px] ${
@@ -123,8 +134,51 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
           {product.name}
         </span>
       </a>
+      {showTooltip && product.description && tooltipPosition && (
+        <AppIconTooltip
+          id={tooltipId}
+          text={product.description}
+          position={tooltipPosition}
+        />
+      )}
     </div>
   );
 });
 
 export default AppIcon;
+
+function AppIconTooltip({
+  id,
+  text,
+  position,
+}: {
+  id: string;
+  text: string;
+  position: TooltipPosition;
+}) {
+  return createPortal(
+    <span
+      id={id}
+      role="tooltip"
+      className="fixed z-50 max-w-[200px] -translate-x-1/2 whitespace-normal rounded-lg bg-[#333]/90 px-2 py-1.5 text-center text-xs text-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] pointer-events-none"
+      style={{
+        left: position.left,
+        top: position.top,
+        transform:
+          position.placement === "top"
+            ? "translate(-50%, -100%)"
+            : "translate(-50%, 0)",
+      }}
+    >
+      {text}
+      <span
+        className={`absolute left-1/2 -translate-x-1/2 border-4 border-transparent ${
+          position.placement === "top"
+            ? "top-full border-t-[#333]/90"
+            : "bottom-full border-b-[#333]/90"
+        }`}
+      />
+    </span>,
+    document.body,
+  );
+}
