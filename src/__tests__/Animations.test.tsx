@@ -35,7 +35,7 @@ function makeDockProducts(count: number): Product[] {
 const gridProducts = makeGridProducts(20);
 const dockProducts = makeDockProducts(4);
 const BOOT_DURATION = 2800;
-const BOOT_ISLAND_MESSAGE_DELAY = 1500;
+const BOOT_ISLAND_MESSAGE_DELAY = 2000;
 
 function mockReducedMotion(enabled: boolean) {
   const listeners: Array<(e: MediaQueryListEvent) => void> = [];
