@@ -21,6 +21,7 @@ interface PageContentProps {
 }
 
 type BootPhase = 0 | 1 | 2 | 3 | 4 | 5;
+type BootIslandMessage = "Lexcorp" | "made with ♥" | 'by George "G" Le';
 type SlidePhase = 0 | 1 | 2 | 3 | 4;
 type AssemblePhase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -33,6 +34,7 @@ export default function PageContent({
   const [bootPhase, setBootPhase] = useState<BootPhase>(
     variant === "boot" ? 1 : 5,
   );
+  const [bootIslandMessage, setBootIslandMessage] = useState<BootIslandMessage | undefined>();
   const [slidePhase, setSlidePhase] = useState<SlidePhase>(
     variant === "slide" ? 0 : 4,
   );
@@ -48,6 +50,9 @@ export default function PageContent({
       setTimeout(() => setBootPhase(3), 1600),
       setTimeout(() => setBootPhase(4), 2400),
       setTimeout(() => setBootPhase(5), 2800),
+      setTimeout(() => setBootIslandMessage("Lexcorp"), 2800),
+      setTimeout(() => setBootIslandMessage("made with ♥"), 3600),
+      setTimeout(() => setBootIslandMessage('by George "G" Le'), 4400),
     ];
     return () => timers.forEach(clearTimeout);
   }, [variant, reducedMotion]);
@@ -92,6 +97,7 @@ export default function PageContent({
             {isBoot ? (
               <BootPhoneContent
                 phase={bootPhase}
+                islandLabel={bootIslandMessage}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
               />
@@ -152,19 +158,14 @@ export default function PageContent({
   return content;
 }
 
-function getBootIslandLabel(phase: BootPhase) {
-  if (phase === 1) return "Lexcorp";
-  if (phase === 2) return "made with ♥";
-  if (phase === 3) return 'by George "G" Le';
-  return undefined;
-}
-
 function BootPhoneContent({
   phase,
+  islandLabel,
   gridProducts,
   dockProducts,
 }: {
   phase: BootPhase;
+  islandLabel?: string;
   gridProducts: Product[];
   dockProducts: Product[];
 }) {
@@ -174,12 +175,39 @@ function BootPhoneContent({
       <AnimatePresence>
         {phase <= 3 && (
           <motion.div
-            className="absolute inset-0 z-40 overflow-hidden bg-black"
+            className="absolute inset-0 z-40 flex items-center justify-center overflow-hidden bg-black px-6"
             initial={{ opacity: 1 }}
             animate={{ opacity: phase >= 4 ? 0 : 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-          />
+          >
+            <div className="flex w-full max-w-[300px] flex-col items-center gap-3 text-center text-white">
+              <motion.div
+                className="text-[24px] font-semibold leading-tight tracking-[0.04em]"
+                initial={{ opacity: 0, scale: 0.94, y: 8 }}
+                animate={{ opacity: phase >= 1 ? 1 : 0, scale: phase >= 1 ? 1 : 0.94, y: phase >= 1 ? 0 : 8 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                Lexcorp
+              </motion.div>
+              <motion.div
+                className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
+                initial={{ opacity: 0, scale: 0.94, y: 8 }}
+                animate={{ opacity: phase >= 2 ? 1 : 0, scale: phase >= 2 ? 1 : 0.94, y: phase >= 2 ? 0 : 8 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                made with ♥
+              </motion.div>
+              <motion.div
+                className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
+                initial={{ opacity: 0, scale: 0.94, y: 8 }}
+                animate={{ opacity: phase >= 3 ? 1 : 0, scale: phase >= 3 ? 1 : 0.94, y: phase >= 3 ? 0 : 8 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                by George &quot;G&quot; Le
+              </motion.div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -192,7 +220,7 @@ function BootPhoneContent({
         <StatusBar />
       </motion.div>
 
-      <DynamicIsland label={getBootIslandLabel(phase)} />
+      <DynamicIsland label={islandLabel} />
 
       {/* Phase 4+: Icons appear row by row with spring bounce */}
       <motion.div

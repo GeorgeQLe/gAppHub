@@ -241,11 +241,11 @@ The primary route `/` starts with the boot screen and ends at the fully rendered
 
 ### Boot Screen (`/`)
 
-1. **0–800ms:** Black screen fills the phone frame. Dynamic Island shows `Lexcorp`.
-2. **800–1600ms:** Dynamic Island rotates to `made with ♥`.
-3. **1600–2400ms:** Dynamic Island rotates to `by George "G" Le`.
+1. **0–800ms:** Black screen fills the phone frame. `Lexcorp` fades and pops into view at the center of the splash screen.
+2. **800–1600ms:** `made with ♥` fades in underneath while the first line remains visible.
+3. **1600–2400ms:** `by George "G" Le` fades in underneath the existing lines.
 4. **2400–2800ms:** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
-5. **2800ms+:** Dock slides up. All animations complete.
+5. **2800ms+:** Dock slides up. Dynamic Island starts rotating through `Lexcorp`, `made with ♥`, and `by George "G" Le`.
 
 ### Reduced Motion
 

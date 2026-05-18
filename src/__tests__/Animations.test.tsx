@@ -94,9 +94,27 @@ describe("PageContent rendering (4 variants)", () => {
     expectFinalContent();
   });
 
-  it("boot splash rotates the intro text through the Dynamic Island", () => {
+  it("boot splash stacks the intro text in the center", () => {
     renderPageContent("boot");
 
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(800); });
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByText("made with ♥")).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(800); });
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByText("made with ♥")).toBeInTheDocument();
+    expect(screen.getByText('by George "G" Le')).toBeInTheDocument();
+  });
+
+  it("starts rotating intro text through the Dynamic Island after the splash", () => {
+    renderPageContent("boot");
+
+    expect(screen.queryByLabelText("Lexcorp")).not.toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(2800); });
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(800); });
