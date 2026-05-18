@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { Product } from "@/types/product";
 import { useAvailableRows } from "@/hooks/useAvailableRows";
+import { usePhoneSwipe } from "@/contexts/PhoneSwipeContext";
 import AppIcon from "@/components/AppIcon";
 import PageDots from "@/components/PageDots";
 import SearchOverlay from "@/components/SearchOverlay";
@@ -32,9 +33,9 @@ export default function IconGrid({ products }: IconGridProps) {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const touchRef = useRef<{ startX: number; startY: number } | null>(null);
-  const dragRef = useRef<{ startX: number; dragging: boolean } | null>(null);
   const iconRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const userInteracted = useRef(false);
+  const swipe = usePhoneSwipe();
 
   const goTo = useCallback(
     (p: number) => setPage(Math.max(0, Math.min(p, totalPages - 1))),
@@ -45,6 +46,18 @@ export default function IconGrid({ products }: IconGridProps) {
     () => (totalPages > 0 ? Math.min(page, totalPages - 1) : 0),
     [page, totalPages],
   );
+
+  const showSearchRef = useRef(showSearch);
+  useEffect(() => {
+    showSearchRef.current = showSearch;
+  }, [showSearch]);
+
+  useEffect(() => {
+    swipe?.registerSwipe((delta) => {
+      if (showSearchRef.current) return;
+      goTo(page + delta);
+    });
+  }, [swipe, goTo, page]);
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term);
@@ -85,23 +98,6 @@ export default function IconGrid({ products }: IconGridProps) {
     }
     if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
     goTo(page + (dx < 0 ? 1 : -1));
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    dragRef.current = { startX: e.clientX, dragging: true };
-  };
-
-  const handleMouseUp = (e: React.MouseEvent) => {
-    if (!dragRef.current?.dragging) return;
-    const dx = e.clientX - dragRef.current.startX;
-    dragRef.current = null;
-    if (showSearch) return;
-    if (Math.abs(dx) < 50) return;
-    goTo(page + (dx < 0 ? 1 : -1));
-  };
-
-  const handleMouseLeave = () => {
-    dragRef.current = null;
   };
 
   const currentPageIcons = pages[safePage] ?? [];
@@ -189,9 +185,6 @@ export default function IconGrid({ products }: IconGridProps) {
       aria-label="Product apps"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
     >
       <SearchOverlay

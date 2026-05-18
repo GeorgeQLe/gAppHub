@@ -3,6 +3,8 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import PageDots from "@/components/PageDots";
 import IconGrid from "@/components/IconGrid";
+import PhoneFrame from "@/components/PhoneFrame";
+import { PhoneSwipeProvider } from "@/contexts/PhoneSwipeContext";
 import type { Product } from "@/types/product";
 
 function makeProduct(overrides: Partial<Product> = {}): Product {
@@ -101,11 +103,17 @@ describe("IconGrid swipe navigation", () => {
   );
 
   it("swipe left advances to next page", () => {
-    render(<IconGrid products={products} />);
-    const region = screen.getByRole("grid", { name: "Product apps" });
+    render(
+      <PhoneSwipeProvider>
+        <PhoneFrame>
+          <IconGrid products={products} />
+        </PhoneFrame>
+      </PhoneSwipeProvider>
+    );
+    const phoneRegion = screen.getByRole("region", { name: "Lexcorp product launcher" });
 
-    fireEvent.mouseDown(region, { clientX: 200 });
-    fireEvent.mouseUp(region, { clientX: 100 });
+    fireEvent.mouseDown(phoneRegion, { clientX: 200 });
+    fireEvent.mouseUp(phoneRegion, { clientX: 100 });
 
     expect(screen.getAllByRole("tab")[1]).toHaveAttribute(
       "aria-selected",

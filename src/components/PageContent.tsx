@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { PhoneSwipeProvider } from "@/contexts/PhoneSwipeContext";
 import BadgeLegend from "@/components/BadgeLegend";
 import Dock from "@/components/Dock";
 import DynamicIsland from "@/components/DynamicIsland";
@@ -116,6 +117,7 @@ export default function PageContent({
     <main className="flex h-screen max-h-screen flex-col items-center overflow-hidden px-4 py-4">
       <div className="flex min-h-0 flex-1 flex-col items-center pb-8">
         <div className="flex min-h-0 flex-1 items-center justify-center">
+          <PhoneSwipeProvider>
           <PhoneFrame>
             {isBoot ? (
               <BootPhoneContent
@@ -146,6 +148,7 @@ export default function PageContent({
               </>
             )}
           </PhoneFrame>
+          </PhoneSwipeProvider>
         </div>
         <div className="mt-4">
           <BadgeLegend />
