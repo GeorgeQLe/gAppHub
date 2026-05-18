@@ -23,21 +23,7 @@ export default function StatusBar() {
     <div aria-hidden="true" className="absolute top-0 left-0 right-0 h-[48px]">
       <span className="absolute left-6 top-[22px] -translate-y-1/2 text-xs font-semibold text-[#1d1d1f]">{time}</span>
 
-      <div className="absolute right-6 top-[22px] -translate-y-1/2 flex items-center gap-1.5">
-        {/* Signal bars */}
-        <svg
-          width="16"
-          height="12"
-          viewBox="0 0 16 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect x="0" y="9" width="3" height="3" rx="0.5" fill="#1d1d1f" />
-          <rect x="4" y="6" width="3" height="6" rx="0.5" fill="#1d1d1f" />
-          <rect x="8" y="3" width="3" height="9" rx="0.5" fill="#1d1d1f" />
-          <rect x="12" y="0" width="3" height="12" rx="0.5" fill="#1d1d1f" />
-        </svg>
-
+      <div className="absolute right-6 top-[22px] -translate-y-1/2 flex items-center">
         {/* Battery */}
         <svg
           width="28"

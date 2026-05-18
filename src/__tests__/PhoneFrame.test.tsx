@@ -32,6 +32,11 @@ describe("StatusBar", () => {
     render(<StatusBar />);
     expect(screen.getByText(/^\d{1,2}:\d{2}/)).toBeInTheDocument();
   });
+
+  it("renders only the battery icon on the right side", () => {
+    const { container } = render(<StatusBar />);
+    expect(container.querySelectorAll("svg")).toHaveLength(1);
+  });
 });
 
 describe("DynamicIsland", () => {

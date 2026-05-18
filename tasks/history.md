@@ -684,3 +684,11 @@
 - Residual risk: external bookmarks to the removed comparison routes will now hit Next's not-found behavior; this matches the requested removal.
 - Rollback note: restore the three deleted route page files and change `src/app/page.tsx` back to `variant="none"` if comparison routes are needed again.
 - Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.
+
+## 2026-05-18 — Fix: Remove signal bars from rendered phone status bar
+
+- Confirmed user report: the rendered phone still included the signal-bars SVG in `src/components/StatusBar.tsx`.
+- Root cause: the original status bar implementation added signal bars, battery, and later docs described them as decorative; the recent cleanup removed only the `100%` battery text, not the signal-bars SVG.
+- Fix: removed the signal-bars SVG from `StatusBar`, leaving only the full battery icon on the right side.
+- Updated `src/__tests__/PhoneFrame.test.tsx` with a regression assertion that `StatusBar` renders only one SVG.
+- Updated `specs/ui-gapphub.md` so future implementation work does not reintroduce signal bars from stale spec text.

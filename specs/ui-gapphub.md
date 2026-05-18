@@ -90,9 +90,7 @@ There is no global shell (no persistent header, sidebar, or footer). The entire 
 - **Height:** ~48px (accommodates Dynamic Island alignment)
 - **Content (left of island):** Current real-world time in `h:mm` format
 - **Content (right of island):**
-  - **Signal bars:** Static 4 filled bars (decorative)
-  - **Wi-Fi icon:** Always full (decorative)
-  - **Battery:** Static 100% with battery icon (decorative)
+  - **Battery:** Static full battery icon (decorative)
 - **Typography:** SF Pro or system sans-serif, 12px, semibold
 - **Color:** Dark text on the light wallpaper background
 
