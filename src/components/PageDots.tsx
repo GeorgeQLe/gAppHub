@@ -9,7 +9,7 @@ export default function PageDots({ total, active, onChange }: PageDotsProps) {
 
   return (
     <div
-      className="flex items-center justify-center gap-1.5"
+      className="flex items-center justify-center"
       role="tablist"
       aria-label="Page indicator"
     >
@@ -20,7 +20,7 @@ export default function PageDots({ total, active, onChange }: PageDotsProps) {
           aria-selected={i === active}
           aria-label={`Page ${i + 1} of ${total}`}
           onClick={() => onChange?.(i)}
-          className="min-w-[44px] min-h-[44px] flex items-center justify-center"
+          className="min-w-[44px] min-h-[44px] -mx-[14px] flex items-center justify-center"
         >
           <span
             className={`rounded-full transition-all duration-200 ${
