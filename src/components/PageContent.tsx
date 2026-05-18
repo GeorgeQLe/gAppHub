@@ -30,6 +30,7 @@ const BOOT_ISLAND_MESSAGES: BootIslandMessage[] = [
   "made with ♥",
   'by George "G" Le',
 ];
+const BOOT_ISLAND_MESSAGE_DELAY = 3000;
 
 export default function PageContent({
   dockProducts,
@@ -52,7 +53,16 @@ export default function PageContent({
     if (variant !== "boot" || reducedMotion) return;
 
     let messageIndex = 0;
-    let interval: ReturnType<typeof setInterval> | undefined;
+    let rotateMessage: ReturnType<typeof setTimeout> | undefined;
+
+    const scheduleNextMessage = () => {
+      rotateMessage = setTimeout(() => {
+        messageIndex = (messageIndex + 1) % BOOT_ISLAND_MESSAGES.length;
+        setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
+        scheduleNextMessage();
+      }, BOOT_ISLAND_MESSAGE_DELAY);
+    };
+
     const timers = [
       setTimeout(() => setBootPhase(2), 800),
       setTimeout(() => setBootPhase(3), 1600),
@@ -60,16 +70,13 @@ export default function PageContent({
       setTimeout(() => setBootPhase(5), 2800),
       setTimeout(() => {
         setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
-        interval = setInterval(() => {
-          messageIndex = (messageIndex + 1) % BOOT_ISLAND_MESSAGES.length;
-          setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
-        }, 1600);
+        scheduleNextMessage();
       }, 2800),
     ];
 
     return () => {
       timers.forEach(clearTimeout);
-      if (interval) clearInterval(interval);
+      if (rotateMessage) clearTimeout(rotateMessage);
     };
   }, [variant, reducedMotion]);
 

@@ -35,6 +35,7 @@ function makeDockProducts(count: number): Product[] {
 const gridProducts = makeGridProducts(20);
 const dockProducts = makeDockProducts(4);
 const BOOT_DURATION = 2800;
+const BOOT_ISLAND_MESSAGE_DELAY = 3000;
 
 function mockReducedMotion(enabled: boolean) {
   const listeners: Array<(e: MediaQueryListEvent) => void> = [];
@@ -117,13 +118,22 @@ describe("PageContent rendering (4 variants)", () => {
     act(() => { vi.advanceTimersByTime(2800); });
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(1600); });
+    act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
     expect(screen.getByLabelText("made with ♥")).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(1600); });
+    act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
     expect(screen.getByLabelText('by George "G" Le')).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(1600); });
+    act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
+    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
+    expect(screen.getByLabelText("made with ♥")).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
+    expect(screen.getByLabelText('by George "G" Le')).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
   });
 
