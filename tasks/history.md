@@ -692,3 +692,11 @@
 - Fix: removed the signal-bars SVG from `StatusBar`, leaving only the full battery icon on the right side.
 - Updated `src/__tests__/PhoneFrame.test.tsx` with a regression assertion that `StatusBar` renders only one SVG.
 - Updated `specs/ui-gapphub.md` so future implementation work does not reintroduce signal bars from stale spec text.
+
+## 2026-05-18 — Fix: UI spacing — grid/dock overlap and icon sizing
+
+- Pre-existing uncommitted changes: icon size 60→54px, dock padding reduction (pb-6→pb-4, pt-3→pt-2), page dot colors from white to dark (#1d1d1f), class ordering normalization, animation timing (BOOT_ISLAND_MESSAGE_DELAY 3000→1500), test assertions updated to match
+- Grid/dock spacing fix: page dots were overlapping the dock because `bottom-[72px]` was less than the ~94px dock height. Grid top padding was only 4px below the Dynamic Island (40px element, 44px padding).
+- `IconGrid.tsx`: extracted `GRID_PAGE_CLASSES` constant, changed grid padding from `pt-[44px] pb-[52px]` to `pt-[52px] pb-[120px]`, moved page dots from `bottom-[72px]` to `bottom-[100px]` (absolute positioned above dock)
+- `useAvailableRows.ts`: updated constants to match new grid padding (PT=52, PB=120) and actual icon dimensions (ICON_HEIGHT=54, LABEL_HEIGHT=16, GAP_Y=16 for gap-y-4). Still yields 6 rows at full phone height.
+- Verified: 89/89 tests pass, typecheck clean, lint has only pre-existing `<img>` warning

@@ -2,12 +2,12 @@
 
 import { useState, useLayoutEffect, RefObject } from "react";
 
-const ICON_HEIGHT = 60;
-const LABEL_HEIGHT = 20;
-const GAP_Y = 28; // gap-y-7 = 1.75rem = 28px
+const ICON_HEIGHT = 54;
+const LABEL_HEIGHT = 16;
+const GAP_Y = 16; // gap-y-4 = 1rem = 16px
 const ROW_HEIGHT = ICON_HEIGHT + LABEL_HEIGHT + GAP_Y;
-const PT = 76;
-const PB = 90;
+const PT = 52;
+const PB = 120;
 const MIN_ROWS = 3;
 const MAX_ROWS = 6;
 const COLS = 4;

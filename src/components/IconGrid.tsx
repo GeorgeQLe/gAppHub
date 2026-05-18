@@ -9,6 +9,7 @@ import SearchOverlay from "@/components/SearchOverlay";
 
 const COLS = 4;
 const PULL_DOWN_THRESHOLD = 30;
+const GRID_PAGE_CLASSES = "w-full grid grid-cols-4 gap-x-5 gap-y-4 pt-[52px] pb-[120px] px-4 content-start";
 
 const BADGE_LABELS: Record<string, string> = {
   L: "live",
@@ -201,7 +202,7 @@ export default function IconGrid({ products }: IconGridProps) {
 
       {filtered !== null ? (
         filtered.length > 0 ? (
-          <div className="w-full grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4 content-start">
+          <div className={GRID_PAGE_CLASSES}>
             {filtered.map((p) => (
               <AppIcon product={p} key={p.id} />
             ))}
@@ -220,7 +221,7 @@ export default function IconGrid({ products }: IconGridProps) {
             {pages.map((pageProducts, i) => (
               <div
                 key={i}
-                className="w-full flex-shrink-0 grid grid-cols-4 gap-x-5 gap-y-7 pt-[76px] pb-[90px] px-4 content-start"
+                className={`flex-shrink-0 ${GRID_PAGE_CLASSES}`}
               >
                 {pageProducts.map((p, j) =>
                   i === safePage ? (
@@ -239,7 +240,7 @@ export default function IconGrid({ products }: IconGridProps) {
               </div>
             ))}
           </div>
-          <div className="-mt-[78px]">
+          <div className="pointer-events-auto absolute inset-x-0 bottom-[100px] z-20">
             <PageDots total={totalPages} active={page} onChange={goTo} />
           </div>
         </>
