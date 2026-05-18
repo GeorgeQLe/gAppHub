@@ -94,19 +94,16 @@ describe("PageContent rendering (4 variants)", () => {
     expectFinalContent();
   });
 
-  it("boot splash stacks the intro text sequence", () => {
+  it("boot splash rotates the intro text through the Dynamic Island", () => {
     renderPageContent("boot");
 
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(800); });
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
-    expect(screen.getByText("made with ♥")).toBeInTheDocument();
+    expect(screen.getByLabelText("made with ♥")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(800); });
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
-    expect(screen.getByText("made with ♥")).toBeInTheDocument();
-    expect(screen.getByText('by George "G" Le')).toBeInTheDocument();
+    expect(screen.getByLabelText('by George "G" Le')).toBeInTheDocument();
   });
 
   it('variant="slide" renders same final content after animation completes', () => {
@@ -138,28 +135,28 @@ describe("useReducedMotion hook", () => {
     mockReducedMotion(false);
     const { container } = renderPageContent("boot");
 
-    expect(container.querySelector(".z-50.bg-black")).toBeInTheDocument();
+    expect(container.querySelector(".z-40.bg-black")).toBeInTheDocument();
   });
 
   it("returns true when prefers-reduced-motion: reduce matches", () => {
     mockReducedMotion(true);
     const { container } = renderPageContent("boot");
 
-    expect(container.querySelector(".z-50.bg-black")).not.toBeInTheDocument();
+    expect(container.querySelector(".z-40.bg-black")).not.toBeInTheDocument();
   });
 
   it("updates when media query change event fires", () => {
     const { listeners, mockMql } = mockReducedMotion(false);
     const { container } = renderPageContent("boot");
 
-    expect(container.querySelector(".z-50.bg-black")).toBeInTheDocument();
+    expect(container.querySelector(".z-40.bg-black")).toBeInTheDocument();
 
     act(() => {
       (mockMql as { matches: boolean }).matches = true;
       listeners.forEach((cb) => cb({ matches: true } as MediaQueryListEvent));
     });
 
-    expect(container.querySelector(".z-50.bg-black")).not.toBeInTheDocument();
+    expect(container.querySelector(".z-40.bg-black")).not.toBeInTheDocument();
   });
 });
 

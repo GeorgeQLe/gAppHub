@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import BadgeLegend from "@/components/BadgeLegend";
 import Dock from "@/components/Dock";
@@ -30,10 +29,9 @@ export default function PageContent({
   gridProducts,
   variant,
 }: PageContentProps) {
-  const isMobile = useIsMobile();
   const reducedMotion = useReducedMotion();
   const [bootPhase, setBootPhase] = useState<BootPhase>(
-    variant === "boot" ? 0 : 5,
+    variant === "boot" ? 1 : 5,
   );
   const [slidePhase, setSlidePhase] = useState<SlidePhase>(
     variant === "slide" ? 0 : 4,
@@ -46,7 +44,6 @@ export default function PageContent({
     if (variant !== "boot" || reducedMotion) return;
 
     const timers = [
-      setTimeout(() => setBootPhase(1), 0),
       setTimeout(() => setBootPhase(2), 800),
       setTimeout(() => setBootPhase(3), 1600),
       setTimeout(() => setBootPhase(4), 2400),
@@ -89,33 +86,7 @@ export default function PageContent({
 
   const content = (
     <main className="flex h-screen max-h-screen flex-col items-center overflow-hidden px-4 py-4">
-      <svg
-        width={isMobile ? 100 : 140}
-        height={isMobile ? 24 : 32}
-        viewBox="0 0 140 32"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-label="Lexcorp"
-      >
-        <text
-          x="50%"
-          y="50%"
-          dominantBaseline="central"
-          textAnchor="middle"
-          fill="#1d1d1f"
-          fontSize="24"
-          fontWeight="600"
-          fontFamily="-apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
-          letterSpacing="0.2em"
-        >
-          LEXCORP
-        </text>
-      </svg>
-
-      <p className={`mt-1 uppercase tracking-widest text-[#6e6e73] ${isMobile ? "text-[11px]" : "text-[13px]"}`}>
-        Made in Boston, Building in Public
-      </p>
-
-      <div className="mt-3 flex min-h-0 flex-1 flex-col items-center pb-8">
+      <div className="flex min-h-0 flex-1 flex-col items-center pb-8">
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <PhoneFrame>
             {isBoot ? (
@@ -181,6 +152,13 @@ export default function PageContent({
   return content;
 }
 
+function getBootIslandLabel(phase: BootPhase) {
+  if (phase === 1) return "Lexcorp";
+  if (phase === 2) return "made with ♥";
+  if (phase === 3) return 'by George "G" Le';
+  return undefined;
+}
+
 function BootPhoneContent({
   phase,
   gridProducts,
@@ -196,39 +174,12 @@ function BootPhoneContent({
       <AnimatePresence>
         {phase <= 3 && (
           <motion.div
-            className="absolute inset-0 z-50 flex items-center justify-center overflow-hidden bg-black px-6"
+            className="absolute inset-0 z-40 overflow-hidden bg-black"
             initial={{ opacity: 1 }}
             animate={{ opacity: phase >= 4 ? 0 : 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <div className="flex w-full max-w-[300px] flex-col items-center gap-3 text-center text-white">
-              <motion.div
-                className="text-[24px] font-semibold leading-tight tracking-[0.04em]"
-                initial={{ opacity: 0, scale: 0.94, y: 8 }}
-                animate={{ opacity: phase >= 1 ? 1 : 0, scale: phase >= 1 ? 1 : 0.94, y: phase >= 1 ? 0 : 8 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-              >
-                Lexcorp
-              </motion.div>
-              <motion.div
-                className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
-                initial={{ opacity: 0, scale: 0.94, y: 8 }}
-                animate={{ opacity: phase >= 2 ? 1 : 0, scale: phase >= 2 ? 1 : 0.94, y: phase >= 2 ? 0 : 8 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-              >
-                made with ♥
-              </motion.div>
-              <motion.div
-                className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
-                initial={{ opacity: 0, scale: 0.94, y: 8 }}
-                animate={{ opacity: phase >= 3 ? 1 : 0, scale: phase >= 3 ? 1 : 0.94, y: phase >= 3 ? 0 : 8 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-              >
-                by George &quot;G&quot; Le
-              </motion.div>
-            </div>
-          </motion.div>
+          />
         )}
       </AnimatePresence>
 
@@ -241,7 +192,7 @@ function BootPhoneContent({
         <StatusBar />
       </motion.div>
 
-      <DynamicIsland />
+      <DynamicIsland label={getBootIslandLabel(phase)} />
 
       {/* Phase 4+: Icons appear row by row with spring bounce */}
       <motion.div

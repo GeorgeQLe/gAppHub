@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import PhoneFrame from "@/components/PhoneFrame";
 import StatusBar from "@/components/StatusBar";
@@ -39,6 +39,11 @@ describe("DynamicIsland", () => {
     const { container } = render(<DynamicIsland />);
     expect(container.firstChild).toBeInTheDocument();
   });
+
+  it("renders optional rotating label copy", () => {
+    render(<DynamicIsland label="Lexcorp" />);
+    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+  });
 });
 
 describe("HomeIndicator", () => {
@@ -50,25 +55,21 @@ describe("HomeIndicator", () => {
 
 describe("Home page", () => {
   beforeEach(() => {
+    cleanup();
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 0, 15, 9, 41));
   });
 
   afterEach(() => {
+    cleanup();
     vi.useRealTimers();
   });
 
-  it("renders LEXCORP text", async () => {
-    const jsx = await Home();
-    render(jsx);
-    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
-  });
-
-  it("renders tagline", async () => {
+  it("renders the product launcher", async () => {
     const jsx = await Home();
     render(jsx);
     expect(
-      screen.getAllByText(/Made in Boston, Building in Public/).length
-    ).toBeGreaterThan(0);
+      screen.getByRole("region", { name: "Lexcorp product launcher" }),
+    ).toBeInTheDocument();
   });
 });

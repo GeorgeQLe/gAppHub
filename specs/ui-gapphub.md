@@ -12,7 +12,7 @@
 | Single-page app, one primary route `/` | Confirmed | `[from spec]` |
 | Boot screen is the primary entrance animation on `/` | Confirmed | `[user decision 2026-05-18]` |
 | No traditional header/sidebar/footer — phone frame is the UI | Confirmed | `[inferred, confirmed]` |
-| Lexcorp logo + tagline above phone | Confirmed | `[from interview]` |
+| No top header; brand copy appears in the Dynamic Island during boot | Confirmed | `[from user]` |
 | Dynamic Island (iPhone 15+) frame style | Confirmed | `[from interview]` |
 | 3D phone with drop shadow | Confirmed | `[from interview]` |
 | Subtle light gradient wallpaper | Confirmed | `[from interview]` |
@@ -39,16 +39,9 @@ There is no global shell (no persistent header, sidebar, or footer). The entire 
 
 ### Elements Outside the Phone Frame
 
-#### Lexcorp Wordmark / Logo
-- **Position:** Centered horizontally, above the phone frame
-- **Size:** Modest — roughly 120–160px wide on desktop, scaling down on smaller screens
-- **Style:** The Lexcorp logo in its standard form, rendered in a dark neutral (charcoal or slate) to contrast the light background
-
-#### Tagline
-- **Text:** "Made in Boston, Building in Public"
-- **Position:** Directly below the logo, centered
-- **Typography:** Small, lightweight, uppercase tracking or regular case — subtle secondary text
-- **Color:** Medium gray (#888 range)
+#### Header
+- No standalone logo, tagline, header, sidebar, or footer appears outside the phone frame.
+- During the boot animation, the Dynamic Island rotates through the brand splash copy.
 
 #### Badge Legend
 - **Position:** Below the phone frame, centered, with comfortable spacing
@@ -248,9 +241,9 @@ The primary route `/` starts with the boot screen and ends at the fully rendered
 
 ### Boot Screen (`/`)
 
-1. **0–800ms:** Black screen fills the phone frame. `Lexcorp` fades and pops into view.
-2. **800–1600ms:** `made with ♥` fades in underneath while the first line remains visible.
-3. **1600–2400ms:** `by George "G" Le` fades in underneath the existing lines.
+1. **0–800ms:** Black screen fills the phone frame. Dynamic Island shows `Lexcorp`.
+2. **800–1600ms:** Dynamic Island rotates to `made with ♥`.
+3. **1600–2400ms:** Dynamic Island rotates to `by George "G" Le`.
 4. **2400–2800ms:** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
 5. **2800ms+:** Dock slides up. All animations complete.
 
