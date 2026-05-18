@@ -34,7 +34,7 @@ function makeDockProducts(count: number): Product[] {
 
 const gridProducts = makeGridProducts(20);
 const dockProducts = makeDockProducts(4);
-const BOOT_DURATION = 3700;
+const BOOT_DURATION = 2800;
 
 function mockReducedMotion(enabled: boolean) {
   const listeners: Array<(e: MediaQueryListEvent) => void> = [];
@@ -99,11 +99,11 @@ describe("PageContent rendering (4 variants)", () => {
 
     expect(screen.getByText("Lexcorp")).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(1100); });
+    act(() => { vi.advanceTimersByTime(800); });
     expect(screen.getByText("Lexcorp")).toBeInTheDocument();
     expect(screen.getByText("made with ♥")).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(1100); });
+    act(() => { vi.advanceTimersByTime(800); });
     expect(screen.getByText("Lexcorp")).toBeInTheDocument();
     expect(screen.getByText("made with ♥")).toBeInTheDocument();
     expect(screen.getByText('by George "G" Le')).toBeInTheDocument();

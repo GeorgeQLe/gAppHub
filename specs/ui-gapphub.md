@@ -248,11 +248,11 @@ The primary route `/` starts with the boot screen and ends at the fully rendered
 
 ### Boot Screen (`/`)
 
-1. **0–1100ms:** Black screen fills the phone frame. `Lexcorp` fades and pops into view.
-2. **1100–2200ms:** `made with ♥` fades in underneath while the first line remains visible.
-3. **2200–3300ms:** `by George "G" Le` fades in underneath the existing lines.
-4. **3300–3700ms:** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
-5. **3700ms+:** Dock slides up. All animations complete.
+1. **0–800ms:** Black screen fills the phone frame. `Lexcorp` fades and pops into view.
+2. **800–1600ms:** `made with ♥` fades in underneath while the first line remains visible.
+3. **1600–2400ms:** `by George "G" Le` fades in underneath the existing lines.
+4. **2400–2800ms:** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
+5. **2800ms+:** Dock slides up. All animations complete.
 
 ### Reduced Motion
 

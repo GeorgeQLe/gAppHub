@@ -47,10 +47,10 @@ export default function PageContent({
 
     const timers = [
       setTimeout(() => setBootPhase(1), 0),
-      setTimeout(() => setBootPhase(2), 1100),
-      setTimeout(() => setBootPhase(3), 2200),
-      setTimeout(() => setBootPhase(4), 3300),
-      setTimeout(() => setBootPhase(5), 3700),
+      setTimeout(() => setBootPhase(2), 800),
+      setTimeout(() => setBootPhase(3), 1600),
+      setTimeout(() => setBootPhase(4), 2400),
+      setTimeout(() => setBootPhase(5), 2800),
     ];
     return () => timers.forEach(clearTimeout);
   }, [variant, reducedMotion]);
