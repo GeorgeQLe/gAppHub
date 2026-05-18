@@ -25,6 +25,12 @@ type BootIslandMessage = "Lexcorp" | "made with ♥" | 'by George "G" Le';
 type SlidePhase = 0 | 1 | 2 | 3 | 4;
 type AssemblePhase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
+const BOOT_ISLAND_MESSAGES: BootIslandMessage[] = [
+  "Lexcorp",
+  "made with ♥",
+  'by George "G" Le',
+];
+
 export default function PageContent({
   dockProducts,
   gridProducts,
@@ -45,16 +51,26 @@ export default function PageContent({
   useEffect(() => {
     if (variant !== "boot" || reducedMotion) return;
 
+    let messageIndex = 0;
+    let interval: ReturnType<typeof setInterval> | undefined;
     const timers = [
       setTimeout(() => setBootPhase(2), 800),
       setTimeout(() => setBootPhase(3), 1600),
       setTimeout(() => setBootPhase(4), 2400),
       setTimeout(() => setBootPhase(5), 2800),
-      setTimeout(() => setBootIslandMessage("Lexcorp"), 2800),
-      setTimeout(() => setBootIslandMessage("made with ♥"), 3600),
-      setTimeout(() => setBootIslandMessage('by George "G" Le'), 4400),
+      setTimeout(() => {
+        setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
+        interval = setInterval(() => {
+          messageIndex = (messageIndex + 1) % BOOT_ISLAND_MESSAGES.length;
+          setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
+        }, 1600);
+      }, 2800),
     ];
-    return () => timers.forEach(clearTimeout);
+
+    return () => {
+      timers.forEach(clearTimeout);
+      if (interval) clearInterval(interval);
+    };
   }, [variant, reducedMotion]);
 
   useEffect(() => {

@@ -117,11 +117,14 @@ describe("PageContent rendering (4 variants)", () => {
     act(() => { vi.advanceTimersByTime(2800); });
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(800); });
+    act(() => { vi.advanceTimersByTime(1600); });
     expect(screen.getByLabelText("made with ♥")).toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(800); });
+    act(() => { vi.advanceTimersByTime(1600); });
     expect(screen.getByLabelText('by George "G" Le')).toBeInTheDocument();
+
+    act(() => { vi.advanceTimersByTime(1600); });
+    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
   });
 
   it('variant="slide" renders same final content after animation completes', () => {

@@ -38,38 +38,6 @@ export default function StatusBar() {
           <rect x="12" y="0" width="3" height="12" rx="0.5" fill="#1d1d1f" />
         </svg>
 
-        {/* Wi-Fi */}
-        <svg
-          width="14"
-          height="12"
-          viewBox="0 0 14 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7 10.5a1.25 1.25 0 1 0 0 -2.5 1.25 1.25 0 0 0 0 2.5Z"
-            fill="#1d1d1f"
-          />
-          <path
-            d="M4.46 7.54a3.6 3.6 0 0 1 5.08 0"
-            stroke="#1d1d1f"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-          />
-          <path
-            d="M2.34 5.17a6.5 6.5 0 0 1 9.32 0"
-            stroke="#1d1d1f"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-          />
-          <path
-            d="M0.5 2.8a9.2 9.2 0 0 1 13 0"
-            stroke="#1d1d1f"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-          />
-        </svg>
-
         {/* Battery */}
         <svg
           width="28"
