@@ -665,3 +665,22 @@
 - Verified: `pnpm test src/__tests__/Interactions.test.tsx` (13 passed), `pnpm test` (87 passed), `pnpm exec tsc --noEmit` (passed), `pnpm lint` (0 errors, 1 accepted warning), `pnpm build` (passed).
 - Prevention: layout tests for portal overlays should mock trigger and visual-anchor bounding boxes separately, so future fixes do not accidentally position against a wrapper instead of the visible target.
 - Next command: `$guide` for deferred real-device hover/responsive verification when preparing for production launch.
+
+## 2026-05-18 — Ship: Promote boot screen to root route
+
+- Updated `src/app/page.tsx`: `/` now renders `PageContent` with `variant="boot"`.
+- Removed obsolete comparison route pages: `src/app/boot/page.tsx`, `src/app/slide/page.tsx`, and `src/app/assemble/page.tsx`.
+- Updated live project docs to reflect the selected route model: `specs/ui-gapphub.md`, `specs/drift-report.md`, `tasks/roadmap.md`, and `tasks/todo.md`.
+
+### Ship Manifest
+
+- User goal: move forward with the boot screen as primary, remove the other routes, and fold boot into the root.
+- Changed files: `src/app/page.tsx`, `src/app/boot/page.tsx`, `src/app/slide/page.tsx`, `src/app/assemble/page.tsx`, `specs/ui-gapphub.md`, `specs/drift-report.md`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/phases/phase-5.md`, `tasks/history.md`.
+- Per-file purpose: `page.tsx` promotes boot to `/`; deleted route pages remove public comparison routes; spec/task docs record the selected route model and prevent stale references.
+- User-goal mapping: visiting `/` now starts with the boot screen, while `/boot`, `/slide`, and `/assemble` no longer exist as app routes.
+- Tests run: `pnpm test` (87 passed), `pnpm exec tsc --noEmit` (passed after clearing stale `.next` generated route validators), `pnpm exec eslint` (0 errors, 1 accepted warning), `pnpm build` (passed; route output lists `/`, `_not-found`, and app icons only).
+- Skipped tests: no additional browser screenshot test was run; this was a route-surface change verified by build route output plus existing animation/component tests.
+- Adversarial review: confirmed Next app routing docs still use folder `page.tsx` files for public routes, checked `src/app` contains no nested route page files after deletion, verified production route output excludes the removed routes, and accepted the existing `@next/next/no-img-element` warning for local product icon PNGs in `AppIcon.tsx`.
+- Residual risk: external bookmarks to the removed comparison routes will now hit Next's not-found behavior; this matches the requested removal.
+- Rollback note: restore the three deleted route page files and change `src/app/page.tsx` back to `variant="none"` if comparison routes are needed again.
+- Next command: `$guide` for deferred real-device responsive testing when preparing for production launch.

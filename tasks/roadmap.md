@@ -16,7 +16,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 | 2 | Icon Grid & Data Layer | ui-gapphub.md §Icon Grid, §App Icon, §Data Shape | 4×6 icon grid populated from dynamic fetch + static JSON fallback, sorted by priority | M |
 | 3 | Interactions & Badges | ui-gapphub.md §App Icon States, §Notification Badge, §Description Tooltip, §Badge Legend | Hover/press animations, notification badges (L/B/N/W), deprecated state, tooltips, badge legend | M |
 | 4 | Dock, Pagination & Search | ui-gapphub.md §Dock, §Pagination, §Pull-Down Search | Frosted glass dock with 4 pinned apps, swipe pagination with dots, Spotlight-style search | L |
-| 5 | Loading Animations | ui-gapphub.md §Loading Animations | Three entrance animation variants on `/boot`, `/slide`, `/assemble` routes | M |
+| 5 | Loading Animations | ui-gapphub.md §Loading Animation | Primary boot screen entrance animation on `/` | M |
 | 6 | Responsive, Accessibility & Polish | ui-gapphub.md §Responsive, §Accessibility, §Visual Style | Mobile/tablet/desktop adaptation, keyboard nav, screen reader support, reduced motion, final visual polish | M |
 
 ---
@@ -363,22 +363,21 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 ## Phase 5: Loading Animations
 
-**Goal**: Implement three entrance animation variants on separate routes (`/boot`, `/slide`, `/assemble`) so the user can compare them side by side and choose a winner for the main route.
+**Goal**: Implement entrance animation variants, compare them, and promote the selected boot screen to the main route.
 
 **Scope**:
-- `/boot` route: black screen → Lexcorp logo pulse → wallpaper fade → icons stagger row-by-row → dock slides up (total ~2.2s)
-- `/slide` route: phone frame slides up + fades in → status bar → icons stagger + fade → dock fades in (total ~1.5s)
-- `/assemble` route: frame sides slide in → seam flash → screen fade → Dynamic Island pop → icons drop with bounce → dock slides up (total ~2.3s)
-- Main `/` route: simple fade-in as interim default
+- Boot screen: stacked splash copy → wallpaper fade → icons reveal → dock slides up
+- Slide route comparison: phone frame slides up + fades in → status bar → icons stagger + fade → dock fades in
+- Assemble route comparison: frame sides slide in → seam flash → screen fade → Dynamic Island pop → icons drop with bounce → dock slides up
+- Main `/` route: boot screen selected as the primary experience
 - `prefers-reduced-motion`: all variants collapse to ≤200ms opacity fade
 - Animation implemented with CSS @keyframes + Framer Motion (or GSAP)
 
 **Acceptance Criteria:**
-- [ ] `/boot` plays the boot screen animation sequence as specified
-- [ ] `/slide` plays the slide-up + fade animation sequence as specified
-- [ ] `/assemble` plays the frame assembly animation sequence as specified
-- [ ] All three routes end at the identical final state (fully rendered phone with icons)
-- [ ] Main `/` route uses a simple fade-in as temporary default
+- [ ] `/` plays the selected boot screen animation sequence as specified
+- [ ] Comparison variants were evaluated before selection
+- [ ] The selected route ends at the identical final state (fully rendered phone with icons)
+- [ ] Obsolete comparison routes are removed
 - [ ] Reduced motion preference disables all animations, replacing with a quick opacity fade
 - [ ] Animations feel smooth at 60fps with no visible jank
 
@@ -399,14 +398,16 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 ### Implementation
 - Step 5.1: Install Framer Motion and create shared page wrapper + reduced motion hook
   - Files: modify `package.json`, create `src/hooks/useReducedMotion.ts`, create `src/components/PageContent.tsx`, modify `src/app/page.tsx`
-- Step 5.2: Build the `/boot` animation route
-  - Files: create `src/app/boot/page.tsx`
-- Step 5.3: Build the `/slide` animation route
-  - Files: create `src/app/slide/page.tsx`
-- Step 5.4: Build the `/assemble` animation route
-  - Files: create `src/app/assemble/page.tsx`
+- Step 5.2: Build the boot animation for comparison
+  - Files: create temporary `src/app/boot/page.tsx`
+- Step 5.3: Build the slide animation for comparison
+  - Files: create temporary `src/app/slide/page.tsx`
+- Step 5.4: Build the assemble animation for comparison
+  - Files: create temporary `src/app/assemble/page.tsx`
 - Step 5.5: Polish animations and verify cross-route consistency
   - Files: modify `src/components/PageContent.tsx` (if needed), any animation route files
+- Step 5.8: Promote selected boot screen to `/` and remove obsolete comparison route files
+  - Files: modify `src/app/page.tsx`, delete temporary comparison route files
 
 ### Green
 - Step 5.6: Write regression tests covering Phase 5 acceptance criteria
@@ -415,19 +416,18 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 ### Milestone: Phase 5 — Loading Animations ✓ (completed 2026-05-15)
 **Acceptance Criteria:**
-- [x] `/boot` plays the boot screen animation sequence as specified
-- [x] `/slide` plays the slide-up + fade animation sequence as specified
-- [x] `/assemble` plays the frame assembly animation sequence as specified
-- [x] All three routes end at the identical final state (fully rendered phone with icons)
-- [x] Main `/` route uses a simple fade-in as temporary default
+- [x] `/` plays the selected boot screen animation sequence as specified
+- [x] Comparison variants were evaluated before selection
+- [x] The selected route ends at the identical final state (fully rendered phone with icons)
+- [x] Obsolete comparison routes are removed
 - [x] Reduced motion preference disables all animations, replacing with a quick opacity fade
 - [x] Animations feel smooth at 60fps with no visible jank
 - [x] All phase tests pass
 - [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan: none
-- Tech debt / follow-ups: `npm run build` static generation timeout on `/boot` and `/` (pre-existing, relative fetch URL in `getProducts` hangs during build)
+- Deviations from plan: boot screen was selected after comparison and promoted to `/`; `/boot`, `/slide`, and `/assemble` route files were removed.
+- Tech debt / follow-ups: none for loading animation routes; production build succeeds.
 - Ready for next phase: yes
 
 ---

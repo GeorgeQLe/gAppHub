@@ -28,7 +28,7 @@
 - Screen area 375×812 aspect ratio — matches
 - Icon label color #333 — matches
 - Truncation via max-w-[74px] + truncate — matches
-- All 4 routes (/, /boot, /slide, /assemble) — matches
+- Primary `/` route uses the selected boot screen; former comparison routes (`/boot`, `/slide`, `/assemble`) were removed — matches
 - Entrance animation reduced motion ≤200ms fade — matches
 
 ## Deferred

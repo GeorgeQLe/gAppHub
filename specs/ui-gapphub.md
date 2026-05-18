@@ -10,7 +10,7 @@
 | Area | Decision | Source |
 |---|---|---|
 | Single-page app, one primary route `/` | Confirmed | `[from spec]` |
-| Three animation comparison routes: `/boot`, `/slide`, `/assemble` | Confirmed | `[from interview]` |
+| Boot screen is the primary entrance animation on `/` | Confirmed | `[user decision 2026-05-18]` |
 | No traditional header/sidebar/footer — phone frame is the UI | Confirmed | `[inferred, confirmed]` |
 | Lexcorp logo + tagline above phone | Confirmed | `[from interview]` |
 | Dynamic Island (iPhone 15+) frame style | Confirmed | `[from interview]` |
@@ -27,12 +27,9 @@
 
 | Route | Purpose |
 |---|---|
-| `/` | Main hub — phone frame with product icon grid |
-| `/boot` | Animation variant: boot screen style |
-| `/slide` | Animation variant: slide-up + fade style |
-| `/assemble` | Animation variant: frame assembly style |
+| `/` | Main hub — boot screen entrance into the phone frame with product icon grid |
 
-The three animation routes render identical content but swap the entrance animation. Once the user picks a winner, the chosen animation moves to `/` and the variant routes can be removed.
+The former comparison routes (`/boot`, `/slide`, `/assemble`) were removed after the boot screen was selected as the primary experience.
 
 ---
 
@@ -245,38 +242,21 @@ Dock apps follow the same icon design as grid icons but may omit badges.
 
 ---
 
-## Loading Animations — Three Variants
+## Loading Animation — Primary Boot Screen
 
-Each variant lives on its own route for A/B comparison. All three end at the same final state: the fully rendered phone with populated icons.
+The primary route `/` starts with the boot screen and ends at the fully rendered phone with populated icons.
 
-### Variant 1: Boot Screen (`/boot`)
+### Boot Screen (`/`)
 
-1. **0–800ms:** Black screen fills the phone frame. Lexcorp logo fades in at center (white, ~80px wide). Subtle pulse animation on the logo.
-2. **800–1200ms:** Logo fades out. Screen transitions to the wallpaper gradient.
-3. **1200–1800ms:** Status bar fades in. Icons stagger in row by row (50ms delay per icon), scaling from 80% to 100% with a slight bounce.
-4. **1800–2200ms:** Dock slides up from below. Page dots fade in.
-5. **2200ms+:** Settled. All animations complete.
-
-### Variant 2: Slide Up + Fade (`/slide`)
-
-1. **0–600ms:** Phone frame slides up from 100px below its final position, opacity 0 → 1, with a smooth ease-out curve.
-2. **600–1200ms:** Screen content fades in — status bar first, then icons stagger in (40ms per icon, scale 90% → 100% + fade).
-3. **1200–1500ms:** Dock fades in. Page dots appear.
-4. **1500ms+:** Settled.
-
-### Variant 3: Assemble (`/assemble`)
-
-1. **0–400ms:** Phone frame sides (left and right bezels) slide in from off-screen horizontally. Top and bottom edges slide in vertically.
-2. **400–700ms:** Frame pieces meet and "lock" — a brief flash/highlight along the seams.
-3. **700–900ms:** Screen area fades from black to wallpaper.
-4. **900–1400ms:** Dynamic Island pops in (scale 0 → 1, bounce). Status bar slides in from the sides.
-5. **1400–2000ms:** Icons drop in from above, one by one, with a soft bounce landing (stagger 30ms).
-6. **2000–2300ms:** Dock slides up. Page dots fade in.
-7. **2300ms+:** Settled.
+1. **0–1100ms:** Black screen fills the phone frame. `Lexcorp` fades and pops into view.
+2. **1100–2200ms:** `made with ♥` fades in underneath while the first line remains visible.
+3. **2200–3300ms:** `by George "G" Le` fades in underneath the existing lines.
+4. **3300–3700ms:** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
+5. **3700ms+:** Dock slides up. All animations complete.
 
 ### Reduced Motion
 
-When `prefers-reduced-motion: reduce` is active, all variants collapse to: phone frame appears immediately at full opacity, icons appear without stagger or scale animation. Total transition: ≤200ms opacity fade.
+When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped and the phone frame appears immediately at full opacity. Total transition: ≤200ms opacity fade.
 
 ---
 

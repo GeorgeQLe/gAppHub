@@ -6,6 +6,6 @@ export default async function Home() {
   const { dock, grid } = splitDockProducts(sorted);
 
   return (
-    <PageContent variant="none" dockProducts={dock} gridProducts={grid} />
+    <PageContent variant="boot" dockProducts={dock} gridProducts={grid} />
   );
 }

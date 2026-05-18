@@ -8,6 +8,7 @@
 - [x] `/research-roadmap` - Documentation scan complete (2026-05-15).
 - [x] All implementation phases complete; documentation current; spec drift resolved.
 - [x] Orphaned `tasks/manual-todo.md`: 1 non-blocking `_(after:...)_` item from Phase 6 remains unchecked (real device testing). Deferred to future work (2026-05-16).
+- [x] Promoted the boot screen to the primary `/` route and removed obsolete comparison routes (`/boot`, `/slide`, `/assemble`) (2026-05-18).
 - [x] Task pipeline is healthy; no issues found.
 
 ## Priority Documentation Todo

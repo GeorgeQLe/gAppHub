@@ -21,7 +21,7 @@
 - [ ] `/slide` plays the slide-up + fade animation sequence as specified
 - [ ] `/assemble` plays the frame assembly animation sequence as specified
 - [ ] All three routes end at the identical final state (fully rendered phone with icons)
-- [ ] Main `/` route uses a simple fade-in as temporary default
+- [ ] Main `/` route uses the selected boot screen after comparison
 - [ ] Reduced motion preference disables all animations, replacing with a quick opacity fade
 - [ ] Animations feel smooth at 60fps with no visible jank
 - [ ] All phase tests pass
@@ -131,7 +131,7 @@
      - Dev server: `/slide` plays the full ~1.5s slide-up sequence
      - Dev server: `/slide` ends at the identical visual state as `/`
      - Dev server: toggling `prefers-reduced-motion` shows instant render on `/slide`
-     - Note: `npm run build` has a pre-existing static generation timeout (not caused by our changes)
+     - Historical note: an earlier build timeout was cleared before final shipping
 
   ### Execution Profile
   **Parallel mode:** serial
@@ -188,7 +188,7 @@
      - `npx tsc --noEmit` passes
      - `npm run lint` — only pre-existing warnings (not in modified files)
      - All 55 existing tests pass (no regressions)
-     - All 4 routes visually correct in browser
+     - Comparison routes visually correct in browser before the selected boot screen is promoted to `/`
 
   ### Execution Profile
   **Parallel mode:** serial
@@ -265,13 +265,13 @@
 - [x] `/slide` plays the slide-up + fade animation sequence as specified
 - [x] `/assemble` plays the frame assembly animation sequence as specified
 - [x] All three routes end at the identical final state (fully rendered phone with icons)
-- [x] Main `/` route uses a simple fade-in as temporary default
+- [x] Main `/` route uses the selected boot screen after comparison
 - [x] Reduced motion preference disables all animations, replacing with a quick opacity fade
 - [x] Animations feel smooth at 60fps with no visible jank
 - [x] All phase tests pass
 - [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan: Assemble used CSS clip-path instead of separate split divs for frame halves; spring physics customized per-element rather than uniform bounce settings
-- Tech debt / follow-ups: `npm run build` static generation timeout pre-exists (relative fetch URL in getProducts hangs during SSG); lint has 2 pre-existing warnings in useReducedMotion.ts and products.ts
+- Deviations from plan: Assemble used CSS clip-path instead of separate split divs for frame halves; spring physics customized per-element rather than uniform bounce settings. Boot screen was later selected as the primary experience and promoted to `/`; the temporary comparison route files were removed on 2026-05-18.
+- Tech debt / follow-ups: none for loading animation routes; production build succeeds.
 - Ready for next phase: yes
