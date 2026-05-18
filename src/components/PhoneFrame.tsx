@@ -1,44 +1,14 @@
 "use client";
 
-import { useIsMobile } from "@/hooks/useIsMobile";
-
 export default function PhoneFrame({ children }: { children?: React.ReactNode }) {
-  const isMobile = useIsMobile();
-
-  if (isMobile) {
-    return (
-      <div
-        className="aspect-[375/812] h-[min(194.88vw,100%)] max-h-full w-auto max-w-[400px] overflow-hidden rounded-3xl border-2 border-gray-300 shadow-md"
-      >
-        <div
-          role="region"
-          aria-label="Lexcorp product launcher"
-          className="relative flex h-full min-h-0 w-full flex-col overflow-hidden"
-          style={{
-            background: "linear-gradient(to bottom, #e8ecf4, #f5f0f6)",
-          }}
-        >
-          {children}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="tablet-scale h-full flex flex-col items-center">
-      <div
-        className="flex w-fit flex-col rounded-[50px] p-[3px] max-h-full"
-        style={{
-          background: "linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0)",
-          boxShadow:
-            "0 20px 60px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3)",
-        }}
-      >
-        <div className="flex min-h-0 flex-1 flex-col rounded-[48px] bg-[#1c1c1e] p-3">
+    <div className="tablet-scale flex aspect-[375/812] h-[min(194.88vw,100%)] max-h-full w-auto max-w-[400px] flex-col items-center overflow-hidden rounded-3xl border-2 border-gray-300 shadow-md md:h-full md:max-w-none md:overflow-visible md:rounded-none md:border-0 md:shadow-none">
+      <div className="phone-frame-shell flex h-full w-full flex-col rounded-3xl md:max-h-full md:w-fit md:rounded-[50px] md:p-[3px]">
+        <div className="flex min-h-0 flex-1 flex-col rounded-3xl md:rounded-[48px] md:bg-[#1c1c1e] md:p-3">
           <div
             role="region"
             aria-label="Lexcorp product launcher"
-            className="relative min-h-0 flex-1 w-[375px] overflow-hidden rounded-[38px] flex flex-col"
+            className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-3xl md:w-[375px] md:flex-1 md:rounded-[38px]"
             style={{
               aspectRatio: "375 / 812",
               background: "linear-gradient(to bottom, #e8ecf4, #f5f0f6)",

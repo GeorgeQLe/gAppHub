@@ -28,6 +28,16 @@ body {
   transform-origin: top center;
 }
 
+@media (min-width: 768px) {
+  .phone-frame-shell {
+    background: linear-gradient(145deg, #e0e0e0, #a0a0a0, #c0c0c0);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .tablet-scale {
     transform: scale(0.85);
