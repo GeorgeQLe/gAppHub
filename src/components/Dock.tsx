@@ -50,7 +50,7 @@ export default function Dock({ products }: DockProps) {
       role="toolbar"
       aria-label="Pinned apps"
       onKeyDown={handleKeyDown}
-      className="absolute bottom-0 left-0 right-0 flex items-center justify-around px-4 pb-6 pt-3 border-t border-white/30 bg-white/[0.72] backdrop-blur-[20px] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] rounded-b-[38px]"
+      className="absolute bottom-0 left-0 right-0 flex items-center justify-around rounded-b-[38px] border-t border-white/30 bg-white/[0.72] px-4 pb-4 pt-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-[20px]"
     >
       {products.map((p, i) => (
         <AppIcon

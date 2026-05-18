@@ -28,6 +28,7 @@ const badgeLabelMap: Record<string, string> = {
 
 const CUSTOM_ICON_IDS = new Set(["war-room", "pitwall", "gskillpacks", "gblockparty"]);
 const TOOLTIP_OFFSET = 8;
+const ICON_SIZE = 54;
 
 type TooltipPosition = {
   left: number;
@@ -98,37 +99,37 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
             <img
               src={`/icons/products/${product.id}.png`}
               alt=""
-              width={60}
-              height={60}
-              className={`w-[60px] h-[60px] rounded-[22.5%] object-cover${deprecated ? " grayscale opacity-50" : ""}`}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+              className={`h-[54px] w-[54px] rounded-[22.5%] object-cover${deprecated ? " grayscale opacity-50" : ""}`}
               draggable={false}
             />
           ) : (
             <div
-              className={`w-[60px] h-[60px] rounded-[22.5%] flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900${deprecated ? " grayscale opacity-50" : ""}`}
+              className={`flex h-[54px] w-[54px] items-center justify-center rounded-[22.5%] bg-gradient-to-br from-slate-700 to-slate-900${deprecated ? " grayscale opacity-50" : ""}`}
             >
               {icon ? (
                 createElement(icon, {
-                  size: 28,
+                  size: 25,
                   className: "text-white",
                   strokeWidth: 1.5,
                 })
               ) : (
-                <span className="text-white text-2xl font-bold">{firstLetter}</span>
+                <span className="text-xl font-bold text-white">{firstLetter}</span>
               )}
             </div>
           )}
           {product.badge && !hideBadge && (
             <span
               aria-hidden="true"
-              className={`absolute -top-[3px] -right-[3px] flex items-center justify-center w-[20px] h-[20px] rounded-full border-2 border-white text-white text-[11px] font-bold leading-none ${badgeColorMap[product.badge]}`}
+              className={`absolute -top-[3px] -right-[3px] flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-white text-[10px] font-bold leading-none text-white ${badgeColorMap[product.badge]}`}
             >
               {product.badge}
             </span>
           )}
         </div>
         <span
-          className={`text-[11px] font-medium text-center leading-tight truncate max-w-[74px] ${
+          className={`max-w-[68px] truncate text-center text-[10px] font-medium leading-tight ${
             deprecated ? "text-gray-500" : "text-[#333]"
           }`}
         >

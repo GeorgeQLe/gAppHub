@@ -30,7 +30,7 @@ const BOOT_ISLAND_MESSAGES: BootIslandMessage[] = [
   "made with ♥",
   'by George "G" Le',
 ];
-const BOOT_ISLAND_MESSAGE_DELAY = 3000;
+const BOOT_ISLAND_MESSAGE_DELAY = 1500;
 
 export default function PageContent({
   dockProducts,

@@ -9,7 +9,7 @@ export default function PageDots({ total, active, onChange }: PageDotsProps) {
 
   return (
     <div
-      className="flex justify-center items-center gap-1.5"
+      className="flex items-center justify-center gap-1.5"
       role="tablist"
       aria-label="Page indicator"
     >
@@ -25,8 +25,8 @@ export default function PageDots({ total, active, onChange }: PageDotsProps) {
           <span
             className={`rounded-full transition-all duration-200 ${
               i === active
-                ? "w-2 h-2 bg-white"
-                : "w-1.5 h-1.5 bg-white/40"
+                ? "h-2 w-2 bg-[#1d1d1f]"
+                : "h-1.5 w-1.5 bg-[#1d1d1f]/35"
             }`}
           />
         </button>

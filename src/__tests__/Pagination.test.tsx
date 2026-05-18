@@ -32,14 +32,14 @@ describe("PageDots", () => {
     expect(tabs).toHaveLength(3);
   });
 
-  it("active dot has bg-white class, inactive has bg-white/40", () => {
+  it("active dot has dark class, inactive has translucent dark class", () => {
     render(<PageDots total={3} active={1} />);
     const tabs = screen.getAllByRole("tab");
     const dots = tabs.map((tab) => tab.querySelector("span")!);
-    expect(dots[0].className).toContain("bg-white/40");
-    expect(dots[1].className).toContain("bg-white");
-    expect(dots[1].className).not.toContain("bg-white/40");
-    expect(dots[2].className).toContain("bg-white/40");
+    expect(dots[0].className).toContain("bg-[#1d1d1f]/35");
+    expect(dots[1].className).toContain("bg-[#1d1d1f]");
+    expect(dots[1].className).not.toContain("bg-[#1d1d1f]/35");
+    expect(dots[2].className).toContain("bg-[#1d1d1f]/35");
   });
 
   it("returns null when total <= 1", () => {
