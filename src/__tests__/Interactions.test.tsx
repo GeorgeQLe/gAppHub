@@ -124,6 +124,7 @@ describe("AppIcon tooltip", () => {
     const tooltip = screen.getByRole("tooltip");
     expect(tooltip).toHaveTextContent("My cool app");
     expect(tooltip.className).toContain("fixed");
+    expect(tooltip.className).not.toContain("-translate-x-1/2");
   });
 
   it("centers the portal tooltip on the icon artwork", () => {
