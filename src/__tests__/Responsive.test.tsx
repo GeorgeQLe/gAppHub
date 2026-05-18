@@ -24,7 +24,8 @@ describe("PhoneFrame — mobile", () => {
     const outer = container.firstElementChild!;
     expect(outer.className).toContain("border-2");
     expect(outer.className).toContain("rounded-3xl");
-    expect(outer.className).toContain("w-[90vw]");
+    expect(outer.className).toContain("h-[min(194.88vw,100%)]");
+    expect(outer.className).toContain("max-h-full");
   });
 
   it("does not render metallic gradient", () => {

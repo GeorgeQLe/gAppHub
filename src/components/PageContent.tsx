@@ -115,36 +115,38 @@ export default function PageContent({
         Made in Boston, Building in Public
       </p>
 
-      <div className="mt-3 min-h-0 flex-1 flex flex-col items-center pb-8">
-        <PhoneFrame>
-          {isBoot ? (
-            <BootPhoneContent
-              phase={bootPhase}
-              gridProducts={gridProducts}
-              dockProducts={dockProducts}
-            />
-          ) : isSlide ? (
-            <SlidePhoneContent
-              phase={slidePhase}
-              gridProducts={gridProducts}
-              dockProducts={dockProducts}
-            />
-          ) : isAssemble ? (
-            <AssemblePhoneContent
-              phase={assemblePhase}
-              gridProducts={gridProducts}
-              dockProducts={dockProducts}
-            />
-          ) : (
-            <>
-              <StatusBar />
-              <DynamicIsland />
-              <IconGrid products={gridProducts} />
-              <Dock products={dockProducts} />
-              <HomeIndicator />
-            </>
-          )}
-        </PhoneFrame>
+      <div className="mt-3 flex min-h-0 flex-1 flex-col items-center pb-8">
+        <div className="flex min-h-0 flex-1 items-center justify-center">
+          <PhoneFrame>
+            {isBoot ? (
+              <BootPhoneContent
+                phase={bootPhase}
+                gridProducts={gridProducts}
+                dockProducts={dockProducts}
+              />
+            ) : isSlide ? (
+              <SlidePhoneContent
+                phase={slidePhase}
+                gridProducts={gridProducts}
+                dockProducts={dockProducts}
+              />
+            ) : isAssemble ? (
+              <AssemblePhoneContent
+                phase={assemblePhase}
+                gridProducts={gridProducts}
+                dockProducts={dockProducts}
+              />
+            ) : (
+              <>
+                <StatusBar />
+                <DynamicIsland />
+                <IconGrid products={gridProducts} />
+                <Dock products={dockProducts} />
+                <HomeIndicator />
+              </>
+            )}
+          </PhoneFrame>
+        </div>
         <div className="mt-4">
           <BadgeLegend />
         </div>

@@ -7,13 +7,14 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
 
   if (isMobile) {
     return (
-      <div className="w-[90vw] max-w-[400px] overflow-hidden rounded-3xl border-2 border-gray-300 shadow-md">
+      <div
+        className="aspect-[375/812] h-[min(194.88vw,100%)] max-h-full w-auto max-w-[400px] overflow-hidden rounded-3xl border-2 border-gray-300 shadow-md"
+      >
         <div
           role="region"
           aria-label="Lexcorp product launcher"
-          className="relative min-h-0 w-full overflow-hidden flex flex-col"
+          className="relative flex h-full min-h-0 w-full flex-col overflow-hidden"
           style={{
-            aspectRatio: "375 / 812",
             background: "linear-gradient(to bottom, #e8ecf4, #f5f0f6)",
           }}
         >
