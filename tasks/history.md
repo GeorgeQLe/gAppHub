@@ -655,3 +655,13 @@
 - Also adjusted dynamic Lucide icon rendering to use `createElement`, resolving the `react-hooks/static-components` lint error surfaced during validation.
 - Updated `src/__tests__/Interactions.test.tsx` to query portal-rendered tooltips through `screen` and assert the tooltip uses fixed positioning.
 - Verified: focused interactions test passes, typecheck clean, lint has only the accepted local-icon `<img>` warning.
+
+## 2026-05-17 — Fix: Center app icon tooltips after portal positioning
+
+- Confirmed user report: portal-rendered app tooltips could appear left of the hovered app icon because the positioning logic used the full anchor bounding box instead of the 60px icon artwork box.
+- Root cause: the previous clipping fix in `src/components/AppIcon.tsx` moved tooltips to `document.body` and calculated `left` from `event.currentTarget.getBoundingClientRect()`. The anchor includes the label and hover transform box, so its center can drift from the visual icon center.
+- Fix: `AppIcon` now measures a dedicated icon wrapper ref for tooltip placement and keeps the rendered portal tooltip clamped inside the viewport after measuring its real width.
+- Updated `src/__tests__/Interactions.test.tsx` with a regression test where the link box is wider than the icon wrapper, asserting the tooltip centers on the icon artwork.
+- Verified: `pnpm test src/__tests__/Interactions.test.tsx` (13 passed), `pnpm test` (87 passed), `pnpm exec tsc --noEmit` (passed), `pnpm lint` (0 errors, 1 accepted warning), `pnpm build` (passed).
+- Prevention: layout tests for portal overlays should mock trigger and visual-anchor bounding boxes separately, so future fixes do not accidentally position against a wrapper instead of the visible target.
+- Next command: `$guide` for deferred real-device hover/responsive verification when preparing for production launch.

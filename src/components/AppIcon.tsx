@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useRef, useState, forwardRef } from "react";
+import { createElement, useLayoutEffect, useRef, useState, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { Product } from "@/types/product";
 import * as icons from "lucide-react";
@@ -50,11 +50,12 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
   const deprecated = product.badge === null;
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition | null>(null);
+  const iconRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = `tooltip-${product.name.replace(/\s+/g, "-").toLowerCase()}`;
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
+    const rect = iconRef.current?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect();
     const placement = rect.top < 80 ? "bottom" : "top";
     setTooltipPosition({
       left: rect.left + rect.width / 2,
@@ -92,7 +93,7 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
         onMouseLeave={handleMouseLeave}
         className="flex flex-col items-center gap-1 rounded-2xl transition-all duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
       >
-        <div className="relative">
+        <div ref={iconRef} className="relative">
           {CUSTOM_ICON_IDS.has(product.id) ? (
             <img
               src={`/icons/products/${product.id}.png`}
@@ -156,13 +157,29 @@ function AppIconTooltip({
   text: string;
   position: TooltipPosition;
 }) {
+  const tooltipRef = useRef<HTMLSpanElement>(null);
+  const [left, setLeft] = useState(position.left);
+
+  useLayoutEffect(() => {
+    const tooltip = tooltipRef.current;
+    if (!tooltip) return;
+
+    const viewportPadding = 8;
+    const halfWidth = tooltip.offsetWidth / 2;
+    const minLeft = viewportPadding + halfWidth;
+    const maxLeft = window.innerWidth - viewportPadding - halfWidth;
+
+    setLeft(Math.min(Math.max(position.left, minLeft), maxLeft));
+  }, [position.left, text]);
+
   return createPortal(
     <span
+      ref={tooltipRef}
       id={id}
       role="tooltip"
       className="fixed z-50 max-w-[200px] -translate-x-1/2 whitespace-normal rounded-lg bg-[#333]/90 px-2 py-1.5 text-center text-xs text-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] pointer-events-none"
       style={{
-        left: position.left,
+        left,
         top: position.top,
         transform:
           position.placement === "top"

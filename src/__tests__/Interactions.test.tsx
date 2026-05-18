@@ -126,6 +126,46 @@ describe("AppIcon tooltip", () => {
     expect(tooltip.className).toContain("fixed");
   });
 
+  it("centers the portal tooltip on the icon artwork", () => {
+    const { container } = render(
+      <AppIcon
+        product={makeProduct({ description: "My cool app" })}
+      />
+    );
+    const link = container.querySelector("a")!;
+    const iconWrapper = link.querySelector("div.relative")!;
+
+    vi.spyOn(link, "getBoundingClientRect").mockReturnValue({
+      left: 0,
+      top: 120,
+      right: 300,
+      bottom: 198,
+      width: 300,
+      height: 78,
+      x: 0,
+      y: 120,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(iconWrapper, "getBoundingClientRect").mockReturnValue({
+      left: 100,
+      top: 120,
+      right: 160,
+      bottom: 180,
+      width: 60,
+      height: 60,
+      x: 100,
+      y: 120,
+      toJSON: () => ({}),
+    });
+
+    fireEvent.mouseEnter(link);
+    act(() => {
+      vi.advanceTimersByTime(400);
+    });
+
+    expect(screen.getByRole("tooltip")).toHaveStyle({ left: "130px" });
+  });
+
   it("hides tooltip on mouse leave", () => {
     const { container } = render(
       <AppIcon
