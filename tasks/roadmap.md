@@ -562,45 +562,96 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 **Subagent lanes:** none
 
 ### Implementation
-- Step 7.1: Expand `Product` type and `products.json` schema
-  - Files: modify `src/types/product.ts`, modify `public/data/products.json`
-  - Add optional `screenshots: string[]`, `testimonials: { text: string; author: string }[]`, `longDescription: string`
-  - No data populated yet — all fields empty/absent in JSON
+- Step 7.1: Expand `Product` type with optional drawer fields
+  - Files: modify `src/types/product.ts`
+  - Add optional fields to the `Product` interface:
+    - `screenshots?: string[]` — URLs or paths to screenshot images
+    - `testimonials?: { text: string; author: string }[]` — user testimonials
+    - `longDescription?: string` — extended description for the drawer body
+  - No changes to `public/data/products.json` data — fields are optional and absent by default
+  - Existing product loading in `src/lib/products.ts` needs no change (optional fields pass through)
 
 - Step 7.2: Build the `AppStoreDrawer` component
   - Files: create `src/components/AppStoreDrawer.tsx`
-  - Bottom sheet with Framer Motion slide-up animation
-  - Backdrop overlay (semi-transparent dark, tap to dismiss)
-  - Content layout: header (icon + name + badge + CTA), description, screenshots carousel, testimonials
-  - Swipe-down gesture to dismiss (reuse vertical drag pattern)
-  - Focus trap and `role="dialog"` with `aria-modal="true"`
-  - Escape key handler
+  - **Props:** `product: Product | null` (null = closed), `onClose: () => void`
+  - **Animation:** Framer Motion `AnimatePresence` + `motion.div` with `y: "100%"` → `y: "20%"` (occupies bottom 80% of phone screen). Spring easing, ~300ms. When `prefers-reduced-motion`, collapse to opacity fade via `useReducedMotion` hook.
+  - **Backdrop:** Semi-transparent `bg-black/40` overlay, click handler calls `onClose`. `z-30` to sit above grid/dock but below any portaled tooltips.
+  - **Sheet container:** `absolute bottom-0 left-0 right-0 h-[80%]` with `bg-white rounded-t-2xl` and `overflow-y-auto`. Inner padding for content.
+  - **Drag-to-dismiss:** Use Framer Motion `drag="y"` with `dragConstraints={{ top: 0 }}` and `dragElastic={0.2}`. On `onDragEnd`, if `offset.y > 100` or `velocity.y > 500`, call `onClose`.
+  - **Header row (sticky):**
+    - App icon: 72×72px squircle. Reuse the same icon rendering logic from `AppIcon.tsx` (custom PNG for `CUSTOM_ICON_IDS`, Lucide icon otherwise, fallback letter). Extract a shared `ProductIcon` sub-component or inline the logic.
+    - App name: bold 16px, with badge dot inline (reuse `badgeColorMap` from `AppIcon.tsx`). Badge dot is 10px colored circle next to the name.
+    - "Open" CTA: `<a href={product.url} target="_blank" rel="noopener noreferrer">` styled as pill button (filled blue `bg-blue-500 text-white rounded-full px-4 py-1.5 text-sm font-semibold`). Include `ExternalLink` icon from `lucide-react` (size 14, inline). `aria-label="Open {product.name} in new tab"`.
+  - **Description:** `product.longDescription ?? product.description`. Rendered as `<p>` with `text-sm text-gray-600 leading-relaxed`.
+  - **Screenshots carousel (conditional):** Only render when `product.screenshots?.length > 0`. Horizontal scrollable div (`overflow-x-auto flex gap-3 snap-x snap-mandatory`). Each screenshot: `<img>` with `rounded-lg` and `snap-center`, max-height ~200px. Show scroll indicators if content overflows.
+  - **Testimonials (conditional):** Only render when `product.testimonials?.length > 0`. Vertical stack of quote cards. Each card: `bg-gray-50 rounded-lg p-3`, italic quote text, `— author` line below.
+  - **Accessibility:**
+    - `role="dialog"` and `aria-modal="true"` on the sheet container
+    - `aria-label="{product.name} details"` on the sheet
+    - Focus trap: on mount, focus the "Open" CTA button. On `keydown`, trap Tab within the sheet (wrap from last focusable to first and vice versa). On Escape, call `onClose`.
+    - When sheet closes, restore focus to the triggering element (passed via ref or callback).
 
-- Step 7.3: Wire drawer into AppIcon (grid + dock)
-  - Files: modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`, modify `src/components/IconGrid.tsx`
-  - Change `<a href>` to `<button>` (or click handler that opens drawer instead of navigating)
-  - Pass selected product to drawer via state (lifted to IconGrid/page level or via context)
-  - Ensure keyboard interaction: Enter/Space on icon opens drawer
+- Step 7.3: Convert AppIcon from link to button and add `onSelect` callback
+  - Files: modify `src/components/AppIcon.tsx`
+  - Change `<a href={product.url} target="_blank">` to `<button type="button" onClick={() => onSelect?.(product)}>`.
+  - Add `onSelect?: (product: Product) => void` to `AppIconProps`.
+  - Update `forwardRef` generic from `HTMLAnchorElement` to `HTMLButtonElement`.
+  - Update `className`: keep all existing hover/press/focus styles. Add `cursor-pointer` and remove `target`, `rel` attributes.
+  - The button still shows the same icon, name, badge, tooltip, and deprecated state — only the click behavior changes.
+  - **Impact on existing tests:** Tests that assert `<a>` elements will need updating to expect `<button>`. Tests that check `href` and `target="_blank"` on AppIcon will be removed (those attributes move to the drawer's CTA).
 
-- Step 7.4: Polish and edge cases
+- Step 7.4: Wire drawer state into PageContent, IconGrid, and Dock
+  - Files: modify `src/components/PageContent.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/Dock.tsx`
+  - **PageContent:**
+    - Add `selectedProduct: Product | null` state (initially null) and `triggerRef: React.RefObject<HTMLButtonElement | null>`
+    - Create `handleIconSelect(product: Product)` that sets `selectedProduct` and captures the triggering element ref
+    - Create `handleDrawerClose()` that sets `selectedProduct` to null and restores focus to `triggerRef`
+    - Pass `onIconSelect={handleIconSelect}` to both `<IconGrid>` and `<Dock>`
+    - Render `<AppStoreDrawer product={selectedProduct} onClose={handleDrawerClose} />` inside the PhoneFrame's screen area (inside the `role="region"` container)
+    - Apply to all animation variants (boot, slide, assemble, none) — the drawer renders once at the PhoneFrame level, not per variant
+  - **IconGrid:**
+    - Add `onIconSelect?: (product: Product) => void` to `IconGridProps`
+    - Pass `onSelect={onIconSelect}` to each `<AppIcon>`
+    - Update `iconRefs` type from `HTMLAnchorElement` to `HTMLButtonElement`
+  - **Dock:**
+    - Add `onIconSelect?: (product: Product) => void` to `DockProps`
+    - Pass `onSelect={onIconSelect}` to each `<AppIcon>`
+    - Update `iconRefs` type from `HTMLAnchorElement` to `HTMLButtonElement`
+
+- Step 7.5: Polish, reduced motion, and edge cases
   - Files: modify `src/components/AppStoreDrawer.tsx`, modify `src/components/AppIcon.tsx`
-  - Focus return to triggering icon on close
-  - Reduced motion: collapse slide animation to opacity fade
-  - Deprecated apps: still show drawer but with muted styling
-  - Verify no swipe/pagination conflicts
+  - **Reduced motion:** Use `useReducedMotion()` hook in `AppStoreDrawer`. When true, replace spring slide-up with instant opacity fade (≤200ms). Disable drag-to-dismiss gesture (rely on Escape/tap-backdrop).
+  - **Deprecated apps:** Drawer still opens for deprecated products. Apply `grayscale opacity-50` to the large icon in the drawer header. "Open" CTA still functional.
+  - **Swipe conflict prevention:** The drawer's `drag="y"` only activates on the sheet itself (not the backdrop). When the drawer is open, IconGrid's pagination swipe handlers should be suppressed — check if `selectedProduct` is non-null in the touch handlers.
+  - **Scroll behavior:** Drawer content area uses `overflow-y-auto`. When content is short (no screenshots/testimonials), the sheet should not scroll. The header row with "Open" CTA is sticky at top (`sticky top-0 bg-white z-10`).
+  - **Search overlay interaction:** If search is open, icon clicks in search results should also open the drawer. Ensure `onSelect` is passed to AppIcons rendered in the search results list in `IconGrid`.
 
 ### Green
-- Step 7.5: Write regression tests
-  - Files: create `src/__tests__/AppStoreDrawer.test.tsx`
-  - Test: clicking icon opens drawer (not external link)
-  - Test: drawer displays product name, description, and Open button
-  - Test: Escape closes drawer
-  - Test: Open button has correct href and target="_blank"
-  - Test: screenshots section hidden when product has no screenshots
-  - Test: testimonials section hidden when product has no testimonials
-  - Test: drawer has role="dialog" and aria-modal="true"
+- Step 7.6: Write regression tests covering acceptance criteria
+  - Files: create `src/__tests__/AppStoreDrawer.test.tsx`, modify `src/__tests__/Interactions.test.tsx`, modify `src/__tests__/Dock.test.tsx`
+  - **New tests (`AppStoreDrawer.test.tsx`):**
+    - Test: AppStoreDrawer renders product name, description, and "Open" button when product is provided
+    - Test: AppStoreDrawer is not rendered when product is null
+    - Test: "Open" CTA has correct `href` and `target="_blank"`
+    - Test: "Open" CTA has `aria-label` with product name
+    - Test: Drawer has `role="dialog"` and `aria-modal="true"`
+    - Test: Pressing Escape calls `onClose`
+    - Test: Clicking backdrop calls `onClose`
+    - Test: Screenshots section hidden when `product.screenshots` is absent/empty
+    - Test: Screenshots section visible when `product.screenshots` has entries
+    - Test: Testimonials section hidden when `product.testimonials` is absent/empty
+    - Test: Testimonials section visible when `product.testimonials` has entries
+    - Test: Large icon renders at 72px for standard Lucide icons
+    - Test: Large icon renders custom PNG for `CUSTOM_ICON_IDS`
+    - Test: Badge dot renders with correct color class next to product name
+    - Test: Deprecated product shows grayscale icon in drawer
+  - **Updated tests (`Interactions.test.tsx`):**
+    - Update AppIcon tests: expect `<button>` instead of `<a>`, remove `href`/`target` assertions
+    - Add test: clicking AppIcon calls `onSelect` with the product
+  - **Updated tests (`Dock.test.tsx`):**
+    - Update Dock tests: expect `<button>` elements instead of `<a>` for dock icons
 
-- Step 7.6: Run all tests, verify they pass, build succeeds
+- Step 7.7: Run all tests, verify they pass, `npx tsc --noEmit` succeeds, `npm run lint` has only pre-existing warnings, `next build` succeeds
 
 ### Milestone: Phase 7 — App Store Drawer
 **Acceptance Criteria:**
