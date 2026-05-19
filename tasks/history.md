@@ -744,3 +744,15 @@
 - Added `onIconSelect` prop to `IconGrid` — passed to all `<AppIcon>` instances (paginated grid + search results)
 - Added `onIconSelect` prop to `Dock` — passed to all `<AppIcon>` instances
 - Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
+
+## 2026-05-19 — Phase 7, Step 7.5: Swipe conflict prevention (polish)
+
+- Added `drawerOpen?: boolean` prop to `IconGrid` component
+- When `drawerOpen` is true, all swipe interactions are suppressed:
+  - `handleTouchStart` returns early (no touch tracking)
+  - `handleTouchEnd` returns early (no page change or search pull-down)
+  - `swipe?.registerSwipe` callback returns early (no PhoneSwipeProvider page change)
+- Threaded `drawerOpen={selectedProduct !== null}` through all 4 `IconGrid` instances in `PageContent`:
+  - Default variant, BootPhoneContent, SlidePhoneContent, AssemblePhoneContent
+- Most Step 7.5 items were already implemented during Step 7.2 (reduced motion, deprecated styling, scroll, search overlay)
+- Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)

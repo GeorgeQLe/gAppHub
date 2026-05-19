@@ -140,6 +140,7 @@ export default function PageContent({
                 islandLabel={bootIslandMessage}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
+                drawerOpen={selectedProduct !== null}
                 onIconSelect={handleIconSelect}
               />
             ) : isSlide ? (
@@ -147,6 +148,7 @@ export default function PageContent({
                 phase={slidePhase}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
+                drawerOpen={selectedProduct !== null}
                 onIconSelect={handleIconSelect}
               />
             ) : isAssemble ? (
@@ -154,13 +156,14 @@ export default function PageContent({
                 phase={assemblePhase}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
+                drawerOpen={selectedProduct !== null}
                 onIconSelect={handleIconSelect}
               />
             ) : (
               <>
                 <StatusBar />
                 <DynamicIsland />
-                <IconGrid products={gridProducts} onIconSelect={handleIconSelect} />
+                <IconGrid products={gridProducts} drawerOpen={selectedProduct !== null} onIconSelect={handleIconSelect} />
                 <Dock products={dockProducts} onIconSelect={handleIconSelect} />
                 <HomeIndicator />
               </>
@@ -208,12 +211,14 @@ function BootPhoneContent({
   islandLabel,
   gridProducts,
   dockProducts,
+  drawerOpen,
   onIconSelect,
 }: {
   phase: BootPhase;
   islandLabel?: string;
   gridProducts: Product[];
   dockProducts: Product[];
+  drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
 }) {
   return (
@@ -276,7 +281,7 @@ function BootPhoneContent({
         animate={{ opacity: phase >= 4 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <IconGrid products={gridProducts} onIconSelect={onIconSelect} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} />
       </motion.div>
 
       {/* Phase 5+: Dock slides up */}
@@ -305,11 +310,13 @@ function SlidePhoneContent({
   phase,
   gridProducts,
   dockProducts,
+  drawerOpen,
   onIconSelect,
 }: {
   phase: SlidePhase;
   gridProducts: Product[];
   dockProducts: Product[];
+  drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
 }) {
   return (
@@ -341,7 +348,7 @@ function SlidePhoneContent({
         }}
         transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
       >
-        <IconGrid products={gridProducts} onIconSelect={onIconSelect} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} />
       </motion.div>
 
       <motion.div
@@ -361,11 +368,13 @@ function AssemblePhoneContent({
   phase,
   gridProducts,
   dockProducts,
+  drawerOpen,
   onIconSelect,
 }: {
   phase: AssemblePhase;
   gridProducts: Product[];
   dockProducts: Product[];
+  drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
 }) {
   return (
@@ -478,7 +487,7 @@ function AssemblePhoneContent({
           mass: 0.7,
         }}
       >
-        <IconGrid products={gridProducts} onIconSelect={onIconSelect} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} />
       </motion.div>
 
       {/* Phase 6: Dock slides up with spring */}

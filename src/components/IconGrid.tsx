@@ -21,10 +21,11 @@ const BADGE_LABELS: Record<string, string> = {
 
 interface IconGridProps {
   products: Product[];
+  drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
 }
 
-export default function IconGrid({ products, onIconSelect }: IconGridProps) {
+export default function IconGrid({ products, drawerOpen, onIconSelect }: IconGridProps) {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const iconsPerPage = useAvailableRows(gridContainerRef);
   const pages = chunk(products, iconsPerPage);
@@ -55,10 +56,10 @@ export default function IconGrid({ products, onIconSelect }: IconGridProps) {
 
   useEffect(() => {
     swipe?.registerSwipe((delta) => {
-      if (showSearchRef.current) return;
+      if (showSearchRef.current || drawerOpen) return;
       goTo(page + delta);
     });
-  }, [swipe, goTo, page]);
+  }, [swipe, goTo, page, drawerOpen]);
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term);
@@ -70,6 +71,7 @@ export default function IconGrid({ products, onIconSelect }: IconGridProps) {
   }, []);
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (drawerOpen) return;
     touchRef.current = {
       startX: e.touches[0].clientX,
       startY: e.touches[0].clientY,
@@ -77,7 +79,7 @@ export default function IconGrid({ products, onIconSelect }: IconGridProps) {
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchRef.current) return;
+    if (!touchRef.current || drawerOpen) return;
     const dx = e.changedTouches[0].clientX - touchRef.current.startX;
     const dy = e.changedTouches[0].clientY - touchRef.current.startY;
     touchRef.current = null;

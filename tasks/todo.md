@@ -209,7 +209,7 @@
 
   **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
-- [ ] Step 7.5: Polish, reduced motion, and edge cases
+- [x] Step 7.5: Polish, reduced motion, and edge cases
   - Files: modify `src/components/PageContent.tsx`, modify `src/components/IconGrid.tsx`
 
   **Implementation Plan (self-contained for clear-context execution):**
