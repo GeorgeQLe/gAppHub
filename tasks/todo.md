@@ -56,7 +56,7 @@
   - No changes to `public/data/products.json` data — fields are optional and absent by default
   - Existing product loading in `src/lib/products.ts` needs no change (optional fields pass through)
 
-- [ ] Step 7.2: Build the `AppStoreDrawer` component
+- [x] Step 7.2: Build the `AppStoreDrawer` component
   - Files: create `src/components/AppStoreDrawer.tsx`
 
   **Implementation Plan (self-contained for clear-context execution):**
@@ -111,6 +111,57 @@
   - Update `className`: keep all existing hover/press/focus styles. Add `cursor-pointer` and remove `target`, `rel` attributes.
   - The button still shows the same icon, name, badge, tooltip, and deprecated state — only the click behavior changes.
   - **Impact on existing tests:** Tests that assert `<a>` elements will need updating to expect `<button>`. Tests that check `href` and `target="_blank"` on AppIcon will be removed (those attributes move to the drawer's CTA).
+
+  **Implementation Plan (self-contained for clear-context execution):**
+
+  Modify `src/components/AppIcon.tsx` to change the interactive element from `<a>` to `<button>`. This is a targeted refactor — visual appearance and all existing features (icon, name, badge, tooltip, deprecated state) stay the same.
+
+  - **Step A: Update props and ref type**
+    - Add `onSelect?: (product: Product) => void` to `AppIconProps` interface (line ~9–12)
+    - Change `forwardRef<HTMLAnchorElement, AppIconProps>` to `forwardRef<HTMLButtonElement, AppIconProps>` (line ~47)
+    - Destructure `onSelect` from props alongside `product`, `hideBadge`, `tabIndex`
+
+  - **Step B: Replace `<a>` with `<button>`**
+    - Replace `<a ref={ref} href={product.url} target="_blank" rel="noopener noreferrer" ...>` (line ~85–96) with `<button ref={ref} type="button" onClick={() => onSelect?.(product)} ...>`
+    - Keep all existing className hover/press/focus Tailwind classes
+    - Add `cursor-pointer` to className
+    - Remove `href`, `target`, `rel` attributes (those are now on AppStoreDrawer's CTA)
+    - The tooltip `onMouseEnter`/`onMouseLeave` handlers stay on the button
+    - Change `handleMouseEnter` type from `React.MouseEvent<HTMLAnchorElement>` to `React.MouseEvent<HTMLButtonElement>`
+
+  - **Step C: Update tests**
+    - `src/__tests__/IconGrid.test.tsx`: Change assertions from `<a>` elements to `<button>` elements. Remove `target="_blank"` and `href` assertions (lines referencing `getAllByRole('link')` → `getAllByRole('button')`).
+    - `src/__tests__/Interactions.test.tsx`: Same — queries for links become queries for buttons. Remove `href`/`target` checks.
+    - `src/__tests__/Dock.test.tsx`: Update dock icon queries from links to buttons.
+    - `src/__tests__/Accessibility.test.tsx`: Update AppIcon role queries.
+    - `src/__tests__/Search.test.tsx`: If any tests query `<a>` within icon results, update to `<button>`.
+    - `src/__tests__/Responsive.test.tsx`: Check if PhoneFrame tests reference links — update if needed.
+    - `src/__tests__/Pagination.test.tsx`: If pagination tests query icon links, update.
+
+  - **Step D: Update Dock and IconGrid ref types**
+    - `src/components/Dock.tsx`: if `iconRefs` is typed as `HTMLAnchorElement`, update to `HTMLButtonElement`
+    - `src/components/IconGrid.tsx`: same ref type update
+
+  **Key patterns from existing code:**
+  - `AppIcon.tsx` currently uses `forwardRef<HTMLAnchorElement>` (line 47) — straightforward generic swap
+  - Tooltip positioning uses `event.currentTarget.getBoundingClientRect()` — works the same on `<button>`
+  - `CUSTOM_ICON_IDS`, `getIcon()`, `badgeColorMap` — no changes needed
+  - `onSelect` is optional (`?.()` call) so AppIcons without a handler still render fine
+
+  ### Execution Profile
+  - **Parallel mode:** serial
+  - **Conflict risk:** medium (touches AppIcon which is used by IconGrid, Dock, and tests)
+  - **Test strategy:** tests-after (Step 7.6)
+
+  **Acceptance criteria for this step:**
+  - AppIcon renders a `<button>` instead of `<a>`
+  - Clicking the button calls `onSelect(product)` when handler is provided
+  - All visual features unchanged (icon, name, badge, tooltip, deprecated state, hover/press/focus)
+  - `forwardRef` generic is `HTMLButtonElement`
+  - All existing tests updated and passing (89 tests, no regressions)
+  - `npx tsc --noEmit` passes
+
+  **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 7.4: Wire drawer state into PageContent, IconGrid, and Dock
   - Files: modify `src/components/PageContent.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/Dock.tsx`

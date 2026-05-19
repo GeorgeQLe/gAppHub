@@ -709,3 +709,18 @@
   - `longDescription?: string` — extended description for drawer body
 - No changes to `products.json` or data loading — fields are optional and absent by default
 - Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
+
+## 2026-05-18 — Phase 7, Step 7.2: Build the AppStoreDrawer component
+
+- Created `src/components/AppStoreDrawer.tsx` — bottom-sheet drawer component with Framer Motion slide-up animation
+- Props: `product: Product | null` (null = closed), `onClose: () => void`
+- Animation: `AnimatePresence` + `motion.div` with spring `y: "100%"` → `y: "0%"` (~300ms), reduced motion falls back to opacity fade
+- Backdrop: `bg-black/40` overlay at `z-30`, click-to-dismiss
+- Drag-to-dismiss: Framer Motion `drag="y"` with 100px offset or 500 velocity threshold; disabled under reduced motion
+- Header: 72px squircle icon (reuses `CUSTOM_ICON_IDS`/Lucide/fallback-letter from AppIcon), app name + badge dot, "Open" pill CTA with `ExternalLink` icon
+- Description: `longDescription ?? description`
+- Screenshots carousel: conditional horizontal snap scroll with `snap-x snap-mandatory`
+- Testimonials: conditional stacked quote cards (`bg-gray-50 rounded-lg`)
+- Accessibility: `role="dialog"`, `aria-modal="true"`, focus trap (Tab wraps), Escape to close, auto-focus CTA on mount
+- Icon rendering logic duplicated from AppIcon (same `CUSTOM_ICON_IDS` set, `getIcon()`, `badgeColorMap` with hex values instead of Tailwind classes)
+- Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
