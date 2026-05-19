@@ -26,8 +26,8 @@ describe("IconGrid", () => {
       makeProduct({ id: `p-${i}`, name: `App ${i}` })
     );
     render(<IconGrid products={products} />);
-    const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(24);
+    const gridcells = screen.getAllByRole("gridcell");
+    expect(gridcells).toHaveLength(24);
   });
 
   it("displays each product name", () => {
@@ -40,7 +40,7 @@ describe("IconGrid", () => {
     expect(screen.getByText("Bravo")).toBeInTheDocument();
   });
 
-  it("links open in new tab with correct href", () => {
+  it("renders buttons instead of links", () => {
     const { container } = render(
       <IconGrid
         products={[
@@ -48,9 +48,9 @@ describe("IconGrid", () => {
         ]}
       />
     );
-    const link = container.querySelector("a")!;
-    expect(link).toHaveAttribute("target", "_blank");
-    expect(link).toHaveAttribute("href", "https://alpha.example.com");
+    const button = container.querySelector("button")!;
+    expect(button).toHaveAttribute("type", "button");
+    expect(container.querySelector("a")).toBeNull();
   });
 
   it("applies truncate class to name span", () => {

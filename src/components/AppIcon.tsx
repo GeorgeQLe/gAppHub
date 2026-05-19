@@ -10,6 +10,7 @@ interface AppIconProps {
   product: Product;
   hideBadge?: boolean;
   tabIndex?: number;
+  onSelect?: (product: Product) => void;
 }
 
 const badgeColorMap: Record<string, string> = {
@@ -44,8 +45,8 @@ function getIcon(name: string): LucideIcon | null {
   return (icons as unknown as Record<string, LucideIcon>)[pascalName] ?? null;
 }
 
-const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
-  { product, hideBadge, tabIndex },
+const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
+  { product, hideBadge, tabIndex, onSelect },
   ref,
 ) {
   const deprecated = product.badge === null;
@@ -55,7 +56,7 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = `tooltip-${product.name.replace(/\s+/g, "-").toLowerCase()}`;
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseEnter = (event: React.MouseEvent<HTMLButtonElement>) => {
     const rect = iconRef.current?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect();
     const placement = rect.top < 80 ? "bottom" : "top";
     setTooltipPosition({
@@ -82,11 +83,10 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
 
   return (
     <div role="gridcell">
-      <a
+      <button
         ref={ref}
-        href={product.url}
-        target="_blank"
-        rel="noopener noreferrer"
+        type="button"
+        onClick={() => onSelect?.(product)}
         aria-label={compositeLabel}
         aria-describedby={showTooltip ? tooltipId : undefined}
         tabIndex={tabIndex}
@@ -135,7 +135,7 @@ const AppIcon = forwardRef<HTMLAnchorElement, AppIconProps>(function AppIcon(
         >
           {product.name}
         </span>
-      </a>
+      </button>
       {showTooltip && product.description && tooltipPosition && (
         <AppIconTooltip
           id={tooltipId}

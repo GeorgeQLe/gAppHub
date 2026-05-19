@@ -10,7 +10,7 @@ interface DockProps {
 
 export default function Dock({ products }: DockProps) {
   const [focusedIndex, setFocusedIndex] = useState(0);
-  const iconRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const iconRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const userInteracted = useRef(false);
 
   useEffect(() => {

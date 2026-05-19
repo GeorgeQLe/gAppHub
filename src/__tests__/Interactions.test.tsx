@@ -80,7 +80,7 @@ describe("AppIcon interaction classes", () => {
     const { container } = render(
       <AppIcon product={makeProduct()} />
     );
-    const link = container.querySelector("a")!;
+    const link = container.querySelector("button")!;
     expect(link.className).toContain("focus-visible:outline");
     expect(link.className).toContain("focus-visible:outline-2");
     expect(link.className).toContain("focus-visible:outline-blue-500");
@@ -90,7 +90,7 @@ describe("AppIcon interaction classes", () => {
     const { container } = render(
       <AppIcon product={makeProduct()} />
     );
-    const link = container.querySelector("a")!;
+    const link = container.querySelector("button")!;
     expect(link.className).toContain("hover:scale-105");
     expect(link.className).toContain("active:scale-[0.92]");
   });
@@ -112,7 +112,7 @@ describe("AppIcon tooltip", () => {
         product={makeProduct({ description: "My cool app" })}
       />
     );
-    const link = container.querySelector("a")!;
+    const link = container.querySelector("button")!;
 
     fireEvent.mouseEnter(link);
     expect(screen.queryByRole("tooltip")).toBeNull();
@@ -133,7 +133,7 @@ describe("AppIcon tooltip", () => {
         product={makeProduct({ description: "My cool app" })}
       />
     );
-    const link = container.querySelector("a")!;
+    const link = container.querySelector("button")!;
     const iconWrapper = link.querySelector("div.relative")!;
 
     vi.spyOn(link, "getBoundingClientRect").mockReturnValue({
@@ -173,7 +173,7 @@ describe("AppIcon tooltip", () => {
         product={makeProduct({ description: "My cool app" })}
       />
     );
-    const link = container.querySelector("a")!;
+    const link = container.querySelector("button")!;
 
     fireEvent.mouseEnter(link);
     act(() => {

@@ -35,8 +35,8 @@ describe("Dock", () => {
 
   it("renders 4 dock icons", () => {
     render(<Dock products={dockProducts} />);
-    const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(4);
+    const buttons = screen.getAllByRole("button");
+    expect(buttons).toHaveLength(4);
   });
 
   it("has frosted glass classes", () => {

@@ -49,18 +49,18 @@ describe("IconGrid accessibility", () => {
 });
 
 describe("AppIcon accessibility", () => {
-  it("has composite aria-label on the link", () => {
+  it("has composite aria-label on the button", () => {
     render(<AppIcon product={makeProduct({ name: "Alpha", badge: "L" })} />);
-    const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("aria-label", "Alpha, Live");
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-label", "Alpha, Live");
   });
 
   it("labels deprecated products correctly", () => {
     render(
       <AppIcon product={makeProduct({ name: "Legacy", badge: null })} />,
     );
-    const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("aria-label", "Legacy, Deprecated");
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-label", "Legacy, Deprecated");
   });
 
   it("has aria-hidden on the badge", () => {

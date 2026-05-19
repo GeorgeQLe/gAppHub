@@ -33,7 +33,7 @@ export default function IconGrid({ products }: IconGridProps) {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const touchRef = useRef<{ startX: number; startY: number } | null>(null);
-  const iconRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const iconRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const userInteracted = useRef(false);
   const swipe = usePhoneSwipe();
 
