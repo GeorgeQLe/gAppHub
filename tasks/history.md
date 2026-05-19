@@ -780,3 +780,12 @@
   - `npm run build`: succeeds, static generation for `/` and `/_not-found`
 - All Phase 7 milestone acceptance criteria met — phase complete
 - **All 7 phases complete**
+
+## 2026-05-19 — Fix: Dynamic Island text animation flicker on mobile
+
+- Root cause: `AnimatePresence mode="wait"` serializes exit→remove→mount→enter, leaving a gap where the old GPU-cached layer lingers as a ghost frame on mobile browsers. Combined with no GPU layer promotion and `scale: 0.98` keeping old text nearly full-size at low opacity.
+- Fix in `src/components/DynamicIsland.tsx`:
+  - Switched `mode="wait"` → `mode="popLayout"` — exiting element pulled out of flow immediately, new element mounts in same frame
+  - Added `style={{ willChange: "transform, opacity" }}` — pre-promotes element to GPU layer on mobile
+  - Removed `scale` from initial/animate/exit, shortened exit duration to 0.25s via inline transition
+- Verified: 111/111 tests pass, lint clean (0 errors, 3 pre-existing warnings)

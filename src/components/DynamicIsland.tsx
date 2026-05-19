@@ -13,14 +13,15 @@ export default function DynamicIsland({ label }: DynamicIslandProps) {
       aria-live={label ? "polite" : undefined}
       aria-label={label}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         {label && (
           <motion.span
             key={label}
             className="px-4 text-center text-[11px] font-semibold leading-none text-white"
-            initial={{ opacity: 0, y: 4, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.98 }}
+            style={{ willChange: "transform, opacity" }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4, transition: { duration: 0.25 } }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
           >
             {label}
