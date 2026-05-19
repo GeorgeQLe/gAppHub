@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import Dock from "@/components/Dock";
 import { splitDockProducts } from "@/lib/products";
@@ -44,6 +44,17 @@ describe("Dock", () => {
     const dock = container.firstElementChild!;
     expect(dock.className).toContain("backdrop-blur-[20px]");
     expect(dock.className).toContain("bg-white/[0.72]");
+  });
+
+  it("calls onIconSelect when a dock icon is clicked", () => {
+    const onIconSelect = vi.fn();
+    render(<Dock products={dockProducts} onIconSelect={onIconSelect} />);
+
+    const buttons = screen.getAllByRole("button");
+    fireEvent.click(buttons[0]);
+
+    expect(onIconSelect).toHaveBeenCalledTimes(1);
+    expect(onIconSelect).toHaveBeenCalledWith(dockProducts[0]);
   });
 
   it("hides badges on dock icons", () => {

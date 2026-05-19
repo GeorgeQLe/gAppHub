@@ -188,6 +188,20 @@ describe("AppIcon tooltip", () => {
   });
 });
 
+describe("AppIcon onSelect callback", () => {
+  it("calls onSelect with the product when clicked", () => {
+    const product = makeProduct({ name: "Click Me" });
+    const onSelect = vi.fn();
+    render(<AppIcon product={product} onSelect={onSelect} />);
+
+    const button = screen.getByRole("button", { name: /click me/i });
+    fireEvent.click(button);
+
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith(product);
+  });
+});
+
 describe("AppIcon deprecated styling", () => {
   it("applies grayscale and opacity to deprecated product icon", () => {
     const { container } = render(
