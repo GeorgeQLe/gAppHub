@@ -210,12 +210,46 @@
   **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 7.5: Polish, reduced motion, and edge cases
-  - Files: modify `src/components/AppStoreDrawer.tsx`, modify `src/components/AppIcon.tsx`
-  - **Reduced motion:** Use `useReducedMotion()` hook in `AppStoreDrawer`. When true, replace spring slide-up with instant opacity fade (≤200ms). Disable drag-to-dismiss gesture (rely on Escape/tap-backdrop).
-  - **Deprecated apps:** Drawer still opens for deprecated products. Apply `grayscale opacity-50` to the large icon in the drawer header. "Open" CTA still functional.
-  - **Swipe conflict prevention:** The drawer's `drag="y"` only activates on the sheet itself (not the backdrop). When the drawer is open, IconGrid's pagination swipe handlers should be suppressed — check if `selectedProduct` is non-null in the touch handlers.
-  - **Scroll behavior:** Drawer content area uses `overflow-y-auto`. When content is short (no screenshots/testimonials), the sheet should not scroll. The header row with "Open" CTA is sticky at top (`sticky top-0 bg-white z-10`).
-  - **Search overlay interaction:** If search is open, icon clicks in search results should also open the drawer. Ensure `onSelect` is passed to AppIcons rendered in the search results list in `IconGrid`.
+  - Files: modify `src/components/PageContent.tsx`, modify `src/components/IconGrid.tsx`
+
+  **Implementation Plan (self-contained for clear-context execution):**
+
+  Most polish items from the original plan are already implemented in `AppStoreDrawer.tsx`:
+  - ✅ Reduced motion: already uses `useReducedMotion()`, switches to opacity fade, disables drag
+  - ✅ Deprecated apps: grayscale + opacity-50 already applied to 72px icon
+  - ✅ Scroll behavior: `overflow-y-auto` + `sticky top-0` header already present
+  - ✅ Search overlay: `onSelect` already passed to search result AppIcons (done in Step 7.4)
+
+  **Remaining work — Swipe conflict prevention:**
+
+  When the drawer is open, IconGrid's touch swipe handlers and PhoneSwipeProvider's swipe should be suppressed to prevent page changes while interacting with the drawer.
+
+  - **Step A: Pass `drawerOpen` to IconGrid (`src/components/PageContent.tsx`)**
+    - Add `drawerOpen={selectedProduct !== null}` prop to all `<IconGrid>` instances (boot, slide, assemble, none variants)
+    - Thread through BootPhoneContent, SlidePhoneContent, AssemblePhoneContent sub-components
+
+  - **Step B: Suppress swipe in IconGrid when drawer is open (`src/components/IconGrid.tsx`)**
+    - Add `drawerOpen?: boolean` to `IconGridProps`
+    - In `handleTouchEnd`, add early return at the top: `if (drawerOpen) return;`
+    - In the `swipe?.registerSwipe` callback, add: `if (drawerOpen) return;` before calling `goTo`
+    - Store `drawerOpen` in a ref (like `showSearchRef`) for access in the swipe callback
+
+  **Key patterns from existing code:**
+  - `IconGrid.tsx` already has `showSearchRef` pattern for accessing state in the registered swipe callback
+  - `PhoneSwipeProvider` registers frame-level swipe — the callback check is the right place to suppress
+
+  ### Execution Profile
+  - **Parallel mode:** serial
+  - **Conflict risk:** low (small additions to existing touch handlers)
+  - **Test strategy:** tests-after (Step 7.6)
+
+  **Acceptance criteria for this step:**
+  - Swiping on the phone screen while the drawer is open does not change the icon grid page
+  - All existing behaviors preserved when drawer is closed
+  - `npx tsc --noEmit` passes
+  - `npm test` passes (89 tests, no regressions)
+
+  **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 ### Green
 - [ ] Step 7.6: Write regression tests covering acceptance criteria
