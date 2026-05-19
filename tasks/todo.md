@@ -163,7 +163,7 @@
 
   **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
-- [ ] Step 7.4: Wire drawer state into PageContent, IconGrid, and Dock
+- [x] Step 7.4: Wire drawer state into PageContent, IconGrid, and Dock
   - Files: modify `src/components/PageContent.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/Dock.tsx`
 
   **Implementation Plan (self-contained for clear-context execution):**

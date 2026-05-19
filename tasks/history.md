@@ -734,3 +734,13 @@
 - Updated 4 test files: `IconGrid.test.tsx` (link→gridcell/button assertions), `Dock.test.tsx` (link→button), `Accessibility.test.tsx` (link→button), `Interactions.test.tsx` (`querySelector("a")`→`querySelector("button")`)
 - No changes to Search.test.tsx or Pagination.test.tsx (no link references)
 - Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
+
+## 2026-05-19 — Phase 7, Step 7.4: Wire drawer state into PageContent, IconGrid, and Dock
+
+- Added `selectedProduct` state and `triggerRef` for focus restoration in `PageContent.tsx`
+- Created `handleIconSelect` and `handleDrawerClose` callbacks with `useCallback`
+- Rendered `<AppStoreDrawer>` inside PhoneFrame after all variant content
+- Threaded `onIconSelect` prop through all animation sub-components (BootPhoneContent, SlidePhoneContent, AssemblePhoneContent) and the `variant="none"` branch
+- Added `onIconSelect` prop to `IconGrid` — passed to all `<AppIcon>` instances (paginated grid + search results)
+- Added `onIconSelect` prop to `Dock` — passed to all `<AppIcon>` instances
+- Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
