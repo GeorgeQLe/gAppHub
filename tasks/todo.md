@@ -254,27 +254,56 @@
 ### Green
 - [ ] Step 7.6: Write regression tests covering acceptance criteria
   - Files: create `src/__tests__/AppStoreDrawer.test.tsx`, modify `src/__tests__/Interactions.test.tsx`, modify `src/__tests__/Dock.test.tsx`
-  - **New tests (`AppStoreDrawer.test.tsx`):**
-    - Test: AppStoreDrawer renders product name, description, and "Open" button when product is provided
-    - Test: AppStoreDrawer is not rendered when product is null
-    - Test: "Open" CTA has correct `href` and `target="_blank"`
-    - Test: "Open" CTA has `aria-label` with product name
-    - Test: Drawer has `role="dialog"` and `aria-modal="true"`
-    - Test: Pressing Escape calls `onClose`
-    - Test: Clicking backdrop calls `onClose`
-    - Test: Screenshots section hidden when `product.screenshots` is absent/empty
-    - Test: Screenshots section visible when `product.screenshots` has entries
-    - Test: Testimonials section hidden when `product.testimonials` is absent/empty
-    - Test: Testimonials section visible when `product.testimonials` has entries
-    - Test: Large icon renders at 72px for standard Lucide icons
-    - Test: Large icon renders custom PNG for `CUSTOM_ICON_IDS`
-    - Test: Badge dot renders with correct color class next to product name
-    - Test: Deprecated product shows grayscale icon in drawer
-  - **Updated tests (`Interactions.test.tsx`):**
-    - Update AppIcon tests: expect `<button>` instead of `<a>`, remove `href`/`target` assertions
-    - Add test: clicking AppIcon calls `onSelect` with the product
-  - **Updated tests (`Dock.test.tsx`):**
-    - Update Dock tests: expect `<button>` elements instead of `<a>` for dock icons
+
+  **Implementation Plan (self-contained for clear-context execution):**
+
+  Write regression tests for Phase 7 (App Store Drawer). Read `src/components/AppStoreDrawer.tsx` to understand the component structure and rendering logic. Read existing test files for test patterns used in this project (helper `makeProduct()`, `cleanup()` in `beforeEach`, `vi.useFakeTimers()`, jsdom mocking conventions).
+
+  - **Step A: Create `src/__tests__/AppStoreDrawer.test.tsx`** with these tests:
+    - AppStoreDrawer renders product name, description, and "Open" button when product is provided
+    - AppStoreDrawer renders nothing when product is null
+    - "Open" CTA has correct `href` and `target="_blank"` and `rel="noopener noreferrer"`
+    - "Open" CTA has `aria-label` with product name (e.g. "Open TestApp in new tab")
+    - Drawer has `role="dialog"` and `aria-modal="true"`
+    - Pressing Escape calls `onClose`
+    - Clicking backdrop calls `onClose`
+    - Screenshots section hidden when `product.screenshots` is absent/empty
+    - Screenshots section visible when `product.screenshots` has entries
+    - Testimonials section hidden when `product.testimonials` is absent/empty
+    - Testimonials section visible when `product.testimonials` has entries
+    - Large icon renders at 72px for standard Lucide icons
+    - Large icon renders custom PNG for `CUSTOM_ICON_IDS` (e.g. "war-room")
+    - Badge dot renders with correct color next to product name
+    - Deprecated product (badge null) shows grayscale + opacity on icon
+
+  - **Step B: Update `src/__tests__/Interactions.test.tsx`:**
+    - Add test: clicking AppIcon `<button>` calls `onSelect` with the product object
+    - Existing tests already query `<button>` (updated in Step 7.3) — verify no stale `<a>` queries remain
+
+  - **Step C: Update `src/__tests__/Dock.test.tsx`:**
+    - Existing tests already query `<button>` (updated in Step 7.3) — verify no stale `<a>` queries remain
+    - Add test: clicking dock icon button calls `onSelect` with the product
+
+  **Key patterns from existing tests:**
+  - `makeProduct(overrides)` helper in test files for generating test `Product` data
+  - `cleanup()` in `beforeEach` to prevent DOM leaking
+  - `screen.getByRole("dialog")` for dialog assertions
+  - `fireEvent.keyDown(el, { key: "Escape" })` for keyboard tests
+  - `vi.fn()` for mock callbacks
+  - Framer Motion in jsdom: `AnimatePresence` and `motion.div` generally render their children immediately; no timer advancement needed for static assertions
+  - `CUSTOM_ICON_IDS` in AppStoreDrawer includes "war-room" — use this for custom icon test
+
+  ### Execution Profile
+  - **Parallel mode:** serial
+  - **Conflict risk:** low (new test file + small additions to existing tests)
+  - **Test strategy:** tests-after (this IS the test step)
+
+  **Acceptance criteria for this step:**
+  - All new tests pass alongside existing 89 tests
+  - `npx tsc --noEmit` passes
+  - No regressions in existing tests
+
+  **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 7.7: Run all tests, verify they pass, `npx tsc --noEmit` succeeds, `npm run lint` has only pre-existing warnings, `next build` succeeds
 
