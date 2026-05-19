@@ -1,8 +1,12 @@
 # GappHub — Current Phase
 
 > Project: GappHub (Lexcorp product portfolio launcher)
-> Phases 1–6 complete (2026-05-15). Phase 7 in progress.
+> All 7 phases complete (2026-05-19).
 > Total Phases: 7
+
+## Priority Task Queue
+
+- [ ] `/research-roadmap` - scan documentation health because all 7 implementation phases are complete and no documentation scan has been run yet.
 
 ## Phase 7: App Store Drawer
 
