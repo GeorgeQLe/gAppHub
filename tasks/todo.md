@@ -58,6 +58,11 @@
 
 - [ ] Step 7.2: Build the `AppStoreDrawer` component
   - Files: create `src/components/AppStoreDrawer.tsx`
+
+  **Implementation Plan (self-contained for clear-context execution):**
+
+  Create `src/components/AppStoreDrawer.tsx` as a `"use client"` component. Read `src/components/AppIcon.tsx` first to understand the icon rendering logic (`CUSTOM_ICON_IDS`, Lucide fallback, `badgeColorMap`) that needs to be reused in the drawer header.
+
   - **Props:** `product: Product | null` (null = closed), `onClose: () => void`
   - **Animation:** Framer Motion `AnimatePresence` + `motion.div` with `y: "100%"` → `y: "20%"` (occupies bottom 80% of phone screen). Spring easing, ~300ms. When `prefers-reduced-motion`, collapse to opacity fade via `useReducedMotion` hook.
   - **Backdrop:** Semi-transparent `bg-black/40` overlay, click handler calls `onClose`. `z-30` to sit above grid/dock but below any portaled tooltips.
@@ -75,6 +80,28 @@
     - `aria-label="{product.name} details"` on the sheet
     - Focus trap: on mount, focus the "Open" CTA button. On `keydown`, trap Tab within the sheet (wrap from last focusable to first and vice versa). On Escape, call `onClose`.
     - When sheet closes, restore focus to the triggering element (passed via ref or callback).
+
+  **Key patterns from existing code:**
+  - `src/components/SearchOverlay.tsx` is prior art for overlay patterns within the phone frame (backdrop, dismiss, animation)
+  - `src/hooks/useReducedMotion.ts` uses `useSyncExternalStore` — import and use it for reduced motion check
+  - `badgeColorMap` in `AppIcon.tsx` maps badge letters to hex colors — reuse for badge dot
+  - `CUSTOM_ICON_IDS` in `AppIcon.tsx` determines which products use custom PNG icons vs Lucide icons
+  - Framer Motion is already installed and used extensively in `PageContent.tsx`
+
+  **Acceptance criteria for this step:**
+  - Component renders product name, description, icon, badge dot, and "Open" CTA when product is non-null
+  - Component renders nothing when product is null
+  - "Open" CTA links to product URL with `target="_blank"` and `rel="noopener noreferrer"`
+  - Drawer has `role="dialog"` and `aria-modal="true"`
+  - Escape key calls `onClose`
+  - Backdrop click calls `onClose`
+  - Drag-down dismisses the drawer (Framer Motion `drag="y"`)
+  - Screenshots carousel renders conditionally
+  - Testimonials render conditionally
+  - Focus trap is implemented (Tab wraps within drawer)
+  - `npx tsc --noEmit` passes, `npm test` passes
+
+  **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 7.3: Convert AppIcon from link to button and add `onSelect` callback
   - Files: modify `src/components/AppIcon.tsx`
