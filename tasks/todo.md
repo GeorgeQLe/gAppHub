@@ -47,7 +47,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 7.1: Expand `Product` type with optional drawer fields
+- [x] Step 7.1: Expand `Product` type with optional drawer fields
   - Files: modify `src/types/product.ts`
   - Add optional fields to the `Product` interface:
     - `screenshots?: string[]` — URLs or paths to screenshot images

@@ -700,3 +700,12 @@
 - `IconGrid.tsx`: extracted `GRID_PAGE_CLASSES` constant, changed grid padding from `pt-[44px] pb-[52px]` to `pt-[52px] pb-[120px]`, moved page dots from `bottom-[72px]` to `bottom-[100px]` (absolute positioned above dock)
 - `useAvailableRows.ts`: updated constants to match new grid padding (PT=52, PB=120) and actual icon dimensions (ICON_HEIGHT=54, LABEL_HEIGHT=16, GAP_Y=16 for gap-y-4). Still yields 6 rows at full phone height.
 - Verified: 89/89 tests pass, typecheck clean, lint has only pre-existing `<img>` warning
+
+## 2026-05-18 — Phase 7, Step 7.1: Expand Product type with optional drawer fields
+
+- Added three optional fields to `Product` interface in `src/types/product.ts`:
+  - `screenshots?: string[]` — image URLs for screenshot carousel
+  - `testimonials?: { text: string; author: string }[]` — user quotes
+  - `longDescription?: string` — extended description for drawer body
+- No changes to `products.json` or data loading — fields are optional and absent by default
+- Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)

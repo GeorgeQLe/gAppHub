@@ -9,6 +9,9 @@ export interface Product {
   featured: boolean;
   dock: boolean;
   order: number;
+  screenshots?: string[];
+  testimonials?: { text: string; author: string }[];
+  longDescription?: string;
 }
 
 export interface ProductsResponse {
