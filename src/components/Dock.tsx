@@ -6,9 +6,10 @@ import AppIcon from "@/components/AppIcon";
 
 interface DockProps {
   products: Product[];
+  onIconSelect?: (product: Product) => void;
 }
 
-export default function Dock({ products }: DockProps) {
+export default function Dock({ products, onIconSelect }: DockProps) {
   const [focusedIndex, setFocusedIndex] = useState(0);
   const iconRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const userInteracted = useRef(false);
@@ -58,6 +59,7 @@ export default function Dock({ products }: DockProps) {
           hideBadge
           key={p.id}
           tabIndex={i === focusedIndex ? 0 : -1}
+          onSelect={onIconSelect}
           ref={(el) => {
             iconRefs.current[i] = el;
           }}

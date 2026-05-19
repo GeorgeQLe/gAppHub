@@ -21,9 +21,10 @@ const BADGE_LABELS: Record<string, string> = {
 
 interface IconGridProps {
   products: Product[];
+  onIconSelect?: (product: Product) => void;
 }
 
-export default function IconGrid({ products }: IconGridProps) {
+export default function IconGrid({ products, onIconSelect }: IconGridProps) {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const iconsPerPage = useAvailableRows(gridContainerRef);
   const pages = chunk(products, iconsPerPage);
@@ -197,7 +198,7 @@ export default function IconGrid({ products }: IconGridProps) {
         filtered.length > 0 ? (
           <div className={GRID_PAGE_CLASSES}>
             {filtered.map((p) => (
-              <AppIcon product={p} key={p.id} />
+              <AppIcon product={p} key={p.id} onSelect={onIconSelect} />
             ))}
           </div>
         ) : (
@@ -222,12 +223,13 @@ export default function IconGrid({ products }: IconGridProps) {
                       product={p}
                       key={p.id}
                       tabIndex={j === focusedIndex ? 0 : -1}
+                      onSelect={onIconSelect}
                       ref={(el) => {
                         iconRefs.current[j] = el;
                       }}
                     />
                   ) : (
-                    <AppIcon product={p} key={p.id} tabIndex={-1} />
+                    <AppIcon product={p} key={p.id} tabIndex={-1} onSelect={onIconSelect} />
                   ),
                 )}
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { PhoneSwipeProvider } from "@/contexts/PhoneSwipeContext";
@@ -11,6 +11,7 @@ import HomeIndicator from "@/components/HomeIndicator";
 import IconGrid from "@/components/IconGrid";
 import PhoneFrame from "@/components/PhoneFrame";
 import StatusBar from "@/components/StatusBar";
+import AppStoreDrawer from "@/components/AppStoreDrawer";
 import type { Product } from "@/types/product";
 
 type Variant = "none" | "boot" | "slide" | "assemble";
@@ -39,6 +40,20 @@ export default function PageContent({
   variant,
 }: PageContentProps) {
   const reducedMotion = useReducedMotion();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleIconSelect = useCallback((product: Product) => {
+    triggerRef.current = document.activeElement as HTMLButtonElement;
+    setSelectedProduct(product);
+  }, []);
+
+  const handleDrawerClose = useCallback(() => {
+    setSelectedProduct(null);
+    triggerRef.current?.focus();
+    triggerRef.current = null;
+  }, []);
+
   const [bootPhase, setBootPhase] = useState<BootPhase>(
     variant === "boot" ? 1 : 5,
   );
@@ -125,28 +140,32 @@ export default function PageContent({
                 islandLabel={bootIslandMessage}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
+                onIconSelect={handleIconSelect}
               />
             ) : isSlide ? (
               <SlidePhoneContent
                 phase={slidePhase}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
+                onIconSelect={handleIconSelect}
               />
             ) : isAssemble ? (
               <AssemblePhoneContent
                 phase={assemblePhase}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
+                onIconSelect={handleIconSelect}
               />
             ) : (
               <>
                 <StatusBar />
                 <DynamicIsland />
-                <IconGrid products={gridProducts} />
-                <Dock products={dockProducts} />
+                <IconGrid products={gridProducts} onIconSelect={handleIconSelect} />
+                <Dock products={dockProducts} onIconSelect={handleIconSelect} />
                 <HomeIndicator />
               </>
             )}
+            <AppStoreDrawer product={selectedProduct} onClose={handleDrawerClose} />
           </PhoneFrame>
           </PhoneSwipeProvider>
         </div>
@@ -189,11 +208,13 @@ function BootPhoneContent({
   islandLabel,
   gridProducts,
   dockProducts,
+  onIconSelect,
 }: {
   phase: BootPhase;
   islandLabel?: string;
   gridProducts: Product[];
   dockProducts: Product[];
+  onIconSelect?: (product: Product) => void;
 }) {
   return (
     <>
@@ -255,7 +276,7 @@ function BootPhoneContent({
         animate={{ opacity: phase >= 4 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <IconGrid products={gridProducts} />
+        <IconGrid products={gridProducts} onIconSelect={onIconSelect} />
       </motion.div>
 
       {/* Phase 5+: Dock slides up */}
@@ -272,7 +293,7 @@ function BootPhoneContent({
           mass: 0.8,
         }}
       >
-        <Dock products={dockProducts} />
+        <Dock products={dockProducts} onIconSelect={onIconSelect} />
       </motion.div>
 
       <HomeIndicator />
@@ -284,10 +305,12 @@ function SlidePhoneContent({
   phase,
   gridProducts,
   dockProducts,
+  onIconSelect,
 }: {
   phase: SlidePhase;
   gridProducts: Product[];
   dockProducts: Product[];
+  onIconSelect?: (product: Product) => void;
 }) {
   return (
     <motion.div
@@ -318,7 +341,7 @@ function SlidePhoneContent({
         }}
         transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
       >
-        <IconGrid products={gridProducts} />
+        <IconGrid products={gridProducts} onIconSelect={onIconSelect} />
       </motion.div>
 
       <motion.div
@@ -326,7 +349,7 @@ function SlidePhoneContent({
         animate={{ opacity: phase >= 3 ? 1 : 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <Dock products={dockProducts} />
+        <Dock products={dockProducts} onIconSelect={onIconSelect} />
       </motion.div>
 
       <HomeIndicator />
@@ -338,10 +361,12 @@ function AssemblePhoneContent({
   phase,
   gridProducts,
   dockProducts,
+  onIconSelect,
 }: {
   phase: AssemblePhase;
   gridProducts: Product[];
   dockProducts: Product[];
+  onIconSelect?: (product: Product) => void;
 }) {
   return (
     <>
@@ -453,7 +478,7 @@ function AssemblePhoneContent({
           mass: 0.7,
         }}
       >
-        <IconGrid products={gridProducts} />
+        <IconGrid products={gridProducts} onIconSelect={onIconSelect} />
       </motion.div>
 
       {/* Phase 6: Dock slides up with spring */}
@@ -470,7 +495,7 @@ function AssemblePhoneContent({
           mass: 0.8,
         }}
       >
-        <Dock products={dockProducts} />
+        <Dock products={dockProducts} onIconSelect={onIconSelect} />
       </motion.div>
 
       <HomeIndicator />
