@@ -29,7 +29,7 @@ The realistic iPhone frame with a smooth loading animation turns a utilitarian l
 - **Vercel hosting.** Deployed as a static or edge-rendered site on Vercel.
 - **Fully responsive.** The phone frame and icon grid must adapt gracefully from large desktop screens down to mobile viewports.
 - **Dynamic + static fallback.** Fetch product data at runtime; fall back to a committed `products.json` if the fetch fails.
-- **External links only.** Each icon opens the product's live website; there is no in-app content beyond the hub itself.
+- **App store drawer for link-out.** Each icon opens a bottom-sheet detail drawer (icon, title, description, screenshots, testimonials) with an explicit "Open" CTA that navigates to the external product URL. This replaced the original "external links only" constraint (2026-05-18).
 
 ## Non-Goals
 
@@ -37,7 +37,7 @@ The realistic iPhone frame with a smooth loading animation turns a utilitarian l
 - No user accounts, authentication, or personalization.
 - No analytics dashboards, admin panels, or e-commerce.
 - No in-app product detail pages — icons link out.
-- No app store or marketplace features.
+- No app store marketplace features (ratings, reviews, install counts). In-app detail drawers are now included (2026-05-18).
 
 ## Design Direction
 

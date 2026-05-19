@@ -398,6 +398,68 @@ When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped an
 
 ---
 
+## App Store Drawer (Bottom Sheet)
+
+> Added: 2026-05-18. Overrides previous non-goal "No in-app product detail pages."
+
+### Trigger
+
+Tapping any app icon (grid or dock) opens a bottom-sheet drawer instead of navigating directly to the external URL. This replaces the current `<a href target="_blank">` behavior.
+
+### Layout
+
+- **Style:** iOS-style bottom sheet, slides up from the bottom of the phone screen area
+- **Height:** ~80% of the phone screen area
+- **Backdrop:** Semi-transparent dark overlay behind the sheet (tap to dismiss)
+- **Dismiss:** Swipe down, tap backdrop, or press Escape
+- **Animation:** Framer Motion slide-up with spring easing, ~300ms
+
+### Content (top to bottom)
+
+1. **Header row (sticky):**
+   - App icon (large, ~72px, same squircle shape as grid icons)
+   - App name (bold, ~16px) with badge dot inline (same colored dot as grid badges)
+   - "Open" CTA button (right-aligned, pill-shaped, filled blue/primary color, with external-link icon). Opens `product.url` in a new tab.
+2. **Description:** Product description text (~14px, regular weight, muted color). Uses existing `description` field; falls back to `longDescription` when available.
+3. **Screenshots carousel (conditional):** Horizontal scrollable row of screenshot images. Hidden entirely when `product.screenshots` is empty or absent.
+4. **Testimonials (conditional):** Vertically stacked quote cards. Hidden entirely when `product.testimonials` is empty or absent.
+
+### Data Model Changes
+
+New optional fields on `Product`:
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `screenshots` | `string[]` | No | URLs or paths to screenshot images |
+| `testimonials` | `{ text: string; author: string }[]` | No | User testimonials |
+| `longDescription` | `string` | No | Extended description for the drawer |
+
+When `screenshots` and `testimonials` are absent, the drawer shows only the header + description + CTA. This is the expected initial state for most products.
+
+### Accessibility
+
+- Drawer has `role="dialog"` with `aria-modal="true"` and `aria-label="{product name} details"`
+- Focus is trapped within the drawer while open
+- Escape key closes the drawer and returns focus to the icon that opened it
+- "Open" button has `aria-label="Open {product name} in new tab"`
+- Icons change from `<a>` to `<button>` (or `<a role="button">`) since they no longer navigate directly
+
+### Keyboard Interaction
+
+| Key | Action |
+|---|---|
+| Enter/Space on icon | Opens drawer |
+| Escape | Closes drawer |
+| Tab | Cycles through drawer content (CTA button, screenshots, etc.) |
+| Enter on "Open" CTA | Opens external URL in new tab |
+
+### Responsive Behavior
+
+- **Desktop/Tablet:** Bottom sheet at ~80% of phone screen height, max content width matches phone screen
+- **Mobile (simplified frame):** Same bottom sheet pattern, occupies ~80% of the visible phone area
+
+---
+
 ## Open Questions
 
 1. Which 3 apps fill the remaining dock slots alongside War Room?
@@ -410,7 +472,6 @@ When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped an
 
 - No dark mode
 - No user accounts or auth
-- No in-app product detail pages
-- No app store features (ratings, reviews, install counts)
+- No app store marketplace features (ratings, reviews, install counts)
 - No real push notifications or OS integration
 - No native mobile app wrapper

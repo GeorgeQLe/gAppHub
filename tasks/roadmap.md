@@ -1,8 +1,8 @@
 # Roadmap: GappHub
 
 > Generated from: specs/ui-gapphub.md, research/concept-brief.md
-> Date: 2026-05-14
-> Total Phases: 6
+> Date: 2026-05-14 (Phase 7 added 2026-05-18)
+> Total Phases: 7
 
 ## Summary
 
@@ -18,6 +18,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 | 4 | Dock, Pagination & Search | ui-gapphub.md §Dock, §Pagination, §Pull-Down Search | Frosted glass dock with 4 pinned apps, swipe pagination with dots, Spotlight-style search | L |
 | 5 | Loading Animations | ui-gapphub.md §Loading Animation | Primary boot screen entrance animation on `/` | M |
 | 6 | Responsive, Accessibility & Polish | ui-gapphub.md §Responsive, §Accessibility, §Visual Style | Mobile/tablet/desktop adaptation, keyboard nav, screen reader support, reduced motion, final visual polish | M |
+| 7 | App Store Drawer | ui-gapphub.md §App Store Drawer, concept-brief.md | Bottom-sheet detail drawer on icon tap with "Open" CTA, screenshots, testimonials, data model expansion | M |
 
 ---
 
@@ -511,6 +512,106 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 - Deviations from plan: none
 - Tech debt / follow-ups: `<img>` lint warning in AppIcon (intentional, local product icon PNGs do not need `next/image`)
 - Ready for next phase: all phases complete — project at deferred/future work stage
+
+---
+
+## Phase 7: App Store Drawer
+
+**Goal**: Replace direct external link-out on icon tap with a bottom-sheet drawer that shows app details (icon, title, badge, description, optional screenshots, optional testimonials) and an explicit "Open" CTA that navigates to the product URL. This sets user expectations before navigating away from GappHub.
+
+**Scope**:
+- Expand `Product` type with optional `screenshots`, `testimonials`, and `longDescription` fields
+- Build `AppStoreDrawer` bottom-sheet component (~80% phone screen height, Framer Motion slide-up)
+- Convert icon tap behavior: `<a href>` → opens drawer; "Open" CTA in drawer → `target="_blank"` navigation
+- Apply to both grid and dock icons
+- Backdrop overlay with tap-to-dismiss
+- Swipe-down to dismiss
+- Keyboard accessible: Escape to close, focus trap, Tab cycles through drawer content
+- ARIA: `role="dialog"`, `aria-modal="true"`, focus return to triggering icon on close
+- Screenshots: horizontal scrollable carousel (hidden when empty)
+- Testimonials: stacked quote cards (hidden when empty)
+- Header: large icon (72px) + app name with badge dot + "Open" pill button with external-link icon
+
+**Acceptance Criteria:**
+- [ ] Tapping any grid icon opens the bottom-sheet drawer instead of navigating directly
+- [ ] Tapping any dock icon opens the bottom-sheet drawer
+- [ ] Drawer displays app icon (72px), name with badge dot, and description
+- [ ] "Open" CTA button in the drawer header opens the product URL in a new tab
+- [ ] Screenshots carousel renders when `screenshots` array is populated, hidden when empty
+- [ ] Testimonials render when `testimonials` array is populated, hidden when empty
+- [ ] Swipe-down dismisses the drawer
+- [ ] Tap on backdrop dismisses the drawer
+- [ ] Escape key closes the drawer and returns focus to the triggering icon
+- [ ] Focus is trapped within the drawer while open
+- [ ] Drawer has `role="dialog"` and `aria-modal="true"`
+- [ ] Drawer animates smoothly (Framer Motion slide-up, ~300ms)
+- [ ] All existing tests pass (no regressions)
+
+**Parallelization:** serial
+
+**Coordination Notes:** Depends on all Phases 1–6. Modifies `AppIcon.tsx` click behavior (grid + dock), adds new component. `SearchOverlay.tsx` provides prior art for overlay patterns within the phone frame.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium (modifies AppIcon click behavior, touches Dock)
+**Review gates:** none
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 7.1: Expand `Product` type and `products.json` schema
+  - Files: modify `src/types/product.ts`, modify `public/data/products.json`
+  - Add optional `screenshots: string[]`, `testimonials: { text: string; author: string }[]`, `longDescription: string`
+  - No data populated yet — all fields empty/absent in JSON
+
+- Step 7.2: Build the `AppStoreDrawer` component
+  - Files: create `src/components/AppStoreDrawer.tsx`
+  - Bottom sheet with Framer Motion slide-up animation
+  - Backdrop overlay (semi-transparent dark, tap to dismiss)
+  - Content layout: header (icon + name + badge + CTA), description, screenshots carousel, testimonials
+  - Swipe-down gesture to dismiss (reuse vertical drag pattern)
+  - Focus trap and `role="dialog"` with `aria-modal="true"`
+  - Escape key handler
+
+- Step 7.3: Wire drawer into AppIcon (grid + dock)
+  - Files: modify `src/components/AppIcon.tsx`, modify `src/components/Dock.tsx`, modify `src/components/IconGrid.tsx`
+  - Change `<a href>` to `<button>` (or click handler that opens drawer instead of navigating)
+  - Pass selected product to drawer via state (lifted to IconGrid/page level or via context)
+  - Ensure keyboard interaction: Enter/Space on icon opens drawer
+
+- Step 7.4: Polish and edge cases
+  - Files: modify `src/components/AppStoreDrawer.tsx`, modify `src/components/AppIcon.tsx`
+  - Focus return to triggering icon on close
+  - Reduced motion: collapse slide animation to opacity fade
+  - Deprecated apps: still show drawer but with muted styling
+  - Verify no swipe/pagination conflicts
+
+### Green
+- Step 7.5: Write regression tests
+  - Files: create `src/__tests__/AppStoreDrawer.test.tsx`
+  - Test: clicking icon opens drawer (not external link)
+  - Test: drawer displays product name, description, and Open button
+  - Test: Escape closes drawer
+  - Test: Open button has correct href and target="_blank"
+  - Test: screenshots section hidden when product has no screenshots
+  - Test: testimonials section hidden when product has no testimonials
+  - Test: drawer has role="dialog" and aria-modal="true"
+
+- Step 7.6: Run all tests, verify they pass, build succeeds
+
+### Milestone: Phase 7 — App Store Drawer
+**Acceptance Criteria:**
+- [ ] All acceptance criteria above checked
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
+
+**On Completion:**
+- Deviations from plan:
+- Tech debt / follow-ups:
+- Ready for next phase: yes/no
 
 ---
 
