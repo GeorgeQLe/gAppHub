@@ -756,3 +756,27 @@
   - Default variant, BootPhoneContent, SlidePhoneContent, AssemblePhoneContent
 - Most Step 7.5 items were already implemented during Step 7.2 (reduced motion, deprecated styling, scroll, search overlay)
 - Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
+
+## 2026-05-19 — Phase 7, Step 7.6: Regression tests for App Store Drawer
+
+- Created `src/__tests__/AppStoreDrawer.test.tsx` with 20 tests covering:
+  - Rendering: product name/description/CTA when product provided, nothing when null, longDescription fallback
+  - CTA: correct href, target="_blank", rel="noopener noreferrer", aria-label with product name
+  - Accessibility: role="dialog", aria-modal="true", aria-label with product name, Escape calls onClose
+  - Dismiss: backdrop click calls onClose
+  - Screenshots: hidden when absent/empty, visible when populated with correct image count
+  - Testimonials: hidden when absent/empty, visible when populated with content
+  - Icon rendering: 72px Lucide icons, custom PNG for CUSTOM_ICON_IDS (war-room), badge dot with correct color, no badge dot for deprecated, grayscale+opacity for deprecated icons
+- Added 1 test to `src/__tests__/Interactions.test.tsx`: clicking AppIcon button calls onSelect with product
+- Added 1 test to `src/__tests__/Dock.test.tsx`: clicking dock icon calls onIconSelect with product
+- Verified: `npx tsc --noEmit` clean, 111/111 tests pass (89 existing + 22 new, no regressions)
+
+## 2026-05-19 — Phase 7, Step 7.7: Final verification (no-op)
+
+- Step 7.7 verification completed during Step 7.6 session:
+  - `npx tsc --noEmit`: clean
+  - `npm test`: 111/111 pass
+  - `npm run lint`: 0 errors, 3 warnings (all pre-existing `@next/next/no-img-element`)
+  - `npm run build`: succeeds, static generation for `/` and `/_not-found`
+- All Phase 7 milestone acceptance criteria met — phase complete
+- **All 7 phases complete**

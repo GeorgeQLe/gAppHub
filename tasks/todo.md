@@ -252,7 +252,7 @@
   **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 ### Green
-- [ ] Step 7.6: Write regression tests covering acceptance criteria
+- [x] Step 7.6: Write regression tests covering acceptance criteria
   - Files: create `src/__tests__/AppStoreDrawer.test.tsx`, modify `src/__tests__/Interactions.test.tsx`, modify `src/__tests__/Dock.test.tsx`
 
   **Implementation Plan (self-contained for clear-context execution):**
@@ -305,26 +305,26 @@
 
   **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
-- [ ] Step 7.7: Run all tests, verify they pass, `npx tsc --noEmit` succeeds, `npm run lint` has only pre-existing warnings, `next build` succeeds
+- [x] Step 7.7: Run all tests, verify they pass, `npx tsc --noEmit` succeeds, `npm run lint` has only pre-existing warnings, `next build` succeeds
 
 ### Milestone: Phase 7 — App Store Drawer
 **Acceptance Criteria:**
-- [ ] Tapping any grid icon opens the bottom-sheet drawer instead of navigating directly
-- [ ] Tapping any dock icon opens the bottom-sheet drawer
-- [ ] Drawer displays app icon (72px), name with badge dot, and description
-- [ ] "Open" CTA button in the drawer header opens the product URL in a new tab
-- [ ] Screenshots carousel renders when `screenshots` array is populated, hidden when empty
-- [ ] Testimonials render when `testimonials` array is populated, hidden when empty
-- [ ] Swipe-down dismisses the drawer
-- [ ] Tap on backdrop dismisses the drawer
-- [ ] Escape key closes the drawer and returns focus to the triggering icon
-- [ ] Focus is trapped within the drawer while open
-- [ ] Drawer has `role="dialog"` and `aria-modal="true"`
-- [ ] Drawer animates smoothly (Framer Motion slide-up, ~300ms)
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] Tapping any grid icon opens the bottom-sheet drawer instead of navigating directly
+- [x] Tapping any dock icon opens the bottom-sheet drawer
+- [x] Drawer displays app icon (72px), name with badge dot, and description
+- [x] "Open" CTA button in the drawer header opens the product URL in a new tab
+- [x] Screenshots carousel renders when `screenshots` array is populated, hidden when empty
+- [x] Testimonials render when `testimonials` array is populated, hidden when empty
+- [x] Swipe-down dismisses the drawer
+- [x] Tap on backdrop dismisses the drawer
+- [x] Escape key closes the drawer and returns focus to the triggering icon
+- [x] Focus is trapped within the drawer while open
+- [x] Drawer has `role="dialog"` and `aria-modal="true"`
+- [x] Drawer animates smoothly (Framer Motion slide-up, ~300ms)
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion:**
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase: yes/no
+- Deviations from plan: none — all steps implemented as specified
+- Tech debt / follow-ups: `@next/next/no-img-element` warnings on AppIcon.tsx and AppStoreDrawer.tsx (accepted, local PNGs)
+- Ready for next phase: yes
