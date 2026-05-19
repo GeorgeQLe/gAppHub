@@ -103,7 +103,7 @@
 
   **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
-- [ ] Step 7.3: Convert AppIcon from link to button and add `onSelect` callback
+- [x] Step 7.3: Convert AppIcon from link to button and add `onSelect` callback
   - Files: modify `src/components/AppIcon.tsx`
   - Change `<a href={product.url} target="_blank">` to `<button type="button" onClick={() => onSelect?.(product)}>`.
   - Add `onSelect?: (product: Product) => void` to `AppIconProps`.
@@ -165,21 +165,49 @@
 
 - [ ] Step 7.4: Wire drawer state into PageContent, IconGrid, and Dock
   - Files: modify `src/components/PageContent.tsx`, modify `src/components/IconGrid.tsx`, modify `src/components/Dock.tsx`
-  - **PageContent:**
-    - Add `selectedProduct: Product | null` state (initially null) and `triggerRef: React.RefObject<HTMLButtonElement | null>`
-    - Create `handleIconSelect(product: Product)` that sets `selectedProduct` and captures the triggering element ref
-    - Create `handleDrawerClose()` that sets `selectedProduct` to null and restores focus to `triggerRef`
-    - Pass `onIconSelect={handleIconSelect}` to both `<IconGrid>` and `<Dock>`
-    - Render `<AppStoreDrawer product={selectedProduct} onClose={handleDrawerClose} />` inside the PhoneFrame's screen area (inside the `role="region"` container)
-    - Apply to all animation variants (boot, slide, assemble, none) — the drawer renders once at the PhoneFrame level, not per variant
-  - **IconGrid:**
-    - Add `onIconSelect?: (product: Product) => void` to `IconGridProps`
-    - Pass `onSelect={onIconSelect}` to each `<AppIcon>`
-    - Update `iconRefs` type from `HTMLAnchorElement` to `HTMLButtonElement`
-  - **Dock:**
-    - Add `onIconSelect?: (product: Product) => void` to `DockProps`
-    - Pass `onSelect={onIconSelect}` to each `<AppIcon>`
-    - Update `iconRefs` type from `HTMLAnchorElement` to `HTMLButtonElement`
+
+  **Implementation Plan (self-contained for clear-context execution):**
+
+  Wire the `AppStoreDrawer` component (built in Step 7.2) into the app by adding selection state in `PageContent` and threading `onSelect` callbacks through `IconGrid` and `Dock` to each `AppIcon` (converted to `<button>` in Step 7.3).
+
+  - **Step A: Add drawer state to PageContent (`src/components/PageContent.tsx`)**
+    - Import `AppStoreDrawer` from `@/components/AppStoreDrawer` and `Product` from `@/types/product`
+    - Add state: `const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)`
+    - Add ref: `const triggerRef = useRef<HTMLButtonElement | null>(null)` for focus restoration
+    - Create `handleIconSelect = (product: Product) => { triggerRef.current = document.activeElement as HTMLButtonElement; setSelectedProduct(product); }`
+    - Create `handleDrawerClose = () => { setSelectedProduct(null); triggerRef.current?.focus(); triggerRef.current = null; }`
+    - Render `<AppStoreDrawer product={selectedProduct} onClose={handleDrawerClose} />` inside the PhoneFrame's screen area (inside the `role="region"` container), after all existing children. This applies to the boot variant (the only active variant on `/`). Also add to the `variant="none"` branch for test compatibility.
+    - Pass `onIconSelect={handleIconSelect}` to both `<IconGrid>` and `<Dock>` components
+
+  - **Step B: Thread `onIconSelect` through IconGrid (`src/components/IconGrid.tsx`)**
+    - Add `onIconSelect?: (product: Product) => void` to `IconGridProps` interface
+    - Pass `onSelect={onIconSelect}` to every `<AppIcon>` — both in paginated grid and in search results filtered list
+    - Note: `iconRefs` type was already updated to `HTMLButtonElement` in Step 7.3
+
+  - **Step C: Thread `onIconSelect` through Dock (`src/components/Dock.tsx`)**
+    - Add `onIconSelect?: (product: Product) => void` to `DockProps` interface
+    - Pass `onSelect={onIconSelect}` to every `<AppIcon>`
+    - Note: `iconRefs` type was already updated to `HTMLButtonElement` in Step 7.3
+
+  **Key patterns from existing code:**
+  - `PageContent.tsx` has multiple animation variant branches (boot, slide, assemble, none) — only boot and none are active (slide/assemble routes were removed). The drawer should render once at the PhoneFrame level, not per variant.
+  - `IconGrid.tsx` renders `AppIcon` in two places: paginated grid pages and search results filtered list. Both need `onSelect`.
+  - `AppStoreDrawer.tsx` expects `product: Product | null` and `onClose: () => void`.
+
+  ### Execution Profile
+  - **Parallel mode:** serial
+  - **Conflict risk:** medium (modifies PageContent which has complex animation branches)
+  - **Test strategy:** tests-after (Step 7.6)
+
+  **Acceptance criteria for this step:**
+  - Clicking any grid icon opens the AppStoreDrawer with that product's details
+  - Clicking any dock icon opens the AppStoreDrawer
+  - Clicking search result icons also opens the drawer
+  - Closing the drawer (Escape, backdrop, drag) returns focus to the triggering icon
+  - `npx tsc --noEmit` passes
+  - `npm test` passes (89 tests, no regressions)
+
+  **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
 - [ ] Step 7.5: Polish, reduced motion, and edge cases
   - Files: modify `src/components/AppStoreDrawer.tsx`, modify `src/components/AppIcon.tsx`

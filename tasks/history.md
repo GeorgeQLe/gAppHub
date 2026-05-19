@@ -724,3 +724,13 @@
 - Accessibility: `role="dialog"`, `aria-modal="true"`, focus trap (Tab wraps), Escape to close, auto-focus CTA on mount
 - Icon rendering logic duplicated from AppIcon (same `CUSTOM_ICON_IDS` set, `getIcon()`, `badgeColorMap` with hex values instead of Tailwind classes)
 - Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
+
+## 2026-05-19 — Phase 7, Step 7.3: Convert AppIcon from link to button
+
+- Changed `AppIcon.tsx` from `<a href>` to `<button type="button">` with `onSelect?: (product: Product) => void` callback
+- Updated `forwardRef` generic from `HTMLAnchorElement` to `HTMLButtonElement`
+- Updated `handleMouseEnter` event type to `React.MouseEvent<HTMLButtonElement>`
+- Updated ref types in `Dock.tsx` and `IconGrid.tsx` from `HTMLAnchorElement` to `HTMLButtonElement`
+- Updated 4 test files: `IconGrid.test.tsx` (link→gridcell/button assertions), `Dock.test.tsx` (link→button), `Accessibility.test.tsx` (link→button), `Interactions.test.tsx` (`querySelector("a")`→`querySelector("button")`)
+- No changes to Search.test.tsx or Pagination.test.tsx (no link references)
+- Verified: `npx tsc --noEmit` clean, 89/89 tests pass (no regressions)
