@@ -798,3 +798,11 @@
 - Added `searchActive` state in `PageContent.tsx`, threaded through all 4 animation variants (none, boot, slide, assemble).
 - Wrapped StatusBar and DynamicIsland in each variant with `transition-opacity duration-200` toggling `opacity-0 pointer-events-none` when search is active.
 - Verified: 111/111 tests pass, typecheck clean
+
+## 2026-05-20 — Polish: Warm sunset gradient splash screen background
+
+- Replaced plain `bg-black` boot splash overlay with warm peach-to-coral gradient (`linear-gradient(135deg, #FF9A56, #FF6B6B)`) in `src/components/PageContent.tsx`
+- Applied the same gradient to the assemble variant's phase-3 transition overlay
+- Updated `public/manifest.webmanifest`: `background_color` and `theme_color` from `#000000` to `#FF9A56`
+- Updated `src/__tests__/Animations.test.tsx`: changed `.z-40.bg-black` selectors to `.z-40` (class was removed)
+- Verified: 111/111 tests pass, lint clean (0 errors, 3 pre-existing warnings)
