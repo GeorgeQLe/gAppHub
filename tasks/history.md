@@ -806,3 +806,13 @@
 - Updated `public/manifest.webmanifest`: `background_color` and `theme_color` from `#000000` to `#FF9A56`
 - Updated `src/__tests__/Animations.test.tsx`: changed `.z-40.bg-black` selectors to `.z-40` (class was removed)
 - Verified: 111/111 tests pass, lint clean (0 errors, 3 pre-existing warnings)
+
+## 2026-05-20 — Refactor: Remove tooltip code (replaced by App Store Drawer)
+
+- The AppStoreDrawer (Phase 7) now shows product details on click, making hover tooltips redundant
+- `AppIcon.tsx`: Removed `useLayoutEffect`, `useRef`, `useState`, `createPortal` imports; removed `TOOLTIP_OFFSET`, `TooltipPosition`, tooltip state/refs/handlers, tooltip JSX, and the entire `AppIconTooltip` component
+- `BadgeLegend.tsx`: Removed `useState` import, `Tooltip` component, `deprecatedDescription` const, `description` fields, `hovered` state, and all hover/tooltip JSX attributes and `cursor-default` classes
+- `BadgeLegend.test.tsx`: Removed 6 tooltip hover/hide tests and unused `fireEvent` import
+- `Interactions.test.tsx`: Removed entire "AppIcon tooltip" describe block (3 tests) and unused `beforeEach`, `afterEach`, `act`, `cleanup` imports
+- Net: −289 lines across 4 files
+- Verified: 102/102 tests pass, typecheck clean
