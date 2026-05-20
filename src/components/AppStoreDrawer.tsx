@@ -98,7 +98,7 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
 
   const sheetTransition = reducedMotion
     ? { duration: 0.15 }
-    : { type: "spring" as const, stiffness: 400, damping: 35, mass: 0.8 };
+    : { type: "spring" as const, stiffness: 400, damping: 38, mass: 0.8 };
 
   return (
     <AnimatePresence>
