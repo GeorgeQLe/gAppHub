@@ -23,9 +23,10 @@ interface IconGridProps {
   products: Product[];
   drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
+  onSearchVisibilityChange?: (visible: boolean) => void;
 }
 
-export default function IconGrid({ products, drawerOpen, onIconSelect }: IconGridProps) {
+export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchVisibilityChange }: IconGridProps) {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const iconsPerPage = useAvailableRows(gridContainerRef);
   const pages = chunk(products, iconsPerPage);
@@ -53,6 +54,10 @@ export default function IconGrid({ products, drawerOpen, onIconSelect }: IconGri
   useEffect(() => {
     showSearchRef.current = showSearch;
   }, [showSearch]);
+
+  useEffect(() => {
+    onSearchVisibilityChange?.(showSearch);
+  }, [showSearch, onSearchVisibilityChange]);
 
   useEffect(() => {
     swipe?.registerSwipe((delta) => {

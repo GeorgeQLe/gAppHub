@@ -789,3 +789,12 @@
   - Added `style={{ willChange: "transform, opacity" }}` — pre-promotes element to GPU layer on mobile
   - Removed `scale` from initial/animate/exit, shortened exit duration to 0.25s via inline transition
 - Verified: 111/111 tests pass, lint clean (0 errors, 3 pre-existing warnings)
+
+## 2026-05-20 — Fix: Search overlay hidden by Dynamic Island and StatusBar icons
+
+- Problem: When swiping down to open search, the search input was covered by the Dynamic Island and the cancel button was covered by the battery icon, because SearchOverlay is positioned at `top-0` inside IconGrid which starts at the top of PhoneFrame (StatusBar and DynamicIsland are absolutely positioned).
+- Fix: Fade out Dynamic Island and StatusBar when search is active, fade them back in on dismiss.
+- Added `onSearchVisibilityChange` callback prop to `IconGrid.tsx`, fires whenever `showSearch` state changes.
+- Added `searchActive` state in `PageContent.tsx`, threaded through all 4 animation variants (none, boot, slide, assemble).
+- Wrapped StatusBar and DynamicIsland in each variant with `transition-opacity duration-200` toggling `opacity-0 pointer-events-none` when search is active.
+- Verified: 111/111 tests pass, typecheck clean

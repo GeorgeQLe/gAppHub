@@ -41,6 +41,7 @@ export default function PageContent({
 }: PageContentProps) {
   const reducedMotion = useReducedMotion();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [searchActive, setSearchActive] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const handleIconSelect = useCallback((product: Product) => {
@@ -142,6 +143,8 @@ export default function PageContent({
                 dockProducts={dockProducts}
                 drawerOpen={selectedProduct !== null}
                 onIconSelect={handleIconSelect}
+                searchActive={searchActive}
+                onSearchVisibilityChange={setSearchActive}
               />
             ) : isSlide ? (
               <SlidePhoneContent
@@ -150,6 +153,8 @@ export default function PageContent({
                 dockProducts={dockProducts}
                 drawerOpen={selectedProduct !== null}
                 onIconSelect={handleIconSelect}
+                searchActive={searchActive}
+                onSearchVisibilityChange={setSearchActive}
               />
             ) : isAssemble ? (
               <AssemblePhoneContent
@@ -158,12 +163,18 @@ export default function PageContent({
                 dockProducts={dockProducts}
                 drawerOpen={selectedProduct !== null}
                 onIconSelect={handleIconSelect}
+                searchActive={searchActive}
+                onSearchVisibilityChange={setSearchActive}
               />
             ) : (
               <>
-                <StatusBar />
-                <DynamicIsland />
-                <IconGrid products={gridProducts} drawerOpen={selectedProduct !== null} onIconSelect={handleIconSelect} />
+                <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                  <StatusBar />
+                </div>
+                <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                  <DynamicIsland />
+                </div>
+                <IconGrid products={gridProducts} drawerOpen={selectedProduct !== null} onIconSelect={handleIconSelect} onSearchVisibilityChange={setSearchActive} />
                 <Dock products={dockProducts} onIconSelect={handleIconSelect} />
                 <HomeIndicator />
               </>
@@ -213,6 +224,8 @@ function BootPhoneContent({
   dockProducts,
   drawerOpen,
   onIconSelect,
+  searchActive,
+  onSearchVisibilityChange,
 }: {
   phase: BootPhase;
   islandLabel?: string;
@@ -220,6 +233,8 @@ function BootPhoneContent({
   dockProducts: Product[];
   drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
+  searchActive?: boolean;
+  onSearchVisibilityChange?: (visible: boolean) => void;
 }) {
   return (
     <>
@@ -264,15 +279,19 @@ function BootPhoneContent({
       </AnimatePresence>
 
       {/* Phase 4+: StatusBar fades in */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: phase >= 4 ? 1 : 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        <StatusBar />
-      </motion.div>
+      <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: phase >= 4 ? 1 : 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          <StatusBar />
+        </motion.div>
+      </div>
 
-      <DynamicIsland label={islandLabel} />
+      <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <DynamicIsland label={islandLabel} />
+      </div>
 
       {/* Phase 4+: Icons appear row by row with spring bounce */}
       <motion.div
@@ -281,7 +300,7 @@ function BootPhoneContent({
         animate={{ opacity: phase >= 4 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
       </motion.div>
 
       {/* Phase 5+: Dock slides up */}
@@ -312,12 +331,16 @@ function SlidePhoneContent({
   dockProducts,
   drawerOpen,
   onIconSelect,
+  searchActive,
+  onSearchVisibilityChange,
 }: {
   phase: SlidePhase;
   gridProducts: Product[];
   dockProducts: Product[];
   drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
+  searchActive?: boolean;
+  onSearchVisibilityChange?: (visible: boolean) => void;
 }) {
   return (
     <motion.div
@@ -329,15 +352,19 @@ function SlidePhoneContent({
       }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: phase >= 2 ? 1 : 0 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
-        <StatusBar />
-      </motion.div>
+      <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: phase >= 2 ? 1 : 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+        >
+          <StatusBar />
+        </motion.div>
+      </div>
 
-      <DynamicIsland />
+      <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <DynamicIsland />
+      </div>
 
       <motion.div
         className="flex-1 overflow-hidden flex flex-col"
@@ -348,7 +375,7 @@ function SlidePhoneContent({
         }}
         transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
       >
-        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
       </motion.div>
 
       <motion.div
@@ -370,12 +397,16 @@ function AssemblePhoneContent({
   dockProducts,
   drawerOpen,
   onIconSelect,
+  searchActive,
+  onSearchVisibilityChange,
 }: {
   phase: AssemblePhase;
   gridProducts: Product[];
   dockProducts: Product[];
   drawerOpen?: boolean;
   onIconSelect?: (product: Product) => void;
+  searchActive?: boolean;
+  onSearchVisibilityChange?: (visible: boolean) => void;
 }) {
   return (
     <>
@@ -440,37 +471,41 @@ function AssemblePhoneContent({
       />
 
       {/* Phase 4: StatusBar slides in from sides, DynamicIsland pops */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{
-          opacity: phase >= 4 ? 1 : 0,
-          x: phase >= 4 ? 0 : -20,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 20,
-          mass: 0.6,
-        }}
-      >
-        <StatusBar />
-      </motion.div>
+      <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{
+            opacity: phase >= 4 ? 1 : 0,
+            x: phase >= 4 ? 0 : -20,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 20,
+            mass: 0.6,
+          }}
+        >
+          <StatusBar />
+        </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.3 }}
-        animate={{
-          opacity: phase >= 4 ? 1 : 0,
-          scale: phase >= 4 ? 1 : 0.3,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 18,
-          mass: 0.5,
-        }}
-      >
-        <DynamicIsland />
-      </motion.div>
+      <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.3 }}
+          animate={{
+            opacity: phase >= 4 ? 1 : 0,
+            scale: phase >= 4 ? 1 : 0.3,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 18,
+            mass: 0.5,
+          }}
+        >
+          <DynamicIsland />
+        </motion.div>
+      </div>
 
       {/* Phase 5: Icons drop from above with stagger */}
       <motion.div
@@ -487,7 +522,7 @@ function AssemblePhoneContent({
           mass: 0.7,
         }}
       >
-        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
       </motion.div>
 
       {/* Phase 6: Dock slides up with spring */}
