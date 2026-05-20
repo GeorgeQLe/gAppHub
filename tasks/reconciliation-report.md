@@ -1,36 +1,35 @@
 # Dev Docs Reconciliation Report
 
-> Date: 2026-05-16
+> Date: 2026-05-20
 > Mode: fix tasks
 > Scope: tasks
 
 ## Errors (0)
 
-None. Roadmap, todo, history, and phase archives are consistent.
+None.
 
-## Warnings (1)
+## Warnings (0)
 
-- **tasks/todo.md** — Phase 6 scope acceptance criteria were unchecked while the milestone section had them all checked. Fixed: checked scope criteria to match milestone.
+None.
 
-## Info (2)
+## Info (1)
 
-- **tasks/manual-todo.md** — 2 non-blocking post-phase items (real device testing, screen reader testing) remained from Phase 6. Explicitly deferred with note.
-- **tasks/roadmap.md** — Scope-level acceptance criteria for Phases 1–6 are unchecked (planning copies) while milestone sections are checked (tracked copies). This is the intentional document structure — no change needed.
+- **tasks/todo.md** — Contained full Phase 7 implementation plan (348 lines of completed step details). Trimmed to header + documentation queue only; phase content archived to `tasks/phases/phase-7.md`.
 
 ## Fixed
 
-- [x] `tasks/todo.md` — Checked Phase 6 scope acceptance criteria (9 items) to match milestone section
-- [x] `tasks/todo.md` — Marked manual-todo orphan queue item as resolved (deferred)
-- [x] `tasks/manual-todo.md` — Updated header to reflect all-phases-complete status, added deferral note
+- [x] **tasks/phases/phase-7.md** — Created missing Phase 7 archive with all steps, milestone, and on-completion summary.
+- [x] **tasks/todo.md** — Removed completed Phase 7 implementation details (archived to phase-7.md). Marked `/reconcile-dev-docs fix tasks` as complete.
+- [x] **tasks/manual-todo.md** — Updated header from "All 6 implementation phases complete (2026-05-15)" to "All 7 implementation phases complete (2026-05-19)".
 
 ## Deferred
 
-- [ ] `tasks/manual-todo.md` — 2 items remain unchecked (real device testing, screen reader testing) — intentionally deferred to production launch prep
+- [ ] **tasks/manual-todo.md** — 1 item remains unchecked (real device testing) — intentionally deferred to production launch prep.
 
 ## Summary
 
-- Roadmap/todo alignment: ok
-- History coverage: ok (all phases, all post-phase work documented through 2026-05-16)
-- Phase archives: ok (6/6 phases archived in `tasks/phases/`)
-- Spec freshness: ok (drift resolved 2026-05-15 per `specs/drift-report.md`)
-- Recommended next action: none — all task docs reconciled
+- Roadmap/todo alignment: ok — all 7 phases marked complete in both roadmap.md and todo.md
+- History coverage: ok — all phases and post-phase fixes have history entries through 2026-05-20
+- Phase archives: ok — all 7 phases archived in `tasks/phases/`
+- Manual tasks: ok — 1 deferred non-blocking item (real device testing), header updated
+- Recommended next action: `/icp` (first unchecked documentation queue item)
