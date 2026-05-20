@@ -49,7 +49,7 @@ There is no global shell (no persistent header, sidebar, or footer). The entire 
   - `L` = Live
   - `B` = Beta
   - `N` = New
-  - `C` = Concept
+  - `W` = Wishlist
   - Grayed-out icon = Deprecated
 - **Style:** Small text, muted colors, each badge rendered at actual size next to its label
 - **Interaction:** Hovering a badge in the legend shows a tooltip with a one-line description
@@ -82,7 +82,7 @@ There is no global shell (no persistent header, sidebar, or footer). The entire 
 - **Size:** ~120px × 36px
 - **Color:** Black (#000), matching the bezel
 - **Position:** ~12px below the top edge of the screen area
-- **Behavior:** Static shape — no expanding or interactive states. After boot, cycles brand copy text using Framer Motion `popLayout` mode with `will-change: transform` for flicker-free transitions
+- **Behavior:** Static — no expanding or interactive states
 
 ### Status Bar
 
@@ -114,10 +114,10 @@ There is no global shell (no persistent header, sidebar, or footer). The entire 
 ### Layout
 
 - **Columns:** 4
-- **Rows per page:** 3–6, dynamically computed based on available height (`useAvailableRows` hook)
-- **Grid gaps:** ~20px horizontal (`gap-x-5`), 16px vertical (`gap-y-4`)
-- **Top padding:** 52px from top of screen area (`pt-[52px]`, below Dynamic Island)
-- **Bottom padding:** 120px from bottom (`pb-[120px]`, above dock area)
+- **Rows per page:** 6 (24 icons per page, matching iOS)
+- **Grid gaps:** ~20px horizontal, ~28px vertical (icon center to icon center: ~90px horizontal, ~100px vertical)
+- **Top padding:** ~76px from top of screen area (below status bar)
+- **Bottom padding:** ~90px from bottom (above dock area)
 
 ### Sort Order (Default)
 
@@ -126,16 +126,16 @@ The grid fills in this priority order:
 1. **Row 1 (positions 1–4):** Hot / trending / featured products — manually curated
 2. **Row 2 (positions 5–8):** Newest products (most recently launched)
 3. **Rows 3–5 (positions 9–20):** Live products, then Beta, in alphabetical order within each group
-4. **Row 6 (positions 21–24):** Concept products
-5. **Overflow:** If products exceed one page, they flow onto additional pages
-6. **Deprecated products:** Placed last, after concept, on the final page
+4. **Row 6 (positions 21–24):** Wishlist products
+5. **Overflow:** If products exceed 24, they flow onto additional pages
+6. **Deprecated products:** Placed last, after wishlist, on the final page
 
 ### Pagination
 
 - **Mechanism:** Horizontal swipe between pages (touch + mouse drag)
 - **Page indicator dots:** iOS-style, centered below the grid and above the dock
-  - Active dot: 8px (`h-2 w-2`), fully opaque, dark (#1d1d1f)
-  - Inactive dots: 6px (`h-1.5 w-1.5`), 35% opacity (`bg-[#1d1d1f]/35`)
+  - Active dot: slightly larger and fully opaque
+  - Inactive dots: smaller, semi-transparent
   - Number of dots = number of pages
 - **Keyboard:** Left/right arrow keys navigate between pages
 - **Transition:** Smooth horizontal slide (300ms ease-out)
@@ -145,7 +145,7 @@ The grid fills in this priority order:
 - **Trigger:** Pull-down gesture from the top of the icon grid area (or swipe down on the first page)
 - **Appearance:** A search bar slides down from above the grid, pushing the grid down slightly
 - **Input:** Text field with placeholder "Search apps..."
-- **Search scope:** Product name, badge state (L/B/N/C), category tags
+- **Search scope:** Product name, badge state (L/B/N/W), category tags
 - **Results:** Filtered icons replace the grid in real-time as the user types. If no matches, show "No apps found" centered in the grid area
 - **Dismiss:** Tap outside, press Escape, or swipe up
 
@@ -180,29 +180,29 @@ Dock apps follow the same icon design as grid icons but may omit badges.
 ### Icon Image
 
 - **Shape:** Rounded square (iOS superellipse / squircle), CSS `border-radius: 22.5%` approximation
-- **Size:** 54px × 54px on desktop (`ICON_SIZE = 54`)
+- **Size:** 60px × 60px on desktop
 - **Border:** None
 - **Content:** Product icon artwork (provided per product)
 
 ### Name Label
 
 - **Position:** Centered below the icon, 4px gap
-- **Typography:** System sans-serif, 10px (`text-[10px]`), medium weight
+- **Typography:** System sans-serif, 11px, medium weight
 - **Color:** Dark gray (#333) on the light wallpaper
 - **Truncation:** Single line, ellipsis if longer than ~8 characters
-- **Max width:** 68px (`max-w-[68px]`)
+- **Max width:** 74px
 
 ### Notification Badge
 
 - **Shape:** Circle (or rounded pill if two characters)
-- **Size:** 18px diameter (`h-[18px] w-[18px]`), expands for wider content
-- **Position:** Top-right corner of the icon, overlapping by ~3px (`-top-[3px] -right-[3px]`)
-- **Background colors:**
-  - `L` (Live): Green (#22c55e)
-  - `B` (Beta): Yellow (#eab308)
-  - `N` (New): Blue (#3b82f6)
-  - `C` (Concept): Red (#ef4444)
-- **Text:** White, bold, 10px (`text-[10px]`), single character centered
+- **Size:** 20px diameter minimum, expands for wider content
+- **Position:** Top-right corner of the icon, overlapping by ~6px
+- **Background colors (WCAG AA compliant):**
+  - `L` (Live): Green (#15803d)
+  - `B` (Beta): Orange (#C2410C)
+  - `N` (New): Blue (#0066CC)
+  - `W` (Wishlist): Purple (#8B3FC1)
+- **Text:** White, bold, 11px, single character centered
 - **Border:** 2px solid white outline (to separate from icon artwork)
 
 ### Deprecated State
@@ -219,7 +219,7 @@ Dock apps follow the same icon design as grid icons but may omit badges.
 | Default | Icon at 100% scale, no transform |
 | Hover | Scale to 105%, subtle upward lift shadow. Description tooltip appears after 400ms delay |
 | Press / Active | Scale to 92% (iOS press-in effect), held for 150ms |
-| Release | Spring back to 100%, then open the App Store Drawer (see §App Store Drawer) |
+| Release | Spring back to 100%, then navigate to URL in new tab |
 | Focus (keyboard) | 2px blue outline ring around the icon, 2px offset |
 | Disabled | N/A — all icons are interactive |
 
@@ -239,11 +239,11 @@ The primary route `/` starts with the boot screen and ends at the fully rendered
 
 ### Boot Screen (`/`)
 
-1. **Phase 1 (~0–1.1s):** Black screen fills the phone frame. `Lexcorp` fades and pops into view at the center of the splash screen.
-2. **Phase 2 (~1.1–2.2s):** `made with ♥` fades in underneath while the first line remains visible.
-3. **Phase 3 (~2.2–3.3s):** `by George "G" Le` fades in underneath the existing lines.
-4. **Phase 4 (~3.3–3.7s):** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
-5. **Post-boot:** Dock slides up. Dynamic Island cycles through brand copy text (`Lexcorp`, `made with ♥`, `by George "G" Le`) using `popLayout` mode with `will-change: transform` for flicker-free text transitions.
+1. **0–800ms:** Black screen fills the phone frame. `Lexcorp` fades and pops into view at the center of the splash screen.
+2. **800–1600ms:** `made with ♥` fades in underneath while the first line remains visible.
+3. **1600–2400ms:** `by George "G" Le` fades in underneath the existing lines.
+4. **2400–2800ms:** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
+5. **2800ms+:** Dock slides up. Dynamic Island starts rotating through `Lexcorp`, `made with ♥`, and `by George "G" Le`.
 
 ### Reduced Motion
 
@@ -288,7 +288,7 @@ When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped an
 ### Typography
 
 - **Primary font:** System font stack (`-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif`)
-- **Icon labels:** 10px medium
+- **Icon labels:** 11px medium
 - **Tagline:** 13px regular, uppercase tracking 0.05em
 - **Legend:** 12px regular
 - **Tooltip:** 12px regular
@@ -308,10 +308,10 @@ When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped an
 | `--text-primary` | #1d1d1f | Icon labels, status bar |
 | `--text-secondary` | #6e6e73 | Tagline, legend labels (WCAG AA compliant) |
 | `--dock-blur-bg` | rgba(255,255,255,0.72) | Dock frosted glass |
-| `--badge-live` | #22c55e | Live badge |
-| `--badge-beta` | #eab308 | Beta badge |
-| `--badge-new` | #3b82f6 | New badge |
-| `--badge-concept` | #ef4444 | Concept badge |
+| `--badge-live` | #15803d | Live badge (WCAG AA) |
+| `--badge-beta` | #C2410C | Beta badge (WCAG AA) |
+| `--badge-new` | #0066CC | New badge (WCAG AA) |
+| `--badge-wishlist` | #8B3FC1 | Wishlist badge (WCAG AA) |
 | `--shadow-primary` | rgba(0,0,0,0.15) | Phone drop shadow |
 
 ### Shadows
@@ -420,7 +420,7 @@ Tapping any app icon (grid or dock) opens a bottom-sheet drawer instead of navig
    - App icon (large, ~72px, same squircle shape as grid icons)
    - App name (bold, ~16px) with badge dot inline (same colored dot as grid badges)
    - "Open" CTA button (right-aligned, pill-shaped, filled blue/primary color, with external-link icon). Opens `product.url` in a new tab.
-2. **Description:** Product description text (~14px, regular weight, muted color). Uses `longDescription` field when available; falls back to `description` (`longDescription ?? description`).
+2. **Description:** Product description text (~14px, regular weight, muted color). Uses existing `description` field; falls back to `longDescription` when available.
 3. **Screenshots carousel (conditional):** Horizontal scrollable row of screenshot images. Hidden entirely when `product.screenshots` is empty or absent.
 4. **Testimonials (conditional):** Vertically stacked quote cards. Hidden entirely when `product.testimonials` is empty or absent.
 
