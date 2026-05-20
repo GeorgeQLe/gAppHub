@@ -242,7 +242,8 @@ function BootPhoneContent({
       <AnimatePresence>
         {phase <= 3 && (
           <motion.div
-            className="absolute inset-0 z-40 flex items-center justify-center overflow-hidden bg-black px-6"
+            className="absolute inset-0 z-40 flex items-center justify-center overflow-hidden px-6"
+            style={{ background: "linear-gradient(135deg, #FF9A56, #FF6B6B)" }}
             initial={{ opacity: 1 }}
             animate={{ opacity: phase >= 4 ? 0 : 1 }}
             exit={{ opacity: 0 }}
@@ -464,7 +465,8 @@ function AssemblePhoneContent({
 
       {/* Phase 3: Screen transitions from black to wallpaper */}
       <motion.div
-        className="absolute inset-0 z-20 bg-black pointer-events-none"
+        className="absolute inset-0 z-20 pointer-events-none"
+        style={{ background: "linear-gradient(135deg, #FF9A56, #FF6B6B)" }}
         initial={{ opacity: 1 }}
         animate={{ opacity: phase >= 3 ? 0 : 1 }}
         transition={{ duration: 0.2, ease: "easeOut" }}

@@ -4,8 +4,8 @@
   "description": "gAppHub — Made in Boston, Building in Public",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#FF9A56",
+  "theme_color": "#FF9A56",
   "icons": [
     {
       "src": "/icon-192.png",

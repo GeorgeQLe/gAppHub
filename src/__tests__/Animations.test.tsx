@@ -166,28 +166,28 @@ describe("useReducedMotion hook", () => {
     mockReducedMotion(false);
     const { container } = renderPageContent("boot");
 
-    expect(container.querySelector(".z-40.bg-black")).toBeInTheDocument();
+    expect(container.querySelector(".z-40")).toBeInTheDocument();
   });
 
   it("returns true when prefers-reduced-motion: reduce matches", () => {
     mockReducedMotion(true);
     const { container } = renderPageContent("boot");
 
-    expect(container.querySelector(".z-40.bg-black")).not.toBeInTheDocument();
+    expect(container.querySelector(".z-40")).not.toBeInTheDocument();
   });
 
   it("updates when media query change event fires", () => {
     const { listeners, mockMql } = mockReducedMotion(false);
     const { container } = renderPageContent("boot");
 
-    expect(container.querySelector(".z-40.bg-black")).toBeInTheDocument();
+    expect(container.querySelector(".z-40")).toBeInTheDocument();
 
     act(() => {
       (mockMql as { matches: boolean }).matches = true;
       listeners.forEach((cb) => cb({ matches: true } as MediaQueryListEvent));
     });
 
-    expect(container.querySelector(".z-40.bg-black")).not.toBeInTheDocument();
+    expect(container.querySelector(".z-40")).not.toBeInTheDocument();
   });
 });
 
