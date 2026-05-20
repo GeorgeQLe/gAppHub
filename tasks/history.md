@@ -816,3 +816,10 @@
 - `Interactions.test.tsx`: Removed entire "AppIcon tooltip" describe block (3 tests) and unused `beforeEach`, `afterEach`, `act`, `cleanup` imports
 - Net: −289 lines across 4 files
 - Verified: 102/102 tests pass, typecheck clean
+
+## 2026-05-20 — Fix: Drawer rubber-band animation on open
+
+- Root cause: spring transition `{ stiffness: 400, damping: 35, mass: 0.8 }` had damping ratio ~0.978 (just below critical), causing overshoot into negative y territory clamped by `dragConstraints={{ top: 0 }}`
+- Fix: increased `damping` from 35 to 38 in `src/components/AppStoreDrawer.tsx:101`, making the spring slightly overdamped (ratio ~1.06) to eliminate overshoot while keeping snappy feel
+- Drag-to-dismiss unaffected (separate from entry/exit transition)
+- Verified: 102/102 tests pass, lint clean (0 errors, 3 pre-existing warnings)
