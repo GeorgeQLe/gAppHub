@@ -194,8 +194,11 @@ describe("AppStoreDrawer icon rendering", () => {
         onClose={vi.fn()}
       />,
     );
-    const img = container.querySelector('img[src="/icons/products/war-room.png"]');
+    const img = container.querySelector('img[width="72"][height="72"]');
     expect(img).toBeInTheDocument();
+    expect(decodeURIComponent(img?.getAttribute("src") ?? "")).toContain(
+      "/icons/products/war-room.png",
+    );
     expect(img).toHaveAttribute("width", "72");
     expect(img).toHaveAttribute("height", "72");
   });

@@ -1,5 +1,14 @@
 # Session History — GappHub
 
+## 2026-05-21 — ICP and competitive alignment page shipped
+
+- Created `alignment/icp.html`, a standalone static HTML page synthesizing `research/icp.md`, `research/competitive-analysis.md`, and `research/concept-brief.md`.
+- Renamed the page from `alignment/index.html` to `alignment/icp.html` after user correction.
+- Marked the ICP and competitive-analysis documentation queue items complete because both research files now exist and the alignment page links their conclusions.
+- Replaced three remaining app `<img>` usages with Next `Image` to clear lint warnings before shipping; updated the affected drawer test for Next image URL rewriting.
+- Validation: `npm run lint` clean, `npm test` passed 102/102 tests, `npm run build` passed.
+- Ship manifest: User goal: create and ship an HTML alignment page about ICP and competitive analysis. Changed files: `alignment/icp.html`, `alignment/ship-icp.html`, `src/components/AppIcon.tsx`, `src/components/AppStoreDrawer.tsx`, `src/__tests__/AppStoreDrawer.test.tsx`, `tasks/todo.md`, `tasks/history.md`, `tasks/lessons.md`. Per-file purpose: static strategy page; ship handoff page; lint-warning cleanup; test selector update; task/history/lesson bookkeeping. User-goal mapping: the requested page is `alignment/icp.html`; code/test edits support the ship validation gate. Tests run: `npm run lint`, `npm test`, `npm run build`. Skipped tests: none. Adversarial review: verified unrelated untracked `.agents/`, `.claude/`, and `.codex/` files are excluded from the ship boundary; accepted no residual lint warnings. Residual risk: no browser visual QA beyond file creation because this is a static artifact and the browser-open attempt may be platform-gated. Rollback note: revert the shipping commit to remove the page and validation cleanup. Next command: `$run`.
+
 ## 2026-05-14 — Phase 1, Step 1.1: Initialize Next.js project
 
 - Scaffolded Next.js 16 with App Router, TypeScript, Tailwind CSS v4, ESLint

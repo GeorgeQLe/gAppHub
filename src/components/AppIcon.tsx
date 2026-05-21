@@ -1,6 +1,7 @@
 "use client";
 
 import { createElement, forwardRef } from "react";
+import Image from "next/image";
 import { Product } from "@/types/product";
 import * as icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -63,7 +64,7 @@ const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
       >
         <div className="relative">
           {CUSTOM_ICON_IDS.has(product.id) ? (
-            <img
+            <Image
               src={`/icons/products/${product.id}.png`}
               alt=""
               width={ICON_SIZE}

@@ -1,6 +1,7 @@
 "use client";
 
 import { createElement, useEffect, useRef, useCallback, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import * as icons from "lucide-react";
@@ -193,10 +194,12 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
                     <h3 className="mb-2 text-sm font-semibold text-gray-900">Screenshots</h3>
                     <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2">
                       {product.screenshots.map((src, i) => (
-                        <img
+                        <Image
                           key={i}
                           src={src}
                           alt={`${product.name} screenshot ${i + 1}`}
+                          width={320}
+                          height={200}
                           className="max-h-[200px] flex-shrink-0 snap-center rounded-lg object-cover"
                           draggable={false}
                         />
@@ -235,7 +238,7 @@ function DrawerIcon({ product }: { product: Product }) {
 
   if (CUSTOM_ICON_IDS.has(product.id)) {
     return (
-      <img
+      <Image
         src={`/icons/products/${product.id}.png`}
         alt=""
         width={ICON_SIZE}

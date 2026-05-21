@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-21 — Static Deliverable Filenames Must Match Requested Route
+
+- When creating standalone alignment artifacts, derive the filename from the user's requested subject or explicit filename before writing the first version.
+- If the user corrects a generated artifact name, include the rename in the shipping boundary and record the correction in task history.
+- Correction enforcement: this ship updated `alignment/index.html` to `alignment/icp.html`; no code-level enforcement is needed because the correction was a one-off artifact naming request.
+
 ## 2026-05-17 — Boot Splash Text Must Be Visually Timed
 
 - When adding splash-screen copy, validate actual readability, not just state transitions in tests.
