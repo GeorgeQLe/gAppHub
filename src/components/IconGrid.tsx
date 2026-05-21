@@ -28,7 +28,7 @@ interface IconGridProps {
 
 export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchVisibilityChange }: IconGridProps) {
   const gridContainerRef = useRef<HTMLDivElement>(null);
-  const iconsPerPage = useAvailableRows(gridContainerRef);
+  const iconsPerPage = useAvailableRows(gridContainerRef, drawerOpen);
   const pages = chunk(products, iconsPerPage);
   const totalPages = pages.length;
   const [page, setPage] = useState(0);

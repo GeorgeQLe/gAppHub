@@ -69,6 +69,7 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset when product changes
     setCanDrag(false);
   }, [product]);
 
@@ -131,7 +132,9 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
             exit="exit"
             transition={sheetTransition}
             onAnimationComplete={(variant) => {
-              if (variant === "visible") setCanDrag(true);
+              if (variant === "visible") {
+                setCanDrag(true);
+              }
             }}
             drag={reducedMotion ? false : canDrag ? "y" : false}
             dragConstraints={{ top: 0 }}

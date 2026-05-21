@@ -12,7 +12,10 @@ const MIN_ROWS = 3;
 const MAX_ROWS = 6;
 const COLS = 4;
 
-export function useAvailableRows(containerRef: RefObject<HTMLElement | null>): number {
+export function useAvailableRows(
+  containerRef: RefObject<HTMLElement | null>,
+  frozen = false,
+): number {
   const [iconsPerPage, setIconsPerPage] = useState(MAX_ROWS * COLS);
 
   useLayoutEffect(() => {
@@ -20,6 +23,7 @@ export function useAvailableRows(containerRef: RefObject<HTMLElement | null>): n
     if (!el) return;
 
     function compute() {
+      if (frozen) return;
       const h = el!.clientHeight;
       if (h === 0) return;
       const available = h - PT - PB;
@@ -32,7 +36,7 @@ export function useAvailableRows(containerRef: RefObject<HTMLElement | null>): n
     const ro = new ResizeObserver(compute);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [containerRef]);
+  }, [containerRef, frozen]);
 
   return iconsPerPage;
 }

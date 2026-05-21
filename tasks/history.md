@@ -838,3 +838,12 @@
 - Fix: added `canDrag` state (initially false, reset on `product` change), enabled only after `onAnimationComplete` fires with `"visible"` variant. Changed `drag` prop to `drag={reducedMotion ? false : canDrag ? "y" : false}`
 - Kept `dragElastic={0}` and `damping=35` — both correct for post-animation drag behavior
 - Verified: 102/102 tests pass
+
+## 2026-05-20 — Fix: Drawer open causes icon grid reflow (the actual "rubber-band")
+
+- Root cause: the perceived rubber-band was never spring overshoot — diagnostic page proved zero overshoot across all configurations. The visual artifact was the icon grid resetting/dropping when the drawer opened.
+- Chain: `setSelectedProduct` → `drawerOpen={true}` → AppStoreDrawer mounts inside PhoneFrame → `ResizeObserver` on grid container fires → `setIconsPerPage` triggers re-render → `pages = chunk(products, iconsPerPage)` regenerates → grid reflows mid-animation
+- Fix: added `frozen` parameter to `useAvailableRows` hook. When `true`, `compute()` early-returns so `ResizeObserver` callbacks are ignored. `IconGrid` passes `drawerOpen` as the frozen flag.
+- Cleanup: removed debug instrumentation from `AppStoreDrawer.tsx` (debugSamples/debugRaf/debugStart refs, sampling useEffect, console logging in onAnimationComplete)
+- Cleanup: deleted `public/debug-drawer.html` diagnostic page
+- Verified: 102/102 tests pass, typecheck clean, lint 0 errors (3 pre-existing warnings)
