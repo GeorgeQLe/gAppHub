@@ -98,7 +98,7 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
 
   const sheetTransition = reducedMotion
     ? { duration: 0.15 }
-    : { type: "spring" as const, stiffness: 400, damping: 38, mass: 0.8 };
+    : { type: "spring" as const, stiffness: 400, damping: 35, mass: 0.8 };
 
   return (
     <AnimatePresence>
@@ -127,7 +127,7 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
             transition={sheetTransition}
             drag={reducedMotion ? false : "y"}
             dragConstraints={{ top: 0 }}
-            dragElastic={0.2}
+            dragElastic={0}
             onDragEnd={(_e, info) => {
               if (info.offset.y > 100 || info.velocity.y > 500) {
                 onClose();
