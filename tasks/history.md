@@ -853,3 +853,13 @@
 - Root cause: `ctaRef.current?.focus()` in `AppStoreDrawer.tsx:80` triggers browser scroll-into-view behavior. The CTA button exists in the DOM but is off-screen (below `overflow-hidden` container) during mount at `y: "100%"`. `focus()` auto-scrolls the nearest scrollable ancestor, shifting the grid's `scrollTop`.
 - Fix: added `{ preventScroll: true }` to the `focus()` call so the browser focuses without scrolling. The drawer's Framer Motion spring animation brings the CTA into view naturally.
 - Verified: 102/102 tests pass, typecheck clean, lint 0 errors (3 pre-existing warnings)
+
+## 2026-05-21 — Phase 8: Populate drawer longDescription for all 34 products
+
+- Added `longDescription` field to all 34 products in `public/data/products.json`
+- Each description is 2–4 sentences (257–387 chars), richer than the one-liner `description` but concise enough for the mobile bottom-sheet drawer
+- Research sources: product page meta descriptions via leexperimental.com, existing product data, portfolio context from concept brief and feature interview docs
+- Descriptions cover product purpose, key features, and value proposition — tailored to each product's maturity (launched, beta, archived, killed, reserved)
+- Spellbook OS sub-modules (Sanctum, Foresight, Prism, Ritual, Portals, Scry) describe their role within the parent system
+- Updated `tasks/todo.md` with completed Phase 8 section (35/35 items checked)
+- Verified: 102/102 tests pass, typecheck clean, lint 0 errors (3 pre-existing warnings), JSON valid

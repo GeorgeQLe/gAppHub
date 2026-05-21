@@ -1,8 +1,8 @@
 # GappHub — Current Phase
 
 > Project: GappHub (Lexcorp product portfolio launcher)
-> All 7 phases complete (2026-05-19).
-> Total Phases: 7
+> All 8 phases complete (2026-05-21).
+> Total Phases: 8
 
 ## Priority Task Queue
 
@@ -20,3 +20,41 @@
 - [ ] `/gtm` - create `research/gtm.md` because it is missing; after `/positioning` and `/journey-map`.
 - [ ] `/monetization` - create `research/monetization.md` because it is missing; after `/icp` and `/competitive-analysis`. Note: GappHub is a portfolio launcher, not a revenue product — this may be minimal or N/A.
 - [ ] `/landing-copy` - create `research/landing-copy.md` because it is missing; after `/positioning` and `/journey-map`. Relevant: the site itself is the landing experience.
+
+## Phase 8 — Drawer Content Research (2026-05-21)
+
+- [x] **#1 War Room** (`war-room`) — longDescription added
+- [x] **#2 GSkillPacks** (`gskillpacks`) — longDescription added
+- [x] **#3 Pitwall** (`pitwall`) — longDescription added
+- [x] **#4 Bismarck AI** (`bismarck-ai`) — longDescription added
+- [x] **#5 Draft Stonk** (`draft-stonk`) — longDescription added
+- [x] **#6 calcLLM** (`calc-llm`) — longDescription added
+- [x] **#7 Next Level Startup** (`next-level-startup`) — longDescription added
+- [x] **#8 VectorFit** (`vectorfit`) — longDescription added
+- [x] **#9 JIT Life OS** (`jit-life-os`) — longDescription added
+- [x] **#10 gBlockParty** (`gblockparty`) — longDescription added
+- [x] **#11 PulseBoard** (`pulseboard`) — longDescription added
+- [x] **#12 Metternich Engine** (`metternich-engine`) — longDescription added
+- [x] **#13 WarranIT** (`warranit`) — longDescription added
+- [x] **#14 FormForge** (`formforge`) — longDescription added
+- [x] **#15 SnipVault** (`snipvault`) — longDescription added
+- [x] **#16 DriftLog** (`driftlog`) — longDescription added
+- [x] **#17 Poketo** (`poketo`) — longDescription added
+- [x] **#18 Poke CRM** (`poke-crm`) — longDescription added
+- [x] **#19 Poke Growth** (`poke-growth`) — longDescription added
+- [x] **#20 CheckGres** (`checkgres`) — longDescription added
+- [x] **#21 GIGACHADD** (`gigachadd`) — longDescription added
+- [x] **#22 Spellbook OS** (`spellbook-os`) — longDescription added
+- [x] **#23 Moltke** (`moltke`) — longDescription added
+- [x] **#24 SpaceNext** (`spacenext`) — longDescription added
+- [x] **#25 B4** (`b4`) — longDescription added
+- [x] **#26 Boston Founder Radio** (`boston-founder-radio`) — longDescription added
+- [x] **#27 PMF Hunt** (`pmfhunt`) — longDescription added
+- [x] **#28 Loadoutworks** (`loadoutworks`) — longDescription added
+- [x] **#29 Sanctum** (`spellbook-sanctum`) — longDescription added
+- [x] **#30 Foresight** (`spellbook-foresight`) — longDescription added
+- [x] **#31 Prism** (`spellbook-prism`) — longDescription added
+- [x] **#32 Ritual** (`spellbook-ritual`) — longDescription added
+- [x] **#33 Portals** (`spellbook-portals`) — longDescription added
+- [x] **#34 Scry** (`spellbook-scry`) — longDescription added
+- [x] **#35 Compile** — All longDescription values applied to `public/data/products.json`
