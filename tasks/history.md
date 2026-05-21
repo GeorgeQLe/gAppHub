@@ -823,3 +823,10 @@
 - Fix: increased `damping` from 35 to 38 in `src/components/AppStoreDrawer.tsx:101`, making the spring slightly overdamped (ratio ~1.06) to eliminate overshoot while keeping snappy feel
 - Drag-to-dismiss unaffected (separate from entry/exit transition)
 - Verified: 102/102 tests pass, lint clean (0 errors, 3 pre-existing warnings)
+
+## 2026-05-20 — Fix: Drawer rubber-band overshoot (elastic clamp)
+
+- Previous fix (damping 35→38) made spring overdamped but rubber-band persisted — root cause was `dragElastic={0.2}` allowing elastic displacement past `dragConstraints={{ top: 0 }}`, amplifying sub-pixel overshoot on frame timing
+- Fix: set `dragElastic={0}` in `AppStoreDrawer.tsx:130` to hard-clamp at top constraint; reverted damping back to 35 for snappier feel (safe with elastic=0)
+- Drag-to-dismiss (downward) unaffected — no `bottom` constraint
+- Verified: 102/102 tests pass
