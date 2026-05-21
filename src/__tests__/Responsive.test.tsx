@@ -38,6 +38,18 @@ describe("PhoneFrame — desktop", () => {
     expect(frame?.className).toContain("md:rounded-[50px]");
   });
 
+  it("locks the rendered phone width so sparse search results cannot shrink it", () => {
+    const { container } = render(<PhoneFrame />);
+    const outer = container.firstElementChild!;
+    const frame = container.querySelector(".phone-frame-shell");
+    const region = screen.getByRole("region");
+
+    expect(outer.className).toContain("md:min-w-[405px]");
+    expect(outer.className).toContain("md:shrink-0");
+    expect(frame?.className).toContain("md:w-full");
+    expect(region.className).toContain("md:w-full");
+  });
+
   it("uses the desktop metallic shell class", () => {
     const { container } = render(<PhoneFrame />);
     const frame = container.querySelector(".phone-frame-shell");
