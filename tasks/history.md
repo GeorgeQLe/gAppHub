@@ -830,3 +830,11 @@
 - Fix: set `dragElastic={0}` in `AppStoreDrawer.tsx:130` to hard-clamp at top constraint; reverted damping back to 35 for snappier feel (safe with elastic=0)
 - Drag-to-dismiss (downward) unaffected — no `bottom` constraint
 - Verified: 102/102 tests pass
+
+## 2026-05-20 — Fix: Drawer rubber-band overshoot (disable drag during entry animation)
+
+- Previous two fixes (damping 35→38, dragElastic=0) targeted the wrong layer — `dragElastic` and `dragConstraints` only affect user drag gestures, not the programmatic spring animation
+- Root cause: `drag="y"` was active during the entry animation. Framer-motion's drag system and animation system share the same `y` motion value; at the settling point, the drag system's pixel-based constraint resolution (`top: 0px`) conflicts with the animation's percentage-based target (`y: "0%"`), producing a visible bounce
+- Fix: added `canDrag` state (initially false, reset on `product` change), enabled only after `onAnimationComplete` fires with `"visible"` variant. Changed `drag` prop to `drag={reducedMotion ? false : canDrag ? "y" : false}`
+- Kept `dragElastic={0}` and `damping=35` — both correct for post-animation drag behavior
+- Verified: 102/102 tests pass

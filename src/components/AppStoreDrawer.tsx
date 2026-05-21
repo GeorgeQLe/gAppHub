@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useEffect, useRef, useCallback } from "react";
+import { createElement, useEffect, useRef, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import * as icons from "lucide-react";
@@ -33,6 +33,7 @@ function getIcon(name: string): LucideIcon | null {
 
 export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps) {
   const reducedMotion = useReducedMotion();
+  const [canDrag, setCanDrag] = useState(false);
   const sheetRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
 
@@ -66,6 +67,10 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
     },
     [onClose],
   );
+
+  useEffect(() => {
+    setCanDrag(false);
+  }, [product]);
 
   useEffect(() => {
     if (!product) return;
@@ -125,7 +130,10 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
             animate="visible"
             exit="exit"
             transition={sheetTransition}
-            drag={reducedMotion ? false : "y"}
+            onAnimationComplete={(variant) => {
+              if (variant === "visible") setCanDrag(true);
+            }}
+            drag={reducedMotion ? false : canDrag ? "y" : false}
             dragConstraints={{ top: 0 }}
             dragElastic={0}
             onDragEnd={(_e, info) => {
