@@ -847,3 +847,9 @@
 - Cleanup: removed debug instrumentation from `AppStoreDrawer.tsx` (debugSamples/debugRaf/debugStart refs, sampling useEffect, console logging in onAnimationComplete)
 - Cleanup: deleted `public/debug-drawer.html` diagnostic page
 - Verified: 102/102 tests pass, typecheck clean, lint 0 errors (3 pre-existing warnings)
+
+## 2026-05-20 — Fix: Grid slides down when drawer opens (focus scroll)
+
+- Root cause: `ctaRef.current?.focus()` in `AppStoreDrawer.tsx:80` triggers browser scroll-into-view behavior. The CTA button exists in the DOM but is off-screen (below `overflow-hidden` container) during mount at `y: "100%"`. `focus()` auto-scrolls the nearest scrollable ancestor, shifting the grid's `scrollTop`.
+- Fix: added `{ preventScroll: true }` to the `focus()` call so the browser focuses without scrolling. The drawer's Framer Motion spring animation brings the CTA into view naturally.
+- Verified: 102/102 tests pass, typecheck clean, lint 0 errors (3 pre-existing warnings)

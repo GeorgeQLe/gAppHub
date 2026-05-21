@@ -77,7 +77,7 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
     if (!product) return;
 
     document.addEventListener("keydown", handleKeyDown);
-    const raf = requestAnimationFrame(() => ctaRef.current?.focus());
+    const raf = requestAnimationFrame(() => ctaRef.current?.focus({ preventScroll: true }));
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
