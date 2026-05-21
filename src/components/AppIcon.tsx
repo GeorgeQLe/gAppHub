@@ -29,6 +29,9 @@ const badgeLabelMap: Record<string, string> = {
 
 const CUSTOM_ICON_IDS = new Set(["war-room", "pitwall", "gskillpacks", "gblockparty"]);
 const ICON_SIZE = 54;
+const iconAlignmentClassMap: Record<string, string> = {
+  joystick: "-translate-x-0.5",
+};
 
 function getIcon(name: string): LucideIcon | null {
   const pascalName = name
@@ -79,7 +82,7 @@ const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
               {icon ? (
                 createElement(icon, {
                   size: 25,
-                  className: "text-white",
+                  className: `text-white ${iconAlignmentClassMap[product.icon] ?? ""}`.trim(),
                   strokeWidth: 1.5,
                 })
               ) : (

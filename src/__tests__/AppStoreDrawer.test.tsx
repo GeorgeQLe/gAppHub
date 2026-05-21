@@ -228,4 +228,21 @@ describe("AppStoreDrawer icon rendering", () => {
     expect(icon?.className).toContain("grayscale");
     expect(icon?.className).toContain("opacity-50");
   });
+
+  it("nudges the joystick glyph left inside the drawer icon tile", () => {
+    const { container } = render(
+      <AppStoreDrawer
+        product={makeProduct({
+          id: "metternich-engine",
+          name: "Metternich Engine",
+          icon: "joystick",
+        })}
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(container.querySelector("svg")?.className.baseVal).toContain(
+      "-translate-x-0.5",
+    );
+  });
 });

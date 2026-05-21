@@ -132,3 +132,21 @@ describe("AppIcon deprecated styling", () => {
     expect(iconDiv.className).not.toContain("grayscale");
   });
 });
+
+describe("AppIcon optical alignment", () => {
+  it("nudges the joystick glyph left inside its icon tile", () => {
+    const { container } = render(
+      <AppIcon
+        product={makeProduct({
+          id: "metternich-engine",
+          name: "Metternich Engine",
+          icon: "joystick",
+        })}
+      />,
+    );
+
+    expect(container.querySelector("svg")?.className.baseVal).toContain(
+      "-translate-x-0.5",
+    );
+  });
+});
