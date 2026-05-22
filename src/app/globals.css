@@ -13,6 +13,8 @@
 }
 
 html {
+  background: var(--background);
+  min-height: 100%;
   overscroll-behavior: none;
 }
 
@@ -21,6 +23,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
+  min-height: 100dvh;
   overscroll-behavior: none;
 }
 

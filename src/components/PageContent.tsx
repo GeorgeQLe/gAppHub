@@ -130,7 +130,7 @@ export default function PageContent({
   const shouldAnimate = variant === "none" && !reducedMotion;
 
   const content = (
-    <main className="flex h-screen max-h-screen flex-col items-center overflow-hidden px-4 py-4">
+    <main className="flex h-dvh max-h-dvh flex-col items-center overflow-hidden px-4 py-4">
       <div className="flex min-h-0 flex-1 flex-col items-center pb-8">
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <PhoneSwipeProvider>
