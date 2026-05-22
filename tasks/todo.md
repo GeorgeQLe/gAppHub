@@ -15,7 +15,7 @@
 - [x] `/reconcile-dev-docs fix tasks` - reconcile task docs because `tasks/manual-todo.md` header still says "All 6 implementation phases complete (2026-05-15)" but Phase 7 is now complete; also verify phase archive completeness (no `tasks/phases/phase-7.md`). Completed 2026-05-20.
 - [x] `/icp` - `research/icp.md` exists; shipped alignment summary page at `alignment/icp.html` (2026-05-21).
 - [x] `/competitive-analysis` - `research/competitive-analysis.md` exists; shipped alignment summary page at `alignment/icp.html` (2026-05-21).
-- [ ] `/positioning` - create `research/positioning.md` because it is missing; after `/icp` and `/competitive-analysis`.
+- [x] `/positioning` - create `research/positioning.md` because it is missing; after `/icp` and `/competitive-analysis`. Completed 2026-05-22.
   - Goal: define GappHub's strategic positioning as a polished Lexcorp portfolio launcher, using existing `research/icp.md`, `research/competitive-analysis.md`, `research/concept-brief.md`, `specs/ui-gapphub.md`, and product data as source material.
   - Output file: `research/positioning.md`.
   - Recommended structure: competitive alternatives, unique attributes, value themes, best-fit audience, market category, positioning statement, and implications for the current UI/landing experience.

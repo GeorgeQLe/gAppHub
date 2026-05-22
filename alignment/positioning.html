@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GappHub Positioning Alignment</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1d1d1f;
+        --muted: #6e6e73;
+        --line: #d2d2d7;
+        --panel: #ffffff;
+        --wash: #f5f5f7;
+        --accent: #0a84ff;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, var(--wash), #ffffff);
+      }
+
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 48px 24px 64px;
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 24px;
+        margin-bottom: 28px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 40px;
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin: 32px 0 12px;
+        font-size: 20px;
+        letter-spacing: 0;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      strong {
+        color: var(--ink);
+      }
+
+      .statement {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+
+      .tile {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .tile h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .tile p {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      a {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>GappHub Positioning Alignment</h1>
+        <p>
+          Preview of the canonical research artifact written to
+          <a href="../research/positioning.md">research/positioning.md</a>.
+        </p>
+      </header>
+
+      <section class="statement">
+        <p>
+          <strong>Positioning:</strong> GappHub is a branded product portfolio launcher for visitors,
+          partners, investors, and candidates who need a fast, credible way to understand the breadth
+          and quality of Lexcorp's product portfolio.
+        </p>
+        <p>
+          <strong>Unlike</strong> generic link-in-bio tools, scattered product sites, or template
+          portfolio pages, GappHub uses a bespoke iPhone home-screen metaphor, app-style drawer details,
+          and self-hosted product data to make the portfolio itself feel like a shipped Lexcorp product.
+        </p>
+      </section>
+
+      <h2>Recommended Category</h2>
+      <p>
+        Branded product portfolio launcher. This keeps the product understandable as adjacent to
+        link-in-bio and portfolio pages without inheriting marketplace, app-store, creator commerce,
+        or standalone SaaS expectations.
+      </p>
+
+      <h2>Core Evidence</h2>
+      <div class="grid">
+        <article class="tile">
+          <h3>ICP</h3>
+          <p>Visitors need one shareable URL, fast scanning, and immediate credibility.</p>
+        </article>
+        <article class="tile">
+          <h3>Competitive Analysis</h3>
+          <p>The market is crowded with generic or creator-monetization tools, not company portfolio launchers.</p>
+        </article>
+        <article class="tile">
+          <h3>Concept Brief</h3>
+          <p>The value wedge is turning a link list into a memorable Apple-inspired showcase.</p>
+        </article>
+        <article class="tile">
+          <h3>UI Spec</h3>
+          <p>The phone frame, app grid, search, dock, and drawers make the metaphor concrete.</p>
+        </article>
+      </div>
+
+      <h2>Implications</h2>
+      <ul>
+        <li>Lead copy with the portfolio role: one shareable front door for Lexcorp products.</li>
+        <li>Keep app-store cues as interaction language, not market category language.</li>
+        <li>Avoid claims around marketplace, commerce, ratings, installs, accounts, or personalization.</li>
+        <li>Use the phone frame as the first-viewport proof point because the metaphor is the positioning.</li>
+      </ul>
+    </main>
+  </body>
+</html>

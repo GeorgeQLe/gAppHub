@@ -899,3 +899,27 @@
 - Residual risk: Safari Computer Use navigation remained on `/v2` during the manual browser attempt, so automated test/build evidence is the primary proof for the interaction. A real-device gesture check remains useful before production launch.
 - Rollback note: revert the search-grid commit to restore the prior split model with separate typed search results.
 - Next command: `$run`
+
+## 2026-05-22 — Research: Positioning
+
+- User goal: create `research/positioning.md` after ICP and competitive analysis.
+- Changed files:
+  - `research/positioning.md` — canonical positioning research artifact.
+  - `alignment/positioning.html` — browser-readable alignment preview of the positioning recommendation.
+  - `tasks/todo.md` — marks the positioning queue item complete.
+  - `tasks/history.md` — records the shipped research work and manifest.
+- Per-file purpose: keep the research artifact durable, provide a preview surface, and keep task history synchronized.
+- User-goal mapping: the positioning doc defines competitive alternatives, unique attributes, value themes, best-fit audience, market category, positioning statement, and UI implications without reframing GappHub as a marketplace or standalone revenue product.
+- Created `research/positioning.md` using local ICP, competitive analysis, concept brief, UI spec, and product data as source material.
+- Positioned GappHub as a branded product portfolio launcher, not a marketplace, app store, generic bio-link page, or standalone revenue product.
+- Recommended the primary frame: one shareable front door for Lexcorp's product universe, with the phone-frame metaphor as the positioning proof point.
+- Checked current external category context for Linktree, Beacons, Carrd, Squarespace/link-in-bio builders, and April Dunford positioning methodology.
+- Updated `tasks/todo.md` to mark the positioning queue item complete.
+- Tests run:
+  - `pnpm lint` — passed with no warnings emitted.
+  - `pnpm test` — 111/111 tests passed.
+- Skipped tests: `pnpm build` skipped because this was documentation/research-only and lint + tests already confirmed no source regression; no manual mobile/tablet pass because `tasks/manual-todo.md` keeps that deferred production-launch check.
+- Adversarial review: checked the positioning against local ICP, competitive analysis, concept brief, UI spec, and product data; specifically reviewed for prohibited frames (marketplace, app store, standalone revenue product), unsupported monetization claims, and overclaiming table-stakes link aggregation.
+- Residual risk: claims are evidence-backed by local research and current web checks, but user validation is still useful for proprietary brand constraints and whether "Lexcorp" should remain the first brand frame.
+- Rollback note: revert the positioning research commit to remove the new artifact and reopen the queue item.
+- Next command: `$run`
