@@ -124,12 +124,39 @@ describe("Search filtering via IconGrid", () => {
     fireEvent.change(input, { target: { value: query } });
   }
 
-  it("pull-down gesture opens search and shows all products", () => {
-    render(<IconGrid products={products} />);
+  it("pull-down gesture opens search without flattening every page", () => {
+    const manyProducts = Array.from({ length: 30 }, (_, index) =>
+      makeProduct({
+        id: `app-${index + 1}`,
+        name: `App ${index + 1}`,
+        order: index + 1,
+      }),
+    );
+
+    render(<IconGrid products={manyProducts} />);
     openSearchAndType("");
 
-    expect(screen.getByText("Alpha")).toBeInTheDocument();
-    expect(screen.getByText("Bravo")).toBeInTheDocument();
+    expect(screen.getByText("App 1")).toBeInTheDocument();
+    expect(screen.getByText("App 24")).toBeInTheDocument();
+    expect(document.querySelector("[data-search-results]")).toBeNull();
+    expect(screen.queryByText("No apps found")).toBeNull();
+  });
+
+  it("uses a scrollable pane for broad search results", () => {
+    const manyProducts = Array.from({ length: 30 }, (_, index) =>
+      makeProduct({
+        id: `app-${index + 1}`,
+        name: `App ${index + 1}`,
+        order: index + 1,
+      }),
+    );
+
+    render(<IconGrid products={manyProducts} />);
+    openSearchAndType("App");
+
+    const results = document.querySelector("[data-search-results]");
+    expect(results).toHaveClass("overflow-y-auto");
+    expect(screen.getByText("App 25")).toBeInTheDocument();
   });
 
   it("filters by product name", () => {

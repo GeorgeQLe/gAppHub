@@ -35,7 +35,7 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const touchRef = useRef<{ startX: number; startY: number } | null>(null);
+  const touchRef = useRef<{ startX: number; startY: number; startedInSearchResults: boolean } | null>(null);
   const iconRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const userInteracted = useRef(false);
   const swipe = usePhoneSwipe();
@@ -77,9 +77,11 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (drawerOpen) return;
+    const target = e.target;
     touchRef.current = {
       startX: e.touches[0].clientX,
       startY: e.touches[0].clientY,
+      startedInSearchResults: target instanceof Element && target.closest("[data-search-results]") !== null,
     };
   };
 
@@ -87,6 +89,7 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
     if (!touchRef.current || drawerOpen) return;
     const dx = e.changedTouches[0].clientX - touchRef.current.startX;
     const dy = e.changedTouches[0].clientY - touchRef.current.startY;
+    const startedInSearchResults = touchRef.current.startedInSearchResults;
     touchRef.current = null;
 
     if (
@@ -99,7 +102,7 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
     }
 
     if (showSearch) {
-      if (dy < -PULL_DOWN_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
+      if (!startedInSearchResults && dy < -PULL_DOWN_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
         handleDismissSearch();
       }
       return;
@@ -183,7 +186,8 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
     }
   };
 
-  const filtered = showSearch ? filterProducts(products, searchTerm) : null;
+  const hasSearchTerm = searchTerm.trim().length > 0;
+  const filtered = showSearch && hasSearchTerm ? filterProducts(products, searchTerm) : null;
 
   return (
     <div
@@ -203,7 +207,10 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
 
       {filtered !== null ? (
         filtered.length > 0 ? (
-          <div className={GRID_PAGE_CLASSES}>
+          <div
+            className={`${GRID_PAGE_CLASSES} h-full overflow-y-auto overscroll-contain`}
+            data-search-results
+          >
             {filtered.map((p) => (
               <AppIcon product={p} key={p.id} onSelect={onIconSelect} />
             ))}
@@ -242,9 +249,11 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
               </div>
             ))}
           </div>
-          <div className="pointer-events-auto absolute inset-x-0 bottom-[100px] z-20">
-            <PageDots total={totalPages} active={page} onChange={goTo} />
-          </div>
+          {!showSearch && (
+            <div className="pointer-events-auto absolute inset-x-0 bottom-[100px] z-20">
+              <PageDots total={totalPages} active={page} onChange={goTo} />
+            </div>
+          )}
         </>
       )}
     </div>
@@ -252,7 +261,7 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
 }
 
 function filterProducts(products: Product[], term: string): Product[] {
-  if (!term.trim()) return products;
+  if (!term.trim()) return [];
   const q = term.toLowerCase();
   return products.filter((p) => {
     if (p.name.toLowerCase().includes(q)) return true;
