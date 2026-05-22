@@ -22,7 +22,7 @@
   - Constraints: do not reposition GappHub as a marketplace, app store, or standalone revenue product; keep the app's role as a branded portfolio/navigation surface.
   - Verification: cite local source files used, check consistency with the ICP and competitive-analysis conclusions, and record any assumptions that need user validation.
   - Suggested route: `$positioning`.
-- [ ] `/journey-map` - create `research/journey-map.md` because it is missing; after `/icp`. Particularly relevant: defines visitor discovery → exploration → product-click flow for the portfolio launcher.
+- [x] `/journey-map` - create `research/journey-map.md` because it is missing; after `/icp`. Completed 2026-05-22.
 - [ ] `/metrics` - create `research/metrics.md` because it is missing; after `/journey-map`.
 - [ ] `/gtm` - create `research/gtm.md` because it is missing; after `/positioning` and `/journey-map`.
 - [ ] `/monetization` - create `research/monetization.md` because it is missing; after `/icp` and `/competitive-analysis`. Note: GappHub is a portfolio launcher, not a revenue product — this may be minimal or N/A.

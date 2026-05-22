@@ -1,5 +1,13 @@
 # Session History — GappHub
 
+## 2026-05-22 — Journey map research shipped
+
+- Created `research/journey-map.md`, mapping the anonymous visitor flow from discovery trigger through orientation, app-grid scan, drawer evaluation, product click-through, and optional exploration loop.
+- Grounded the map in `research/icp.md`, `research/positioning.md`, `research/concept-brief.md`, `specs/ui-gapphub.md`, and `public/data/products.json`.
+- Marked the journey-map documentation queue item complete in `tasks/todo.md`.
+- Validation: documentation-focused checks only; no source code changed and executable app tests were not required for this documentation-only step.
+- Ship manifest: User goal: execute the next incomplete `$run` step, which was the journey-map documentation item. Changed files: `research/journey-map.md`, `alignment/commit-and-push-by-feature-journey-map.html`, `tasks/todo.md`, `tasks/history.md`. Per-file purpose: new journey research artifact; alignment preview page; task completion bookkeeping; session history record. User-goal mapping: the new research file directly satisfies the unchecked `/journey-map` item, and task/history updates make the project state resumable. Tests run: file existence and source-reference checks. Skipped tests: `npm run lint`, `npm test`, and `npm run build` because this step changed only Markdown documentation and task records, not application source, configuration, runtime assets, schemas, or command surfaces. Adversarial review: checked the journey does not reposition GappHub as a marketplace, app store, commerce surface, or SaaS product and keeps infrastructure/analytics as future measurement ideas only. Residual risk: assumptions about visitor comprehension and CTA wording still need validation with real users or analytics. Rollback note: revert the shipping commit to remove the journey map and restore the queue item. Next command: `$run`.
+
 ## 2026-05-21 — ICP and competitive alignment page shipped
 
 - Created `alignment/icp.html`, a standalone static HTML page synthesizing `research/icp.md`, `research/competitive-analysis.md`, and `research/concept-brief.md`.

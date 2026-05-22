@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GappHub Journey Map Alignment</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1d1d1f;
+        --muted: #6e6e73;
+        --line: #d2d2d7;
+        --panel: #ffffff;
+        --bg: #f5f5f7;
+        --blue: #2563eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, var(--bg), #ffffff);
+        color: var(--ink);
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1040px, calc(100vw - 40px));
+        margin: 0 auto;
+        padding: 56px 0;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(36px, 6vw, 64px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 22px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .lede {
+        max-width: 760px;
+        font-size: 20px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 36px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 20px;
+      }
+
+      .panel strong {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 36px;
+      }
+
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #ffffff;
+        padding: 14px;
+        min-height: 120px;
+      }
+
+      .step span {
+        display: inline-flex;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: var(--blue);
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .step b {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .step p {
+        font-size: 14px;
+      }
+
+      .sources {
+        margin-top: 36px;
+      }
+
+      .sources ul {
+        margin: 12px 0 0;
+        padding-left: 20px;
+        color: var(--muted);
+      }
+
+      code {
+        color: var(--ink);
+        background: #f0f0f3;
+        border-radius: 4px;
+        padding: 1px 4px;
+      }
+
+      @media (max-width: 840px) {
+        .grid,
+        .flow {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Journey Map Alignment</h1>
+      <p class="lede">
+        Preview of the new <code>research/journey-map.md</code> artifact for GappHub's anonymous visitor flow from discovery trigger to product click-through.
+      </p>
+
+      <section class="grid" aria-label="Document purpose">
+        <div class="panel">
+          <strong>Purpose</strong>
+          <p>Define the portfolio launcher journey so metrics, GTM, monetization, and landing-copy work stay tied to actual visitor behavior.</p>
+        </div>
+        <div class="panel">
+          <strong>Positioning Guardrail</strong>
+          <p>Keep GappHub framed as a branded product portfolio launcher, not a marketplace, app store, commerce surface, or standalone SaaS.</p>
+        </div>
+        <div class="panel">
+          <strong>Implementation Scope</strong>
+          <p>Documentation only. The artifact records analytics and infrastructure as future measurement ideas, not current build requirements.</p>
+        </div>
+      </section>
+
+      <section class="flow" aria-label="Journey flow">
+        <div class="step"><span>1</span><b>Trigger</b><p>Visitor opens a social bio, shared URL, pitch-deck link, search result, QR code, or product cross-link.</p></div>
+        <div class="step"><span>2</span><b>Orientation</b><p>The boot sequence and phone frame communicate Lexcorp portfolio breadth and polish.</p></div>
+        <div class="step"><span>3</span><b>Scan</b><p>The visitor reads icon names, badges, page dots, dock entries, and search affordances.</p></div>
+        <div class="step"><span>4</span><b>Narrow</b><p>An app-style drawer gives enough product context for a confident choice.</p></div>
+        <div class="step"><span>5</span><b>Click</b><p>The Open CTA sends the visitor to the selected product site.</p></div>
+        <div class="step"><span>6</span><b>Explore</b><p>The visitor can close the drawer and continue comparing products.</p></div>
+      </section>
+
+      <section class="sources panel">
+        <h2>Canonical File Changes</h2>
+        <ul>
+          <li><code>research/journey-map.md</code> creates the journey-map research artifact.</li>
+          <li><code>tasks/todo.md</code> marks the journey-map queue item complete.</li>
+          <li><code>tasks/history.md</code> records the ship manifest and validation rationale.</li>
+        </ul>
+      </section>
+
+      <section class="sources panel">
+        <h2>Source Evidence</h2>
+        <ul>
+          <li><code>research/icp.md</code> for visitor segments, triggers, and pain points.</li>
+          <li><code>research/positioning.md</code> for category and market guardrails.</li>
+          <li><code>research/concept-brief.md</code> for product constraints and non-goals.</li>
+          <li><code>specs/ui-gapphub.md</code> for the phone-frame, drawer, search, and pagination model.</li>
+          <li><code>public/data/products.json</code> for product metadata fields supporting the journey.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
