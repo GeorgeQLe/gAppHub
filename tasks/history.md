@@ -879,3 +879,23 @@
 - Fix: moved the sheet to `z-40` and added `transform-gpu`, `will-change-transform`, `[backface-visibility:hidden]`, and `[contain:paint]` to keep the sliding sheet on a stable isolated layer above the backdrop.
 - Added regression coverage in `AppStoreDrawer.test.tsx` for the layer-isolation classes.
 - Verified: drawer test 22/22 passes, full suite 106/106 passes, lint clean, production build succeeds.
+
+## 2026-05-22 — Fix: Search uses single paged grid model
+
+- User goal: keep horizontal page swaps available while search mode is enabled, avoiding the prior split behavior where typed search used a vertical results pane.
+- Changed files:
+  - `src/components/IconGrid.tsx` — derives `visibleProducts` from search state, paginates both normal and filtered app sets through the same grid branch, keeps page dots/swipes active in search, resets to page 1 on query change, and leaves search-input arrow keys to the input.
+  - `src/__tests__/Search.test.tsx` — updates regression tests for broad search pagination, active swipes during search, query reset, input arrow key handling, and no-match state.
+  - `alignment/investigate-search-grid-model.html` — alignment and wireframe artifact comparing split, single-grid, and hybrid search approaches; Option B selected.
+  - `tasks/todo.md`, `tasks/history.md` — shipping notes and manifest.
+- User-goal mapping: search now changes which products are in the grid, not how the grid navigates; empty and typed searches retain the same horizontal page model.
+- Tests run:
+  - `pnpm test` — 111/111 passing
+  - `pnpm lint` — passing, no warnings emitted
+  - `pnpm build` — passing, static route generation succeeds
+  - `curl -I http://localhost:3000` — existing dev server responds 200
+- Skipped tests: no manual mobile/tablet device pass; existing `tasks/manual-todo.md` keeps that deferred production-launch check.
+- Adversarial review: checked for search-mode regressions around empty query flattening, filtered result pagination, page-dot visibility, swipe handling, no-match results, drawer swipe suppression, and input key handling. Initial implementation exposed a hook ordering crash and an invalid set-state-in-effect lint pattern; both were fixed before shipping.
+- Residual risk: Safari Computer Use navigation remained on `/v2` during the manual browser attempt, so automated test/build evidence is the primary proof for the interaction. A real-device gesture check remains useful before production launch.
+- Rollback note: revert the search-grid commit to restore the prior split model with separate typed search results.
+- Next command: `$run`

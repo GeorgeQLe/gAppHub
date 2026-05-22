@@ -124,14 +124,17 @@ describe("Search filtering via IconGrid", () => {
     fireEvent.change(input, { target: { value: query } });
   }
 
-  it("pull-down gesture opens search without flattening every page", () => {
-    const manyProducts = Array.from({ length: 30 }, (_, index) =>
+  const makeManyProducts = (count: number, namePrefix = "App") =>
+    Array.from({ length: count }, (_, index) =>
       makeProduct({
         id: `app-${index + 1}`,
-        name: `App ${index + 1}`,
+        name: `${namePrefix} ${index + 1}`,
         order: index + 1,
       }),
     );
+
+  it("pull-down gesture opens search without flattening every page", () => {
+    const manyProducts = makeManyProducts(30);
 
     render(<IconGrid products={manyProducts} />);
     openSearchAndType("");
@@ -142,21 +145,76 @@ describe("Search filtering via IconGrid", () => {
     expect(screen.queryByText("No apps found")).toBeNull();
   });
 
-  it("uses a scrollable pane for broad search results", () => {
-    const manyProducts = Array.from({ length: 30 }, (_, index) =>
-      makeProduct({
-        id: `app-${index + 1}`,
-        name: `App ${index + 1}`,
-        order: index + 1,
-      }),
-    );
+  it("uses paginated grid pages for broad search results", () => {
+    const manyProducts = makeManyProducts(30);
 
     render(<IconGrid products={manyProducts} />);
     openSearchAndType("App");
 
-    const results = document.querySelector("[data-search-results]");
-    expect(results).toHaveClass("overflow-y-auto");
+    expect(document.querySelector("[data-search-results]")).toBeNull();
+    expect(screen.getAllByRole("tab")).toHaveLength(2);
+    expect(screen.getByText("App 1")).toBeInTheDocument();
     expect(screen.getByText("App 25")).toBeInTheDocument();
+  });
+
+  it("keeps horizontal swipe active while search is open", () => {
+    const manyProducts = makeManyProducts(30);
+    render(<IconGrid products={manyProducts} />);
+    openSearchAndType("App");
+
+    const region = screen.getByRole("grid", { name: "Product apps" });
+    fireEvent.touchStart(region, {
+      touches: [{ clientX: 200, clientY: 100 }],
+    });
+    fireEvent.touchEnd(region, {
+      changedTouches: [{ clientX: 100, clientY: 105 }],
+    });
+
+    expect(screen.getAllByRole("tab")[1]).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
+  it("resets to the first page when the search query changes", () => {
+    const manyProducts = makeManyProducts(50);
+    render(<IconGrid products={manyProducts} />);
+    openSearchAndType("App");
+
+    const region = screen.getByRole("grid", { name: "Product apps" });
+    fireEvent.touchStart(region, {
+      touches: [{ clientX: 200, clientY: 100 }],
+    });
+    fireEvent.touchEnd(region, {
+      changedTouches: [{ clientX: 100, clientY: 105 }],
+    });
+    expect(screen.getAllByRole("tab")[1]).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+
+    fireEvent.change(screen.getByLabelText("Search apps"), {
+      target: { value: "live" },
+    });
+
+    expect(screen.getAllByRole("tab")[0]).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
+  it("does not use grid arrow navigation from the search input", () => {
+    const manyProducts = makeManyProducts(30);
+    render(<IconGrid products={manyProducts} />);
+    openSearchAndType("App");
+
+    const input = screen.getByLabelText("Search apps");
+    fireEvent.keyDown(input, { key: "ArrowRight" });
+
+    expect(screen.getAllByRole("tab")[0]).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
   });
 
   it("filters by product name", () => {
@@ -189,5 +247,6 @@ describe("Search filtering via IconGrid", () => {
     openSearchAndType("zzzzz");
 
     expect(screen.getByText("No apps found")).toBeInTheDocument();
+    expect(screen.queryByRole("tablist")).toBeNull();
   });
 });

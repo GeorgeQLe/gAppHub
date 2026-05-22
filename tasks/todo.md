@@ -6,6 +6,7 @@
 
 ## Priority Task Queue
 
+- [x] `$investigate` / `$ship` - align and implement single paged grid search model so search filters the same horizontal app grid while preserving page dots and swipes (2026-05-22).
 - [x] `/research-roadmap` - documentation scan completed (2026-05-19).
 
 ## Priority Documentation Todo
