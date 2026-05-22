@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GappHub Expert Review</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1d1d1f;
+        --muted: #6e6e73;
+        --line: #d8d8de;
+        --panel: #ffffff;
+        --bg: #f5f5f7;
+        --green: #1f8f4d;
+        --amber: #a15c00;
+        --blue: #1f5fbf;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        background: linear-gradient(180deg, var(--bg), #ffffff);
+        color: var(--ink);
+      }
+      main {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 56px;
+      }
+      header {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 24px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(32px, 5vw, 52px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+      .lede {
+        max-width: 760px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin: 24px 0;
+      }
+      .tile,
+      section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .tile {
+        padding: 18px;
+      }
+      .tile strong {
+        display: block;
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+      .tile span {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      section {
+        margin-top: 18px;
+        padding: 22px;
+      }
+      h2 {
+        margin: 0 0 14px;
+        font-size: 20px;
+      }
+      h3 {
+        margin: 18px 0 8px;
+        font-size: 16px;
+      }
+      p,
+      li {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      code {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        color: var(--ink);
+      }
+      .severity {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .none {
+        background: #e7f7ed;
+        color: var(--green);
+      }
+      .medium {
+        background: #fff4df;
+        color: var(--amber);
+      }
+      .spec {
+        background: #e8f0ff;
+        color: var(--blue);
+      }
+      @media (max-width: 760px) {
+        main {
+          width: min(100% - 24px, 1080px);
+          padding-top: 28px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>GappHub Expert Review</h1>
+        <p class="lede">
+          Project-wide review against the current UI spec, roadmap, drift report,
+          task history, and Next 16 App Router documentation.
+        </p>
+      </header>
+
+      <div class="grid" aria-label="Review summary">
+        <div class="tile">
+          <strong>0</strong>
+          <span>Critical or High findings</span>
+        </div>
+        <div class="tile">
+          <strong>111</strong>
+          <span>Vitest tests passing</span>
+        </div>
+        <div class="tile">
+          <strong>3</strong>
+          <span>Validation gates clean</span>
+        </div>
+      </div>
+
+      <section>
+        <h2>Verified Findings</h2>
+        <p><span class="severity none">Critical: none</span></p>
+        <p><span class="severity none">High: none</span></p>
+
+        <h3><span class="severity medium">Medium</span> Badge legend lacks documented hover tooltips</h3>
+        <p>
+          The UI spec says each badge legend item should show a one-line tooltip
+          on hover, but <code>src/components/BadgeLegend.tsx</code> only renders
+          static labels. <code>src/__tests__/BadgeLegend.test.tsx</code> covers
+          item presence but not tooltip behavior. Recommended fix: restore legend
+          tooltip state and add a focused test for hover/focus disclosure.
+        </p>
+
+        <h3><span class="severity medium">Medium</span> Page indicator can use unclamped active state</h3>
+        <p>
+          <code>src/components/IconGrid.tsx</code> clamps rendered content with
+          <code>safePage</code>, but passes raw <code>page</code> to
+          <code>PageDots</code>. When the row calculation changes the page count,
+          no dot can be selected even though the content is clamped to a valid
+          page. Recommended fix: pass <code>safePage</code> to
+          <code>PageDots</code> and normalize <code>page</code> when
+          <code>totalPages</code> shrinks.
+        </p>
+
+        <h3><span class="severity spec">Spec conformance</span></h3>
+        <ul>
+          <li>
+            <code>specs/ui-gapphub.md</code> explicitly documents badge legend
+            hover tooltips; implementation currently omits them.
+          </li>
+          <li>
+            The spec expects active iOS-style page dots; the current clamped
+            rendering path can temporarily disagree with the dot state after
+            responsive row recalculation.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Documented Decisions</h2>
+        <ul>
+          <li>
+            Single primary route <code>/</code> with the boot entrance animation
+            is intentional; removed comparison routes are documented.
+          </li>
+          <li>
+            Dynamic row calculation through <code>useAvailableRows</code> is now
+            part of the spec, not drift.
+          </li>
+          <li>
+            Static status-bar battery and reduced-motion animation behavior are
+            documented deferred or resolved decisions.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Validation</h2>
+        <ul>
+          <li><code>npm run lint</code> passed.</li>
+          <li><code>npm test</code> passed: 12 files, 111 tests.</li>
+          <li><code>npm run build</code> passed with Next.js 16.2.6.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
