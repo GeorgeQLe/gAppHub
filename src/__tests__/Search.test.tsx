@@ -82,6 +82,16 @@ describe("SearchOverlay standalone", () => {
     fireEvent.click(backdrop);
     expect(onDismiss).toHaveBeenCalled();
   });
+
+  it("renders the close icon in black", () => {
+    render(
+      <SearchOverlay visible={true} onSearch={vi.fn()} onDismiss={vi.fn()} />
+    );
+
+    expect(screen.getByRole("button", { name: "Close search" })).toHaveClass(
+      "text-black"
+    );
+  });
 });
 
 describe("Search filtering via IconGrid", () => {

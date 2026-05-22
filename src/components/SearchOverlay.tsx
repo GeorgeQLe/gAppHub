@@ -63,7 +63,7 @@ export default function SearchOverlay({
           type="button"
           onClick={onDismiss}
           aria-label="Close search"
-          className="flex items-center justify-center w-7 h-7 rounded-full bg-white/30 text-white/70 text-base leading-none active:bg-white/50"
+          className="flex items-center justify-center w-7 h-7 rounded-full bg-white/30 text-black text-base leading-none active:bg-white/50"
         >
           ×
         </button>
