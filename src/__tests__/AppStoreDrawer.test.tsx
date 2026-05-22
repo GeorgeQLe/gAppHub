@@ -51,6 +51,18 @@ describe("AppStoreDrawer rendering", () => {
     expect(screen.getByText("Extended description")).toBeInTheDocument();
     expect(screen.queryByText("A test product")).toBeNull();
   });
+
+  it("keeps the animated sheet on an isolated composited layer above the backdrop", () => {
+    render(<AppStoreDrawer product={makeProduct()} onClose={vi.fn()} />);
+
+    expect(screen.getByRole("dialog")).toHaveClass(
+      "z-40",
+      "transform-gpu",
+      "will-change-transform",
+      "[backface-visibility:hidden]",
+      "[contain:paint]",
+    );
+  });
 });
 
 describe("AppStoreDrawer CTA", () => {

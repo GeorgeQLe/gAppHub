@@ -129,7 +129,7 @@ export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps
             role="dialog"
             aria-modal="true"
             aria-label={`${product.name} details`}
-            className="absolute bottom-0 left-0 right-0 z-30 h-[80%] overflow-hidden rounded-t-2xl bg-white"
+            className="absolute bottom-0 left-0 right-0 z-40 h-[80%] transform-gpu overflow-hidden rounded-t-2xl bg-white will-change-transform [backface-visibility:hidden] [contain:paint]"
             variants={sheetVariants}
             initial="hidden"
             animate="visible"

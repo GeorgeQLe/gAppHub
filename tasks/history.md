@@ -872,3 +872,10 @@
 - Spellbook OS sub-modules (Sanctum, Foresight, Prism, Ritual, Portals, Scry) describe their role within the parent system
 - Updated `tasks/todo.md` with completed Phase 8 section (35/35 items checked)
 - Verified: 102/102 tests pass, typecheck clean, lint 0 errors (3 pre-existing warnings), JSON valid
+
+## 2026-05-22 — Fix: Drawer mid-animation flash
+
+- Root cause: the animated drawer sheet and backdrop both used `z-30`; the sheet also lacked explicit compositing/paint isolation while Framer Motion animated its transform, allowing intermittent backdrop/sheet repaint flashes during the slide-up.
+- Fix: moved the sheet to `z-40` and added `transform-gpu`, `will-change-transform`, `[backface-visibility:hidden]`, and `[contain:paint]` to keep the sliding sheet on a stable isolated layer above the backdrop.
+- Added regression coverage in `AppStoreDrawer.test.tsx` for the layer-isolation classes.
+- Verified: drawer test 22/22 passes, full suite 106/106 passes, lint clean, production build succeeds.
