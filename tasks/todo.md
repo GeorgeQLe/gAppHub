@@ -16,6 +16,12 @@
 - [x] `/icp` - `research/icp.md` exists; shipped alignment summary page at `alignment/icp.html` (2026-05-21).
 - [x] `/competitive-analysis` - `research/competitive-analysis.md` exists; shipped alignment summary page at `alignment/icp.html` (2026-05-21).
 - [ ] `/positioning` - create `research/positioning.md` because it is missing; after `/icp` and `/competitive-analysis`.
+  - Goal: define GappHub's strategic positioning as a polished Lexcorp portfolio launcher, using existing `research/icp.md`, `research/competitive-analysis.md`, `research/concept-brief.md`, `specs/ui-gapphub.md`, and product data as source material.
+  - Output file: `research/positioning.md`.
+  - Recommended structure: competitive alternatives, unique attributes, value themes, best-fit audience, market category, positioning statement, and implications for the current UI/landing experience.
+  - Constraints: do not reposition GappHub as a marketplace, app store, or standalone revenue product; keep the app's role as a branded portfolio/navigation surface.
+  - Verification: cite local source files used, check consistency with the ICP and competitive-analysis conclusions, and record any assumptions that need user validation.
+  - Suggested route: `$positioning`.
 - [ ] `/journey-map` - create `research/journey-map.md` because it is missing; after `/icp`. Particularly relevant: defines visitor discovery → exploration → product-click flow for the portfolio launcher.
 - [ ] `/metrics` - create `research/metrics.md` because it is missing; after `/journey-map`.
 - [ ] `/gtm` - create `research/gtm.md` because it is missing; after `/positioning` and `/journey-map`.
