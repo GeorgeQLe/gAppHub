@@ -1,5 +1,12 @@
 # Session History — GappHub
 
+## 2026-05-25 — Shimmer effects on boot splash text and screen wipe
+
+- Added `.shimmer-text` CSS class with pseudo-element shimmer sweep for boot splash text lines (Lexcorp, made with ♥, by George "G" Le), staggered via `--shimmer-delay` CSS custom property.
+- Added `.shimmer-wipe` CSS class with vertical shimmer wipe overlay triggered at boot phase 3 completion.
+- Applied shimmer-text to all three boot splash `motion.div` elements in `PageContent.tsx` with delays 0.35s, 1.15s, 1.95s.
+- Added shimmer-wipe overlay as a full-screen pointer-events-none div at phase 3.
+
 ## 2026-05-25 — Shimmer effect on app icons after boot
 
 - Added a one-shot holographic shimmer sweep across app icons after the boot splash fades (phase 4).
