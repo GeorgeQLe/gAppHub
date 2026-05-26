@@ -1,5 +1,14 @@
 # Session History — GappHub
 
+## 2026-05-25 — Shimmer effect on app icons after boot
+
+- Added a one-shot holographic shimmer sweep across app icons after the boot splash fades (phase 4).
+- CSS-only implementation: `@keyframes shimmer` + `.shimmer-foil` class in `globals.css`, absolutely-positioned overlay in `AppIcon.tsx`.
+- Staggered per icon (80ms delay per index) so the sweep cascades across the grid.
+- Threaded `shimmer` prop through `IconGrid`, `Dock`, and `BootPhoneContent`.
+- Triggered via `bootShimmer` state in `PageContent.tsx` at 2800ms (when icons fade in).
+- Validation: `npm run build` passes, `npm run lint` clean.
+
 ## 2026-05-22 — Journey map research shipped
 
 - Created `research/journey-map.md`, mapping the anonymous visitor flow from discovery trigger through orientation, app-grid scan, drawer evaluation, product click-through, and optional exploration loop.

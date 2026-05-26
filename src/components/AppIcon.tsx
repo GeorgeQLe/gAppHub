@@ -11,6 +11,8 @@ interface AppIconProps {
   hideBadge?: boolean;
   tabIndex?: number;
   onSelect?: (product: Product) => void;
+  shimmer?: boolean;
+  shimmerDelay?: number;
 }
 
 const badgeColorMap: Record<string, string> = {
@@ -42,7 +44,7 @@ function getIcon(name: string): LucideIcon | null {
 }
 
 const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
-  { product, hideBadge, tabIndex, onSelect },
+  { product, hideBadge, tabIndex, onSelect, shimmer, shimmerDelay },
   ref,
 ) {
   const deprecated = product.badge === null;
@@ -89,6 +91,12 @@ const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
                 <span className="text-xl font-bold text-white">{firstLetter}</span>
               )}
             </div>
+          )}
+          {shimmer && (
+            <div
+              className="shimmer-foil absolute inset-0 rounded-[22.5%] pointer-events-none"
+              style={shimmerDelay ? { animationDelay: `${shimmerDelay}ms` } : undefined}
+            />
           )}
           {product.badge && !hideBadge && (
             <span

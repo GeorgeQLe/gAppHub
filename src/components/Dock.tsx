@@ -6,10 +6,11 @@ import AppIcon from "@/components/AppIcon";
 
 interface DockProps {
   products: Product[];
+  shimmer?: boolean;
   onIconSelect?: (product: Product) => void;
 }
 
-export default function Dock({ products, onIconSelect }: DockProps) {
+export default function Dock({ products, shimmer, onIconSelect }: DockProps) {
   const [focusedIndex, setFocusedIndex] = useState(0);
   const iconRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const userInteracted = useRef(false);
@@ -60,6 +61,8 @@ export default function Dock({ products, onIconSelect }: DockProps) {
           key={p.id}
           tabIndex={i === focusedIndex ? 0 : -1}
           onSelect={onIconSelect}
+          shimmer={shimmer}
+          shimmerDelay={i * 80}
           ref={(el) => {
             iconRefs.current[i] = el;
           }}

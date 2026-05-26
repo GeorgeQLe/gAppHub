@@ -22,11 +22,12 @@ const BADGE_LABELS: Record<string, string> = {
 interface IconGridProps {
   products: Product[];
   drawerOpen?: boolean;
+  shimmer?: boolean;
   onIconSelect?: (product: Product) => void;
   onSearchVisibilityChange?: (visible: boolean) => void;
 }
 
-export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchVisibilityChange }: IconGridProps) {
+export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, onSearchVisibilityChange }: IconGridProps) {
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const iconsPerPage = useAvailableRows(gridContainerRef, drawerOpen);
   const [page, setPage] = useState(0);
@@ -219,12 +220,14 @@ export default function IconGrid({ products, drawerOpen, onIconSelect, onSearchV
                       key={p.id}
                       tabIndex={j === focusedIndex ? 0 : -1}
                       onSelect={onIconSelect}
+                      shimmer={shimmer}
+                      shimmerDelay={j * 80}
                       ref={(el) => {
                         iconRefs.current[j] = el;
                       }}
                     />
                   ) : (
-                    <AppIcon product={p} key={p.id} tabIndex={-1} onSelect={onIconSelect} />
+                    <AppIcon product={p} key={p.id} tabIndex={-1} onSelect={onIconSelect} shimmer={shimmer} shimmerDelay={j * 80} />
                   ),
                 )}
               </div>

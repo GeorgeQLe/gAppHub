@@ -58,6 +58,7 @@ export default function PageContent({
   const [bootPhase, setBootPhase] = useState<BootPhase>(
     variant === "boot" ? 1 : 5,
   );
+  const [bootShimmer, setBootShimmer] = useState(false);
   const [bootIslandMessage, setBootIslandMessage] = useState<BootIslandMessage | undefined>();
   const [slidePhase, setSlidePhase] = useState<SlidePhase>(
     variant === "slide" ? 0 : 4,
@@ -85,6 +86,7 @@ export default function PageContent({
       setTimeout(() => setBootPhase(3), 1600),
       setTimeout(() => setBootPhase(4), 2400),
       setTimeout(() => setBootPhase(5), 2800),
+      setTimeout(() => setBootShimmer(true), 2800),
       setTimeout(() => {
         setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
         scheduleNextMessage();
@@ -139,6 +141,7 @@ export default function PageContent({
               <BootPhoneContent
                 phase={bootPhase}
                 islandLabel={bootIslandMessage}
+                shimmer={bootShimmer}
                 gridProducts={gridProducts}
                 dockProducts={dockProducts}
                 drawerOpen={selectedProduct !== null}
@@ -220,6 +223,7 @@ export default function PageContent({
 function BootPhoneContent({
   phase,
   islandLabel,
+  shimmer,
   gridProducts,
   dockProducts,
   drawerOpen,
@@ -229,6 +233,7 @@ function BootPhoneContent({
 }: {
   phase: BootPhase;
   islandLabel?: string;
+  shimmer?: boolean;
   gridProducts: Product[];
   dockProducts: Product[];
   drawerOpen?: boolean;
@@ -301,7 +306,7 @@ function BootPhoneContent({
         animate={{ opacity: phase >= 4 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <IconGrid products={gridProducts} drawerOpen={drawerOpen} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
+        <IconGrid products={gridProducts} drawerOpen={drawerOpen} shimmer={shimmer} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
       </motion.div>
 
       {/* Phase 5+: Dock slides up */}
@@ -318,7 +323,7 @@ function BootPhoneContent({
           mass: 0.8,
         }}
       >
-        <Dock products={dockProducts} onIconSelect={onIconSelect} />
+        <Dock products={dockProducts} shimmer={shimmer} onIconSelect={onIconSelect} />
       </motion.div>
 
       <HomeIndicator />
