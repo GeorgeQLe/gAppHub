@@ -256,7 +256,8 @@ function BootPhoneContent({
           >
             <div className="flex w-full max-w-[300px] flex-col items-center gap-3 text-center text-white">
               <motion.div
-                className="text-[24px] font-semibold leading-tight tracking-[0.04em]"
+                className="shimmer-text text-[24px] font-semibold leading-tight tracking-[0.04em]"
+                style={{ '--shimmer-delay': '0.35s' } as React.CSSProperties}
                 initial={{ opacity: 0, scale: 0.94, y: 8 }}
                 animate={{ opacity: phase >= 1 ? 1 : 0, scale: phase >= 1 ? 1 : 0.94, y: phase >= 1 ? 0 : 8 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
@@ -264,7 +265,8 @@ function BootPhoneContent({
                 Lexcorp
               </motion.div>
               <motion.div
-                className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
+                className="shimmer-text text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
+                style={{ '--shimmer-delay': '1.15s' } as React.CSSProperties}
                 initial={{ opacity: 0, scale: 0.94, y: 8 }}
                 animate={{ opacity: phase >= 2 ? 1 : 0, scale: phase >= 2 ? 1 : 0.94, y: phase >= 2 ? 0 : 8 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
@@ -272,7 +274,8 @@ function BootPhoneContent({
                 made with ♥
               </motion.div>
               <motion.div
-                className="text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
+                className="shimmer-text text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"
+                style={{ '--shimmer-delay': '1.95s' } as React.CSSProperties}
                 initial={{ opacity: 0, scale: 0.94, y: 8 }}
                 animate={{ opacity: phase >= 3 ? 1 : 0, scale: phase >= 3 ? 1 : 0.94, y: phase >= 3 ? 0 : 8 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
@@ -280,6 +283,12 @@ function BootPhoneContent({
                 by George &quot;G&quot; Le
               </motion.div>
             </div>
+            {phase === 3 && (
+              <div
+                className="shimmer-wipe absolute inset-0 z-10 pointer-events-none"
+                style={{ animationDelay: '0.4s' }}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
