@@ -1,5 +1,13 @@
 # Session History — GappHub
 
+## 2026-05-27 — Fix: Shimmer effect clipped to text letterforms
+
+- Replaced `.shimmer-text` pseudo-element overlay technique with `background-clip: text` approach in `src/app/globals.css`.
+- Old: `::after` pseudo-element swept a semi-transparent white gradient across the entire text bounding box (visible between/around letters).
+- New: gradient IS the text color, clipped to glyph shapes via `background-clip: text` + `color: transparent`. Base text is 85%-opacity white, shimmer band is 100%-opacity white.
+- Reuses existing `@keyframes shimmer` (no keyframe changes). No component changes needed — existing `shimmer-text` class, `--shimmer-delay` CSS variable, and Framer Motion props work as-is.
+- Verified: single CSS rule change, no regressions to `.shimmer-foil` or `.shimmer-wipe` effects.
+
 ## 2026-05-25 — Shimmer effects on boot splash text and screen wipe
 
 - Added `.shimmer-text` CSS class with pseudo-element shimmer sweep for boot splash text lines (Lexcorp, made with ♥, by George "G" Le), staggered via `--shimmer-delay` CSS custom property.
