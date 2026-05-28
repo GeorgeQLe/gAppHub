@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>GappHub Expert Review</title>
+    <title>GappHub Expert Review — 2026-05-28</title>
     <style>
       :root {
         color-scheme: light;
@@ -15,6 +15,7 @@
         --green: #1f8f4d;
         --amber: #a15c00;
         --blue: #1f5fbf;
+        --red: #c33;
       }
       * {
         box-sizing: border-box;
@@ -50,7 +51,7 @@
       }
       .grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin: 24px 0;
       }
@@ -93,9 +94,13 @@
         margin: 0;
         padding-left: 20px;
       }
+      li + li {
+        margin-top: 6px;
+      }
       code {
         font-family: "SFMono-Regular", Consolas, monospace;
         color: var(--ink);
+        font-size: 0.92em;
       }
       .severity {
         display: inline-flex;
@@ -106,17 +111,29 @@
         font-size: 13px;
         font-weight: 700;
       }
-      .none {
-        background: #e7f7ed;
-        color: var(--green);
+      .critical {
+        background: #fde8e8;
+        color: var(--red);
+      }
+      .high {
+        background: #fff0e0;
+        color: #b45000;
       }
       .medium {
         background: #fff4df;
         color: var(--amber);
       }
+      .low {
+        background: #eef3ff;
+        color: var(--blue);
+      }
       .spec {
         background: #e8f0ff;
         color: var(--blue);
+      }
+      .positive {
+        background: #e7f7ed;
+        color: var(--green);
       }
       @media (max-width: 760px) {
         main {
@@ -124,7 +141,7 @@
           padding-top: 28px;
         }
         .grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr 1fr;
         }
       }
     </style>
@@ -134,15 +151,20 @@
       <header>
         <h1>GappHub Expert Review</h1>
         <p class="lede">
-          Project-wide review against the current UI spec, roadmap, drift report,
-          task history, and Next 16 App Router documentation.
+          Project-wide code review cross-referenced against the UI spec, roadmap,
+          drift report, interview logs, and task history. All findings verified
+          with a second read of the source code.
         </p>
       </header>
 
       <div class="grid" aria-label="Review summary">
         <div class="tile">
-          <strong>0</strong>
-          <span>Critical or High findings</span>
+          <strong>2</strong>
+          <span>Critical findings</span>
+        </div>
+        <div class="tile">
+          <strong>2</strong>
+          <span>High findings</span>
         </div>
         <div class="tile">
           <strong>111</strong>
@@ -154,69 +176,226 @@
         </div>
       </div>
 
+      <!-- Critical -->
       <section>
-        <h2>Verified Findings</h2>
-        <p><span class="severity none">Critical: none</span></p>
-        <p><span class="severity none">High: none</span></p>
+        <h2>Critical</h2>
 
-        <h3><span class="severity medium">Medium</span> Badge legend lacks documented hover tooltips</h3>
+        <h3><span class="severity critical">Critical</span> Reduced motion CSS selectors target stale element type</h3>
         <p>
-          The UI spec says each badge legend item should show a one-line tooltip
-          on hover, but <code>src/components/BadgeLegend.tsx</code> only renders
-          static labels. <code>src/__tests__/BadgeLegend.test.tsx</code> covers
-          item presence but not tooltip behavior. Recommended fix: restore legend
-          tooltip state and add a focused test for hover/focus disclosure.
+          <code>globals.css:109-124</code> &mdash; The <code>prefers-reduced-motion</code>
+          CSS rules target <code>[role="gridcell"] a</code> and
+          <code>[role="toolbar"] a</code>, but since Phase 7, all app icons are
+          <code>&lt;button&gt;</code> elements (see <code>AppIcon.tsx:62</code>).
+          These selectors match nothing &mdash; reduced motion users still get
+          hover scale/shadow and press-in transforms.
+          Additionally, <code>Accessibility.test.tsx:114</code> asserts the stale
+          <code>[role="gridcell"] a</code> selector exists in the CSS, so the test
+          passes while the actual behavior is broken.
+        </p>
+        <p>
+          <strong>Fix:</strong> Change <code>a</code> to <code>button</code> in
+          all four CSS rule blocks and update the test assertions to match.
         </p>
 
-        <h3><span class="severity medium">Medium</span> Page indicator can use unclamped active state</h3>
+        <h3><span class="severity critical">Critical</span> Sort order omits badge "N" (New)</h3>
         <p>
-          <code>src/components/IconGrid.tsx</code> clamps rendered content with
-          <code>safePage</code>, but passes raw <code>page</code> to
-          <code>PageDots</code>. When the row calculation changes the page count,
-          no dot can be selected even though the content is clamped to a valid
-          page. Recommended fix: pass <code>safePage</code> to
-          <code>PageDots</code> and normalize <code>page</code> when
-          <code>totalPages</code> shrinks.
+          <code>products.ts:52-58</code> &mdash; <code>sortProducts</code> calls
+          <code>byBadge("L")</code>, <code>byBadge("B")</code>,
+          <code>byBadge("C")</code>, and <code>byBadge(null)</code> but never
+          <code>byBadge("N")</code>. The <code>Product</code> type at
+          <code>product.ts:7</code> explicitly allows <code>"N"</code> as a valid
+          badge. Any product added with badge <code>"N"</code> will silently
+          disappear from the grid. No products currently use this badge, so the
+          bug is latent.
+        </p>
+        <p>
+          <strong>Fix:</strong> Add <code>...byBadge("N")</code> between
+          <code>byBadge("B")</code> and <code>byBadge("C")</code>.
+        </p>
+      </section>
+
+      <!-- High -->
+      <section>
+        <h2>High</h2>
+
+        <h3><span class="severity high">High</span> Barrel import of entire lucide-react icon library</h3>
+        <p>
+          <code>AppIcon.tsx:6</code> and <code>AppStoreDrawer.tsx:7</code> both use
+          <code>import * as icons from "lucide-react"</code> to dynamically resolve
+          icons by name. This pulls ~1,000+ icons into the client bundle. Tree-shaking
+          cannot optimize dynamic key lookups like <code>icons[pascalName]</code>.
+        </p>
+        <p>
+          <strong>Fix:</strong> Extract a map of only the icons referenced in
+          <code>products.json</code>, switch all products to custom PNGs, or verify
+          the bundle stays under the 150KB gzip performance budget.
         </p>
 
-        <h3><span class="severity spec">Spec conformance</span></h3>
+        <h3><span class="severity high">High</span> Duplicated icon rendering logic</h3>
+        <p>
+          <code>getIcon()</code>, <code>CUSTOM_ICON_IDS</code>,
+          <code>iconAlignmentClassMap</code>, and <code>badgeColorMap</code> are
+          copy-pasted between <code>AppIcon.tsx</code> and
+          <code>AppStoreDrawer.tsx</code>. If a product or color changes, both
+          files must be updated in lockstep.
+        </p>
+        <p>
+          <strong>Fix:</strong> Extract shared constants and helpers into
+          <code>src/lib/icon-utils.ts</code>.
+        </p>
+      </section>
+
+      <!-- Medium -->
+      <section>
+        <h2>Medium</h2>
+
+        <h3><span class="severity medium">Medium</span> Unused <code>useIsMobile</code> hook</h3>
+        <p>
+          <code>src/hooks/useIsMobile.ts</code> is not imported by any production
+          component. The mock at <code>Accessibility.test.tsx:5</code> is also
+          stale &mdash; none of the components imported by that test use the hook.
+        </p>
+
+        <h3><span class="severity medium">Medium</span> Slide and Assemble animation variants are dead code</h3>
+        <p>
+          <code>page.tsx:9</code> hardcodes <code>variant="boot"</code>. The
+          <code>SlidePhoneContent</code> and <code>AssemblePhoneContent</code>
+          components, their state, and their timer effects in
+          <code>PageContent.tsx</code> are unreachable. These were kept after
+          Phase 5 comparison &mdash; may be intentional.
+        </p>
+
+        <h3><span class="severity medium">Medium</span> Duplicated reduced-motion wrapper</h3>
+        <p>
+          <code>PageContent.tsx:196-219</code> &mdash; Two conditional branches
+          produce identical <code>motion.div</code> wrappers with the same props.
+          Can be merged into a single condition.
+        </p>
+
+        <h3><span class="severity medium">Medium</span> StatusBar hydration mismatch</h3>
+        <p>
+          <code>StatusBar.tsx:6-8</code> &mdash; <code>useState(() =&gt;
+          new Date().toLocaleTimeString(...))</code> bakes the build-time clock
+          into the statically generated HTML. On client hydration, a different
+          time is computed, causing a React hydration warning. Fix: initialize
+          with empty string and set real time in <code>useEffect</code>, or add
+          <code>suppressHydrationWarning</code>.
+        </p>
+      </section>
+
+      <!-- Low -->
+      <section>
+        <h2>Low</h2>
         <ul>
           <li>
-            <code>specs/ui-gapphub.md</code> explicitly documents badge legend
-            hover tooltips; implementation currently omits them.
+            <code>SearchOverlay.tsx:47-49</code> &mdash; Backdrop dismiss area
+            has <code>aria-hidden</code> without <code>role="presentation"</code>.
           </li>
           <li>
-            The spec expects active iOS-style page dots; the current clamped
-            rendering path can temporarily disagree with the dot state after
-            responsive row recalculation.
+            <code>PageContent.tsx:48</code> &mdash; <code>document.activeElement
+            as HTMLButtonElement</code> is an unchecked cast (safe in practice).
+          </li>
+          <li>
+            <code>BadgeLegend.tsx:27-39</code> &mdash; Deprecated icon in legend
+            is a black square rather than a grayed-out app icon matching the grid
+            visual.
+          </li>
+          <li>
+            <code>IconGrid.tsx:60-65</code> &mdash; <code>registerSwipe</code>
+            called on every dependency change with no cleanup. Works correctly via
+            ref overwrite, but pattern is fragile.
           </li>
         </ul>
       </section>
 
+      <!-- Spec conformance -->
       <section>
-        <h2>Documented Decisions</h2>
+        <h2><span class="severity spec">Spec Conformance</span></h2>
         <ul>
           <li>
-            Single primary route <code>/</code> with the boot entrance animation
-            is intentional; removed comparison routes are documented.
+            <strong>Sort order vs badge "N":</strong>
+            <code>products.ts</code> sort implementation has no bucket for
+            <code>"N"</code> (New) products, which the <code>Product</code> type
+            allows. Gap between type definition and sort logic.
           </li>
           <li>
-            Dynamic row calculation through <code>useAvailableRows</code> is now
-            part of the spec, not drift.
-          </li>
-          <li>
-            Static status-bar battery and reduced-motion animation behavior are
-            documented deferred or resolved decisions.
+            <strong>Reduced motion:</strong> Spec &sect;Reduced Motion says
+            hover scale is disabled and press animation is replaced by opacity
+            dim via CSS media query. The CSS selectors target <code>a</code>
+            but icons are <code>button</code>, so requirements are not met.
           </li>
         </ul>
       </section>
 
+      <!-- Documented decisions -->
+      <section>
+        <h2>Documented Decisions (no action needed)</h2>
+        <ul>
+          <li>
+            <code>next/image</code> lint warnings on <code>AppIcon.tsx</code>
+            and <code>AppStoreDrawer.tsx</code> are intentional for local PNGs
+            (roadmap Phase 6/7 notes).
+          </li>
+          <li>
+            No dark mode &mdash; explicit spec non-goal.
+          </li>
+          <li>
+            Status bar easter eggs (signal/battery) deferred &mdash; drift
+            report &sect;Deferred.
+          </li>
+          <li>
+            <code>PhoneSwipeContext</code> undocumented in spec &mdash; drift
+            report &sect;Undocumented Code.
+          </li>
+          <li>
+            Former non-goal &ldquo;No in-app product detail pages&rdquo;
+            overridden &mdash; App Store Drawer interview log confirms user
+            authorization.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Positive -->
+      <section>
+        <h2><span class="severity positive">Positive Observations</span></h2>
+        <ul>
+          <li>
+            Clean server/client architecture: SSR data fetching in
+            <code>page.tsx</code> with client component tree below. No prop
+            drilling beyond one level.
+          </li>
+          <li>
+            Thorough accessibility: ARIA roles and labels on all interactive
+            regions, focus trap in drawer, keyboard grid navigation,
+            <code>role="tablist"</code> on page dots.
+          </li>
+          <li>
+            <code>useReducedMotion</code> via <code>useSyncExternalStore</code>
+            &mdash; correct React 19 pattern with SSR-safe server snapshot.
+          </li>
+          <li>
+            <code>useAvailableRows</code> with <code>ResizeObserver</code>
+            &mdash; elegant dynamic grid sizing responsive to container height.
+          </li>
+          <li>
+            Drawer focus management: Tab wrapping, Escape to close, focus
+            restoration to triggering icon, animation-gated drag.
+          </li>
+          <li>
+            Solid test coverage: 111 tests across 12 files covering
+            interactions, accessibility, pagination, search, responsive, and
+            the App Store drawer.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Validation -->
       <section>
         <h2>Validation</h2>
         <ul>
-          <li><code>npm run lint</code> passed.</li>
-          <li><code>npm test</code> passed: 12 files, 111 tests.</li>
-          <li><code>npm run build</code> passed with Next.js 16.2.6.</li>
+          <li><code>npx tsc --noEmit</code> &mdash; clean, no errors.</li>
+          <li><code>vitest run</code> &mdash; 12 files, 111 tests passing.</li>
+          <li><code>next build</code> &mdash; successful static generation.</li>
         </ul>
       </section>
     </main>

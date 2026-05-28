@@ -955,3 +955,15 @@
 - Residual risk: claims are evidence-backed by local research and current web checks, but user validation is still useful for proprietary brand constraints and whether "Lexcorp" should remain the first brand frame.
 - Rollback note: revert the positioning research commit to remove the new artifact and reopen the queue item.
 - Next command: `$run`
+
+## 2026-05-28 — Fix all expert review findings
+
+- Fixed all 12 findings from `/expert-review` (2 Critical, 2 High, 3 Medium, 2 Low, 3 skipped as low-risk).
+- **Critical #1**: Changed reduced-motion CSS selectors from `a` → `button` in `globals.css` (icons became `<button>` in Phase 7). Updated 3 stale test assertions in `Accessibility.test.tsx`.
+- **Critical #2**: Added missing `...byBadge("N")` to `sortProducts` in `products.ts` — "New" badge products were silently dropped from the grid.
+- **High #3**: Replaced `import * as icons from "lucide-react"` barrel import with explicit map of 34 used icons in new `src/lib/icon-utils.ts`. Eliminates ~1,000+ unused icon imports from client bundle.
+- **High #4**: Extracted duplicated `getIcon()`, `CUSTOM_ICON_IDS`, `iconAlignmentClassMap`, `badgeColorMap`, `badgeLabelMap` into shared `src/lib/icon-utils.ts`. Both `AppIcon.tsx` and `AppStoreDrawer.tsx` now import from the shared module.
+- **Medium**: Fixed StatusBar hydration mismatch (empty initial state + `suppressHydrationWarning`). Deleted unused `useIsMobile` hook and stale test mock. Removed dead `SlidePhoneContent`/`AssemblePhoneContent` animation variants and simplified `Variant` type to `"none" | "boot"`.
+- **Low**: Replaced `aria-hidden` with `role="presentation"` on SearchOverlay backdrop. Replaced BadgeLegend deprecated icon from black square SVG to grayscale squircle matching grid icon style.
+- Updated `Animations.test.tsx` to remove slide/assemble variant tests and references. Updated `Search.test.tsx` backdrop selector.
+- Verification: 107/107 tests pass, `tsc --noEmit` clean, `next build` succeeds, no remaining barrel imports or stale CSS selectors.

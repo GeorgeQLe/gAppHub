@@ -56,7 +56,7 @@ function mockReducedMotion(enabled: boolean) {
   return { listeners, mockMql };
 }
 
-function renderPageContent(variant: "none" | "boot" | "slide" | "assemble") {
+function renderPageContent(variant: "none" | "boot") {
   return render(
     <PageContent
       variant={variant}
@@ -137,17 +137,6 @@ describe("PageContent rendering (4 variants)", () => {
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
   });
 
-  it('variant="slide" renders same final content after animation completes', () => {
-    renderPageContent("slide");
-    act(() => { vi.advanceTimersByTime(1500); });
-    expectFinalContent();
-  });
-
-  it('variant="assemble" renders same final content after animation completes', () => {
-    renderPageContent("assemble");
-    act(() => { vi.advanceTimersByTime(2300); });
-    expectFinalContent();
-  });
 });
 
 describe("useReducedMotion hook", () => {
@@ -209,17 +198,6 @@ describe("Reduced motion on animation variants", () => {
     expectFinalContent();
   });
 
-  it("slide with reduced motion skips animation and renders final content immediately", () => {
-    mockReducedMotion(true);
-    renderPageContent("slide");
-    expectFinalContent();
-  });
-
-  it("assemble with reduced motion skips animation and renders final content immediately", () => {
-    mockReducedMotion(true);
-    renderPageContent("assemble");
-    expectFinalContent();
-  });
 });
 
 describe("Cross-route consistency", () => {
@@ -234,9 +212,9 @@ describe("Cross-route consistency", () => {
     vi.restoreAllMocks();
   });
 
-  it("all 4 variants render same number of grid icons (20) and dock icons (4)", () => {
-    const variants = ["none", "boot", "slide", "assemble"] as const;
-    const timings = { none: 0, boot: BOOT_DURATION, slide: 1500, assemble: 2300 };
+  it("both variants render same number of grid icons (20) and dock icons (4)", () => {
+    const variants = ["none", "boot"] as const;
+    const timings = { none: 0, boot: BOOT_DURATION };
 
     for (const variant of variants) {
       const { unmount } = renderPageContent(variant);
