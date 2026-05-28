@@ -86,9 +86,17 @@ body {
   pointer-events: none;
 }
 
+/*
+ * The band must enter the frame at the START of the timeline so the
+ * ease-in-out slow-in applies to the visible rise. If the visible travel is
+ * pushed to the middle of the timeline, the band crosses the bottom edge
+ * during the fast middle of the easing curve and flashes/pops in instead of
+ * gliding up. Keep the leading edge at/below the bottom at 0% (see the
+ * matching background-position below, which fill:both holds during the delay).
+ */
 @keyframes shimmer-wipe {
-  0%   { background-position: 0 -200%; }
-  100% { background-position: 0 200%; }
+  0%   { background-position: 0 -40%; }   /* band leading edge just at/below bottom — hidden, ready to rise */
+  100% { background-position: 0 140%; }   /* band fully exited past the top */
 }
 
 .shimmer-wipe {
@@ -101,8 +109,8 @@ body {
     transparent 70%
   );
   background-size: 100% 200%;
-  background-position: 0 -200%;
-  animation: shimmer-wipe 0.8s ease-in-out 1 both;
+  background-position: 0 -40%;            /* match 0% keyframe so fill:both holds it hidden during the 0.4s delay */
+  animation: shimmer-wipe 1s ease-in-out 1 both;
 }
 
 @media (prefers-reduced-motion: reduce) {

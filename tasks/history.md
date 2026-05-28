@@ -967,3 +967,14 @@
 - **Low**: Replaced `aria-hidden` with `role="presentation"` on SearchOverlay backdrop. Replaced BadgeLegend deprecated icon from black square SVG to grayscale squircle matching grid icon style.
 - Updated `Animations.test.tsx` to remove slide/assemble variant tests and references. Updated `Search.test.tsx` backdrop selector.
 - Verification: 107/107 tests pass, `tsc --noEmit` clean, `next build` succeeds, no remaining barrel imports or stale CSS selectors.
+
+## 2026-05-28 — Fix sheen wipe popping in at the bottom
+
+- Fixed the boot splash `.shimmer-wipe` band popping/flashing in at the phone's bottom edge instead of gliding up smoothly from below.
+- Root cause was a timing/range coupling, not direction: with `background-size 100% 200%` and a `-200% → 200%` keyframe range, the band's visible travel was pushed into the fast middle of the `ease-in-out` curve, so it crossed the bottom edge at peak velocity (the "pop") while the slow-in part of the easing was spent off-screen.
+- Retuned the keyframe range to `-40% → 140%` so the band enters the frame at the start of the timeline (during the gentle slow-in) and exits the top at the end — visible travel now spans the full duration. Also matched the static `background-position` to `0 -40%` so `fill: both` holds it hidden during the `0.4s` delay, and lengthened the sweep to `1s`.
+- Kept the upward direction and `ease-in-out` (swapping keyframe values to reverse direction was rejected as it would make the band fall downward).
+- Added a prevention comment above `@keyframes shimmer-wipe` documenting that the band must enter at the start of the timeline so the slow-in applies to the visible rise.
+- Single file: `src/app/globals.css:89-117`. `.shimmer-wipe` is only consumed at `PageContent.tsx:215-220`; the `animationDelay: '0.4s'` there is unaffected.
+- Also fixed an unrelated leftover lint warning: removed unused `vi` import from `Accessibility.test.tsx` (left over from the prior expert-review cleanup).
+- Verification: `pnpm lint` clean (0 warnings), `pnpm test` 107/107 pass. The animation itself has no automated coverage — visual verification is recommended (reload boot, watch splash→icons sheen) but was not performed in this session.
