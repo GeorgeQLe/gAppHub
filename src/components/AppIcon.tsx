@@ -3,8 +3,13 @@
 import { createElement, forwardRef } from "react";
 import Image from "next/image";
 import { Product } from "@/types/product";
-import * as icons from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import {
+  badgeTailwindColorMap,
+  badgeLabelMap,
+  CUSTOM_ICON_IDS,
+  iconAlignmentClassMap,
+  getIcon,
+} from "@/lib/icon-utils";
 
 interface AppIconProps {
   product: Product;
@@ -15,33 +20,7 @@ interface AppIconProps {
   shimmerDelay?: number;
 }
 
-const badgeColorMap: Record<string, string> = {
-  L: "bg-[#22c55e]",
-  B: "bg-[#eab308]",
-  N: "bg-[#3b82f6]",
-  C: "bg-[#ef4444]",
-};
-
-const badgeLabelMap: Record<string, string> = {
-  L: "Live",
-  B: "Beta",
-  N: "New",
-  C: "Concept",
-};
-
-const CUSTOM_ICON_IDS = new Set(["war-room", "pitwall", "gskillpacks", "gblockparty"]);
 const ICON_SIZE = 54;
-const iconAlignmentClassMap: Record<string, string> = {
-  joystick: "-translate-x-0.5",
-};
-
-function getIcon(name: string): LucideIcon | null {
-  const pascalName = name
-    .split("-")
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-    .join("");
-  return (icons as unknown as Record<string, LucideIcon>)[pascalName] ?? null;
-}
 
 const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
   { product, hideBadge, tabIndex, onSelect, shimmer, shimmerDelay },
@@ -101,7 +80,7 @@ const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
           {product.badge && !hideBadge && (
             <span
               aria-hidden="true"
-              className={`absolute -top-[3px] -right-[3px] flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-white text-[10px] font-bold leading-none text-white ${badgeColorMap[product.badge]}`}
+              className={`absolute -top-[3px] -right-[3px] flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-white text-[10px] font-bold leading-none text-white ${badgeTailwindColorMap[product.badge]}`}
             >
               {product.badge}
             </span>

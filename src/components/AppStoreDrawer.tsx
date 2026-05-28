@@ -4,36 +4,21 @@ import { createElement, useEffect, useRef, useCallback, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import * as icons from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Product } from "@/types/product";
+import {
+  badgeColorMap,
+  CUSTOM_ICON_IDS,
+  iconAlignmentClassMap,
+  getIcon,
+} from "@/lib/icon-utils";
 
 interface AppStoreDrawerProps {
   product: Product | null;
   onClose: () => void;
 }
 
-const badgeColorMap: Record<string, string> = {
-  L: "#22c55e",
-  B: "#eab308",
-  N: "#3b82f6",
-  C: "#ef4444",
-};
-
-const CUSTOM_ICON_IDS = new Set(["war-room", "pitwall", "gskillpacks", "gblockparty"]);
 const ICON_SIZE = 72;
-const iconAlignmentClassMap: Record<string, string> = {
-  joystick: "-translate-x-0.5",
-};
-
-function getIcon(name: string): LucideIcon | null {
-  const pascalName = name
-    .split("-")
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-    .join("");
-  return (icons as unknown as Record<string, LucideIcon>)[pascalName] ?? null;
-}
 
 export default function AppStoreDrawer({ product, onClose }: AppStoreDrawerProps) {
   const reducedMotion = useReducedMotion();
