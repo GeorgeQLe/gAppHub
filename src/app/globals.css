@@ -106,19 +106,19 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [role="gridcell"] a,
-  [role="toolbar"] a {
+  [role="gridcell"] button,
+  [role="toolbar"] button {
     transition-property: opacity !important;
   }
 
-  [role="gridcell"] a:hover,
-  [role="toolbar"] a:hover {
+  [role="gridcell"] button:hover,
+  [role="toolbar"] button:hover {
     transform: none !important;
     box-shadow: none !important;
   }
 
-  [role="gridcell"] a:active,
-  [role="toolbar"] a:active {
+  [role="gridcell"] button:active,
+  [role="toolbar"] button:active {
     transform: none !important;
     opacity: 0.7;
   }

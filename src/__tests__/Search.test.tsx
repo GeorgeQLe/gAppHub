@@ -78,7 +78,7 @@ describe("SearchOverlay standalone", () => {
       vi.runAllTimers();
     });
 
-    const backdrop = container.querySelector("[aria-hidden]")!;
+    const backdrop = container.querySelector('[role="presentation"]')!;
     fireEvent.click(backdrop);
     expect(onDismiss).toHaveBeenCalled();
   });

@@ -25,17 +25,7 @@ export default function BadgeLegend() {
         </div>
       ))}
       <div className="relative flex items-center gap-1.5">
-        <span className="flex items-center justify-center w-4 h-4 rounded-[3px] bg-[#1c1c1e]">
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 10 10"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="10" height="10" rx="2" fill="#000000" />
-          </svg>
-        </span>
+        <span className="flex items-center justify-center w-4 h-4 rounded-[22.5%] bg-gradient-to-br from-slate-700 to-slate-900 grayscale opacity-50" />
         <span className="text-xs text-[#6e6e73]">Deprecated</span>
       </div>
     </div>

@@ -2,8 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 
-vi.mock("@/hooks/useIsMobile", () => ({ useIsMobile: vi.fn(() => false) }));
-
 import PhoneFrame from "@/components/PhoneFrame";
 import IconGrid from "@/components/IconGrid";
 import AppIcon from "@/components/AppIcon";
@@ -111,8 +109,8 @@ describe("Reduced motion on AppIcon", () => {
       "utf-8",
     );
     expect(css).toContain("prefers-reduced-motion: reduce");
-    expect(css).toContain('[role="gridcell"] a');
-    expect(css).toContain('[role="toolbar"] a');
+    expect(css).toContain('[role="gridcell"] button');
+    expect(css).toContain('[role="toolbar"] button');
     expect(css).toContain("transform: none !important");
     expect(css).toContain("box-shadow: none !important");
   });
@@ -127,7 +125,7 @@ describe("Reduced motion on AppIcon", () => {
     const reducedMotionBlock = css.slice(
       css.indexOf("@media (prefers-reduced-motion: reduce)"),
     );
-    expect(reducedMotionBlock).toContain("a:active");
+    expect(reducedMotionBlock).toContain("button:active");
     expect(reducedMotionBlock).toContain("transform: none !important");
     expect(reducedMotionBlock).toContain("opacity: 0.7");
     expect(reducedMotionBlock).toContain("transition-property: opacity");

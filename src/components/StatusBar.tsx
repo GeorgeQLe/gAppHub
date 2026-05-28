@@ -3,9 +3,7 @@
 import { useState, useEffect } from "react";
 
 export default function StatusBar() {
-  const [time, setTime] = useState(() =>
-    new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
-  );
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     const update = () =>
@@ -15,13 +13,14 @@ export default function StatusBar() {
           minute: "2-digit",
         })
       );
+    update();
     const id = setInterval(update, 60_000);
     return () => clearInterval(id);
   }, []);
 
   return (
     <div aria-hidden="true" className="absolute top-0 left-0 right-0 h-[48px]">
-      <span className="absolute left-6 top-[22px] -translate-y-1/2 text-xs font-semibold text-[#1d1d1f]">{time}</span>
+      <span className="absolute left-6 top-[22px] -translate-y-1/2 text-xs font-semibold text-[#1d1d1f]" suppressHydrationWarning>{time}</span>
 
       <div className="absolute right-6 top-[22px] -translate-y-1/2 flex items-center">
         {/* Battery */}

@@ -44,9 +44,9 @@ export default function SearchOverlay({
       }`}
     >
       <div
+        role="presentation"
         className="absolute inset-0 h-screen"
         onClick={onDismiss}
-        aria-hidden
       />
       <div className="relative px-4 pt-3 pb-2 flex items-center gap-2">
         <input
