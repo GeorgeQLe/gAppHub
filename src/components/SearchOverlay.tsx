@@ -48,7 +48,7 @@ export default function SearchOverlay({
         className="absolute inset-0 h-screen"
         onClick={onDismiss}
       />
-      <div className="relative px-4 pt-3 pb-2 flex items-center gap-2">
+      <div className="relative px-4 pt-2 pb-2 flex items-center gap-2">
         <input
           ref={inputRef}
           type="text"

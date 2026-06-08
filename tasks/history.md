@@ -978,3 +978,9 @@
 - Single file: `src/app/globals.css:89-117`. `.shimmer-wipe` is only consumed at `PageContent.tsx:215-220`; the `animationDelay: '0.4s'` there is unaffected.
 - Also fixed an unrelated leftover lint warning: removed unused `vi` import from `Accessibility.test.tsx` (left over from the prior expert-review cleanup).
 - Verification: `pnpm lint` clean (0 warnings), `pnpm test` 107/107 pass. The animation itself has no automated coverage — visual verification is recommended (reload boot, watch splash→icons sheen) but was not performed in this session.
+
+## 2026-06-08 — Fix: Search bar not centered in its area on swipe-down
+
+- Root cause: `SearchOverlay.tsx:51` inner container had `pt-3 pb-2` (12px top, 8px bottom), making the 36px search input sit biased downward within the 52px header zone above the icon grid.
+- Fix: changed `pt-3` → `pt-2` on the inner container div, centering the input: 8px above + 36px input + 8px below = 52px.
+- Single file change: `src/components/SearchOverlay.tsx:51`.
