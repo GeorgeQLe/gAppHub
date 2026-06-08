@@ -984,3 +984,18 @@
 - Root cause: `SearchOverlay.tsx:51` inner container had `pt-3 pb-2` (12px top, 8px bottom), making the 36px search input sit biased downward within the 52px header zone above the icon grid.
 - Fix: changed `pt-3` → `pt-2` on the inner container div, centering the input: 8px above + 36px input + 8px below = 52px.
 - Single file change: `src/components/SearchOverlay.tsx:51`.
+
+## 2026-06-08 — Feature: Operation Vittles widget and boot splash
+
+- Added Operation Vittles expandable banner widget (`src/components/VittlesWidget.tsx`) with cyberpunk styling, scanline effects, and expand/collapse animation.
+- Added vittles data module (`src/lib/vittles-data.ts`) with operation metadata, objectives, colors, and dates.
+- Added cyberpunk CSS glitch effects in `src/app/globals.css`: `glitch-clip`, `glitch-flicker`, `glitch-reveal`, `glitch-dissolve`, `scanlines` keyframes plus `.vittles-scanlines` and `.vittles-glitch-text` utility classes.
+- Extended boot sequence from 5 phases to 7 phases in `src/components/PageContent.tsx`:
+  - Phase 4 (2400ms): Operation Vittles cyberpunk banner glitches in with scanlines and text effects.
+  - Phase 5 (4200ms): Banner glitch-dissolves away.
+  - Phase 6 (5000ms): Home screen icons reveal (was phase 4).
+  - Phase 7 (5400ms): Dock slides up + shimmer + Dynamic Island messages (was phase 5).
+- Created `VittlesSplash` component for the full-screen banner during boot phases 4-5.
+- Positioned VittlesWidget in the space below app icons (inside the flex-1 grid wrapper at `bottom-[40px]`) in both boot and non-boot paths.
+- Updated `src/__tests__/Animations.test.tsx`: adjusted boot timer advancement from 2800ms to 5400ms for new phase timing.
+- Verified: 107/107 tests pass, typecheck clean.

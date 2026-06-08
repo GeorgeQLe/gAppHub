@@ -115,7 +115,7 @@ describe("PageContent rendering (4 variants)", () => {
 
     expect(screen.queryByLabelText("Lexcorp")).not.toBeInTheDocument();
 
-    act(() => { vi.advanceTimersByTime(2800); });
+    act(() => { vi.advanceTimersByTime(5400); });
     expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });

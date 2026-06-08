@@ -12,6 +12,7 @@ import IconGrid from "@/components/IconGrid";
 import PhoneFrame from "@/components/PhoneFrame";
 import StatusBar from "@/components/StatusBar";
 import AppStoreDrawer from "@/components/AppStoreDrawer";
+import VittlesWidget from "@/components/VittlesWidget";
 import type { Product } from "@/types/product";
 
 type Variant = "none" | "boot";
@@ -22,7 +23,7 @@ interface PageContentProps {
   variant: Variant;
 }
 
-type BootPhase = 0 | 1 | 2 | 3 | 4 | 5;
+type BootPhase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 type BootIslandMessage = "Lexcorp" | "made with ♥" | 'by George "G" Le';
 const BOOT_ISLAND_MESSAGES: BootIslandMessage[] = [
   "Lexcorp",
@@ -53,7 +54,7 @@ export default function PageContent({
   }, []);
 
   const [bootPhase, setBootPhase] = useState<BootPhase>(
-    variant === "boot" ? 1 : 5,
+    variant === "boot" ? 1 : 7,
   );
   const [bootShimmer, setBootShimmer] = useState(false);
   const [bootIslandMessage, setBootIslandMessage] = useState<BootIslandMessage | undefined>();
@@ -74,13 +75,19 @@ export default function PageContent({
     const timers = [
       setTimeout(() => setBootPhase(2), 800),
       setTimeout(() => setBootPhase(3), 1600),
+      // Phase 4: Vittles banner glitches in
       setTimeout(() => setBootPhase(4), 2400),
-      setTimeout(() => setBootPhase(5), 2800),
-      setTimeout(() => setBootShimmer(true), 2800),
+      // Phase 5: Vittles banner glitch-dissolves away
+      setTimeout(() => setBootPhase(5), 4200),
+      // Phase 6: Home screen reveals (was phase 4)
+      setTimeout(() => setBootPhase(6), 5000),
+      // Phase 7: Dock slides up + shimmer (was phase 5)
+      setTimeout(() => setBootPhase(7), 5400),
+      setTimeout(() => setBootShimmer(true), 5400),
       setTimeout(() => {
         setBootIslandMessage(BOOT_ISLAND_MESSAGES[messageIndex]);
         scheduleNextMessage();
-      }, 2800),
+      }, 5400),
     ];
 
     return () => {
@@ -118,7 +125,12 @@ export default function PageContent({
                 <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                   <DynamicIsland />
                 </div>
-                <IconGrid products={gridProducts} drawerOpen={selectedProduct !== null} onIconSelect={handleIconSelect} onSearchVisibilityChange={setSearchActive} />
+                <div className="relative flex flex-col flex-1 min-h-0">
+                  <IconGrid products={gridProducts} drawerOpen={selectedProduct !== null} onIconSelect={handleIconSelect} onSearchVisibilityChange={setSearchActive} />
+                  <div className="absolute inset-x-0 bottom-[40px] z-10">
+                    <VittlesWidget />
+                  </div>
+                </div>
                 <Dock products={dockProducts} onIconSelect={handleIconSelect} />
                 <HomeIndicator />
               </>
@@ -147,6 +159,96 @@ export default function PageContent({
   }
 
   return content;
+}
+
+function VittlesSplash({ phase }: { phase: BootPhase }) {
+  const isRevealing = phase === 4;
+  const isDissolving = phase === 5;
+  const isVisible = isRevealing || isDissolving;
+
+  if (!isVisible) return null;
+
+  return (
+    <motion.div
+      className="absolute inset-0 z-40 flex items-center justify-center overflow-hidden"
+      style={{ background: "#07111F" }}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: isDissolving ? 0 : 1 }}
+      transition={{ duration: isDissolving ? 0.6 : 0.1 }}
+    >
+      {/* Scanline overlay */}
+      <div className="vittles-scanlines pointer-events-none absolute inset-0 z-30 opacity-40" />
+
+      {/* Glitch flicker overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 z-20"
+        style={{
+          background: "linear-gradient(180deg, transparent 50%, rgba(10,91,255,0.02) 50%)",
+          backgroundSize: "100% 4px",
+          animation: isRevealing ? "glitch-flicker 0.4s steps(1) 1" : undefined,
+        }}
+      />
+
+      {/* Main content */}
+      <div
+        className="relative z-10 flex flex-col items-center gap-4 px-8 text-center"
+        style={{
+          animation: isRevealing
+            ? "glitch-reveal 0.8s ease-out 1 both"
+            : "glitch-dissolve 0.6s ease-in 1 both",
+        }}
+      >
+        {/* Top rule */}
+        <div
+          className="h-px w-24"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${
+              "#0A5BFF"
+            }, transparent)`,
+          }}
+        />
+
+        {/* Title with glitch text effect */}
+        <div
+          className="vittles-glitch-text text-[22px] font-bold uppercase tracking-[0.18em]"
+          data-text="OPERATION VITTLES"
+          style={{ color: "#F3F6FB" }}
+        >
+          OPERATION VITTLES
+        </div>
+
+        {/* Tagline */}
+        <div
+          className="text-[13px] font-medium tracking-[0.06em]"
+          style={{ color: "#C7D2E0" }}
+        >
+          Apps as Distribution
+        </div>
+
+        {/* Status badge */}
+        <div
+          className="mt-1 rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
+          style={{
+            borderColor: "rgba(59,130,246,0.4)",
+            color: "#0A5BFF",
+            background: "rgba(10,91,255,0.08)",
+          }}
+        >
+          Active
+        </div>
+
+        {/* Bottom rule */}
+        <div
+          className="h-px w-24"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${
+              "#0A5BFF"
+            }, transparent)`,
+          }}
+        />
+      </div>
+    </motion.div>
+  );
 }
 
 function BootPhoneContent({
@@ -222,11 +324,18 @@ function BootPhoneContent({
         )}
       </AnimatePresence>
 
-      {/* Phase 4+: StatusBar fades in */}
+      {/* Phase 4–5: Operation Vittles cyberpunk banner */}
+      <AnimatePresence>
+        {(phase === 4 || phase === 5) && (
+          <VittlesSplash phase={phase} />
+        )}
+      </AnimatePresence>
+
+      {/* Phase 6+: StatusBar fades in */}
       <div className={`transition-opacity duration-200 ${searchActive ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: phase >= 4 ? 1 : 0 }}
+          animate={{ opacity: phase >= 6 ? 1 : 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <StatusBar />
@@ -237,22 +346,31 @@ function BootPhoneContent({
         <DynamicIsland label={islandLabel} />
       </div>
 
-      {/* Phase 4+: Icons appear row by row with spring bounce */}
+      {/* Phase 6+: Icons appear */}
       <motion.div
-        className="flex-1 overflow-hidden flex flex-col"
+        className="relative flex-1 overflow-hidden flex flex-col min-h-0"
         initial={{ opacity: 0 }}
-        animate={{ opacity: phase >= 4 ? 1 : 0 }}
+        animate={{ opacity: phase >= 6 ? 1 : 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <IconGrid products={gridProducts} drawerOpen={drawerOpen} shimmer={shimmer} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
+        {/* Vittles widget appears after boot */}
+        <motion.div
+          className="absolute inset-x-0 bottom-[40px] z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: phase >= 7 ? 1 : 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <VittlesWidget />
+        </motion.div>
       </motion.div>
 
-      {/* Phase 5+: Dock slides up */}
+      {/* Phase 7+: Dock slides up */}
       <motion.div
         initial={{ y: 80, opacity: 0 }}
         animate={{
-          y: phase >= 5 ? 0 : 80,
-          opacity: phase >= 5 ? 1 : 0,
+          y: phase >= 7 ? 0 : 80,
+          opacity: phase >= 7 ? 1 : 0,
         }}
         transition={{
           type: "spring",
