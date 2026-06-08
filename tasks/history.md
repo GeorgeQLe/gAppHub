@@ -999,3 +999,8 @@
 - Positioned VittlesWidget in the space below app icons (inside the flex-1 grid wrapper at `bottom-[40px]`) in both boot and non-boot paths.
 - Updated `src/__tests__/Animations.test.tsx`: adjusted boot timer advancement from 2800ms to 5400ms for new phase timing.
 - Verified: 107/107 tests pass, typecheck clean.
+
+## 2026-06-08 — Fix: Vittles expanded card has no dismiss affordance
+
+- Made the expanded detail card tappable to collapse: added `onClick={toggle}`, `cursor-pointer`, `active:scale-[0.98]`, `role="button"`, `tabIndex={0}`, and `aria-label` to the expanded `motion.div`.
+- Previously only the collapsed banner button toggled state; the expanded card had no click handler so users couldn't dismiss it.

@@ -66,7 +66,11 @@ export default function VittlesWidget() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="w-full max-w-[calc(100%-32px)] overflow-hidden rounded-2xl border backdrop-blur-xl"
+            className="w-full max-w-[calc(100%-32px)] cursor-pointer overflow-hidden rounded-2xl border backdrop-blur-xl active:scale-[0.98] transition-transform"
+            onClick={toggle}
+            role="button"
+            tabIndex={0}
+            aria-label="Collapse Operation Vittles details"
             style={{
               background: `linear-gradient(180deg, ${VITTLES.colors.cardBg}, ${VITTLES.colors.bg})`,
               borderColor: VITTLES.colors.border,
