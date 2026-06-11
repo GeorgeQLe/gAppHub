@@ -127,7 +127,7 @@ export default function PageContent({
                 </div>
                 <div className="relative flex flex-col flex-1 min-h-0">
                   <IconGrid products={gridProducts} drawerOpen={selectedProduct !== null} onIconSelect={handleIconSelect} onSearchVisibilityChange={setSearchActive} />
-                  <div className="absolute inset-x-0 bottom-[40px] z-10">
+                  <div className="absolute inset-x-0 bottom-[120px] z-10 pointer-events-none">
                     <VittlesWidget />
                   </div>
                 </div>
@@ -356,7 +356,7 @@ function BootPhoneContent({
         <IconGrid products={gridProducts} drawerOpen={drawerOpen} shimmer={shimmer} onIconSelect={onIconSelect} onSearchVisibilityChange={onSearchVisibilityChange} />
         {/* Vittles widget appears after boot */}
         <motion.div
-          className="absolute inset-x-0 bottom-[40px] z-10"
+          className="absolute inset-x-0 bottom-[120px] z-10 pointer-events-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: phase >= 7 ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}

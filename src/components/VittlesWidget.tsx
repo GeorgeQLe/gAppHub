@@ -1,20 +1,51 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VITTLES } from "@/lib/vittles-data";
 
+const cardVariants = {
+  hidden: { height: 0, opacity: 0, marginTop: 0 },
+  visible: { height: "auto", opacity: 1, marginTop: 8 },
+  exit: {
+    height: 0,
+    opacity: 0,
+    marginTop: 0,
+    transition: {
+      height: { duration: 0.2 },
+      opacity: { duration: 0.1 },
+      marginTop: { duration: 0.2 },
+    },
+  },
+};
+
 export default function VittlesWidget() {
   const [expanded, setExpanded] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const toggle = useCallback(() => setExpanded((v) => !v), []);
 
+  useEffect(() => {
+    if (!expanded) return;
+    function handleClick(e: MouseEvent | TouchEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setExpanded(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick, true);
+    document.addEventListener("touchstart", handleClick, true);
+    return () => {
+      document.removeEventListener("mousedown", handleClick, true);
+      document.removeEventListener("touchstart", handleClick, true);
+    };
+  }, [expanded]);
+
   return (
-    <div className="flex flex-col items-center gap-2 px-4">
+    <div ref={containerRef} className="flex flex-col items-center px-4 pointer-events-auto">
       <button
         onClick={toggle}
         aria-expanded={expanded}
         aria-label="Operation Vittles details"
-        className="group w-full max-w-[calc(100%-32px)] rounded-2xl border px-4 py-2.5 text-left backdrop-blur-xl transition-all duration-200 active:scale-[0.98]"
+        className="group w-full max-w-[calc(100%-32px)] rounded-2xl border px-4 py-2.5 text-left backdrop-blur-xl transition-[transform,box-shadow] duration-200 active:scale-[0.98] hover:ring-1 hover:ring-blue-400/40 hover:shadow-[0_0_12px_rgba(10,91,255,0.25)]"
         style={{
           background: expanded
             ? `linear-gradient(135deg, ${VITTLES.colors.bg}, ${VITTLES.colors.cardBg})`
@@ -62,11 +93,16 @@ export default function VittlesWidget() {
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="w-full max-w-[calc(100%-32px)] cursor-pointer overflow-hidden rounded-2xl border backdrop-blur-xl active:scale-[0.98] transition-transform"
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{
+              height: { type: "spring", stiffness: 400, damping: 30 },
+              opacity: { duration: 0.15 },
+              marginTop: { type: "spring", stiffness: 400, damping: 30 },
+            }}
+            className="w-full max-w-[calc(100%-32px)] cursor-pointer overflow-hidden rounded-2xl border backdrop-blur-xl active:scale-[0.98] transition-[transform,box-shadow] duration-200 hover:ring-1 hover:ring-blue-400/40 hover:shadow-[0_0_12px_rgba(10,91,255,0.25)]"
             onClick={toggle}
             role="button"
             tabIndex={0}
