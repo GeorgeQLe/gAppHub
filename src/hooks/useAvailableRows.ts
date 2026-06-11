@@ -7,7 +7,7 @@ const LABEL_HEIGHT = 16;
 const GAP_Y = 16; // gap-y-4 = 1rem = 16px
 const ROW_HEIGHT = ICON_HEIGHT + LABEL_HEIGHT + GAP_Y;
 const PT = 52;
-const PB = 120;
+const PB = 180;
 const MIN_ROWS = 3;
 const MAX_ROWS = 6;
 const COLS = 4;

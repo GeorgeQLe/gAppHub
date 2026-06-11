@@ -10,7 +10,7 @@ import SearchOverlay from "@/components/SearchOverlay";
 
 const COLS = 4;
 const PULL_DOWN_THRESHOLD = 30;
-const GRID_PAGE_CLASSES = "w-full grid grid-cols-4 gap-x-5 gap-y-4 pt-[52px] pb-[120px] px-4 content-start";
+const GRID_PAGE_CLASSES = "w-full grid grid-cols-4 justify-items-center gap-x-5 gap-y-4 pt-[52px] pb-[180px] px-4 content-start";
 
 const BADGE_LABELS: Record<string, string> = {
   L: "live",
@@ -52,6 +52,12 @@ export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, 
     () => (totalPages > 0 ? Math.min(page, totalPages - 1) : 0),
     [page, totalPages],
   );
+
+  useEffect(() => {
+    if (totalPages > 0 && page >= totalPages) {
+      setPage(totalPages - 1);
+    }
+  }, [totalPages, page]);
 
   useEffect(() => {
     onSearchVisibilityChange?.(showSearch);
@@ -233,8 +239,8 @@ export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, 
               </div>
             ))}
           </div>
-          <div className="pointer-events-auto absolute inset-x-0 bottom-[100px] z-20">
-            <PageDots total={totalPages} active={page} onChange={goTo} />
+          <div className="pointer-events-auto absolute inset-x-0 bottom-[90px] z-20">
+            <PageDots total={totalPages} active={safePage} onChange={goTo} />
           </div>
         </>
       )}

@@ -44,7 +44,7 @@ const AppIcon = forwardRef<HTMLButtonElement, AppIconProps>(function AppIcon(
         onClick={() => onSelect?.(product)}
         aria-label={compositeLabel}
         tabIndex={tabIndex}
-        className="flex flex-col items-center gap-1 rounded-2xl transition-all duration-150 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
+        className="flex flex-col items-center gap-1 transition-all duration-150 ease-out hover:scale-105 hover:-translate-y-0.5 active:scale-[0.92] focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
       >
         <div className="relative">
           {CUSTOM_ICON_IDS.has(product.id) ? (
