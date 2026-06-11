@@ -1,5 +1,12 @@
 # Session History — GappHub
 
+## 2026-06-11 — Fix: Text selection during mouse drag-to-swipe
+
+- Root cause: `PhoneSwipeContext.tsx` `onMouseDown` handler tracked mouseup for swipe detection but never suppressed browser text selection during the drag.
+- Fix: Added `mousemove` listener with 10px dead zone that clears existing selection and prevents further selection via `preventDefault()` once dragging is detected. Both listeners cleaned up on mouseup.
+- Also shipping uncommitted changes from prior sessions: Vittles widget improvements (outside-click dismiss, animation variants, hover glow), icon grid layout fixes (page bounds guard, padding, dot z-index), and PhoneFrame wheel handler refactor.
+- Verified: 107/107 tests pass, typecheck clean.
+
 ## 2026-05-27 — Fix: Shimmer effect clipped to text letterforms
 
 - Replaced `.shimmer-text` pseudo-element overlay technique with `background-clip: text` approach in `src/app/globals.css`.
