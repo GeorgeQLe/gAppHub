@@ -7,7 +7,10 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
   const swipe = usePhoneSwipe();
   const regionRef = useRef<HTMLDivElement>(null);
   const wheelRef = useRef(swipe?.onWheel);
-  wheelRef.current = swipe?.onWheel;
+
+  useEffect(() => {
+    wheelRef.current = swipe?.onWheel;
+  }, [swipe?.onWheel]);
 
   useEffect(() => {
     const el = regionRef.current;

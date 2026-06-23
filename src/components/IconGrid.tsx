@@ -54,21 +54,15 @@ export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, 
   );
 
   useEffect(() => {
-    if (totalPages > 0 && page >= totalPages) {
-      setPage(totalPages - 1);
-    }
-  }, [totalPages, page]);
-
-  useEffect(() => {
     onSearchVisibilityChange?.(showSearch);
   }, [showSearch, onSearchVisibilityChange]);
 
   useEffect(() => {
     swipe?.registerSwipe((delta) => {
       if (drawerOpen) return;
-      goTo(page + delta);
+      goTo(safePage + delta);
     });
-  }, [swipe, goTo, page, drawerOpen]);
+  }, [swipe, goTo, safePage, drawerOpen]);
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term);
@@ -110,7 +104,7 @@ export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, 
       }
     }
     if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
-    goTo(page + (dx < 0 ? 1 : -1));
+    goTo(safePage + (dx < 0 ? 1 : -1));
   };
 
   const currentPageIcons = pages[safePage] ?? [];
@@ -130,8 +124,8 @@ export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, 
         e.preventDefault();
         if (focusedIndex + 1 < iconCount) {
           setFocusedIndex(focusedIndex + 1);
-        } else if (page < totalPages - 1) {
-          goTo(page + 1);
+        } else if (safePage < totalPages - 1) {
+          goTo(safePage + 1);
           setFocusedIndex(0);
         }
         break;
@@ -174,7 +168,7 @@ export default function IconGrid({ products, drawerOpen, shimmer, onIconSelect, 
       }
       case "Home": {
         e.preventDefault();
-        if (page !== 0) goTo(0);
+        if (safePage !== 0) goTo(0);
         setFocusedIndex(0);
         break;
       }
