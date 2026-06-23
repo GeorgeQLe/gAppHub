@@ -6,6 +6,7 @@
 
 ## Priority Task Queue
 
+- [x] `$exec` - search GitHub repos via `gh api` and sync the GappHub app roster from the canonical War Room product registry; expanded `public/data/products.json` from 34 to 64 products (2026-06-23).
 - [x] `$investigate` / `$ship` - align and implement single paged grid search model so search filters the same horizontal app grid while preserving page dots and swipes (2026-05-22).
 - [x] `/research-roadmap` - documentation scan completed (2026-05-19).
 

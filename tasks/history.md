@@ -1,5 +1,15 @@
 # Session History — GappHub
 
+## 2026-06-23 — App roster sync from GitHub registry
+
+- Used `gh api` to search GitHub repositories and identify the canonical product source in `GeorgeQLe/lexcorp-war-room` at `src/content/products/registry.ts`.
+- Updated `public/data/products.json` from 34 to 64 products, preserving existing featured/dock choices and curated display order while refreshing copy and adding the missing registry products.
+- Added products include TrackCTL, Automium, Axon, Crew, Trace, GappHub, Go, lexterm.js, OBS Revenue Overlay, ReWalkthrough, SVG Spawn, tfviz, AFPS Tracker, PokeChops, Alignmeant, intMaxxing, and Bismarck Anno Clone (Concept).
+- Fixed two lint errors surfaced during ship validation: `IconGrid` no longer calls `setPage` synchronously in an effect, and `PhoneFrame` no longer writes a ref during render.
+- Validation: roster audit passed (64 products, 64 unique ids, 64 unique orders, valid badges and HTTPS URLs), `pnpm lint` passed, `pnpm test` passed 107/107 tests, `pnpm build` passed, and local `curl -I http://localhost:3000` returned 200 OK.
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`) exists.
+- Ship manifest: User goal: search GitHub repos using `gh api` and update the app roster on this site. Changed files: `public/data/products.json`, `src/components/IconGrid.tsx`, `src/components/PhoneFrame.tsx`, `tasks/todo.md`, `tasks/history.md`. Per-file purpose: roster data refresh and additions; lint-rule fix for page clamping; lint-rule fix for wheel handler ref lifecycle; task completion record; session history and manifest. User-goal mapping: the data file is the app roster consumed by `getProducts()`, and the docs record the shipped state. Tests run: `pnpm lint`, `pnpm test`, `pnpm build`, roster JSON audit, and local HTTP 200 check. Skipped tests: no physical mobile/tablet responsive pass because `tasks/manual-todo.md` keeps that as deferred production-launch verification; no deploy because this repo has no manual deploy contract. Adversarial review: checked the roster against the War Room registry, validated product count/ids/orders/badges/URLs, reviewed icon names against the local Lucide map, and scanned changed product data for secret-like strings; matches were benign words such as "token" in product copy. Residual risk: status-to-badge/category mapping for newly added products is partly heuristic, and some default `leexperimental.com/products/*` links may depend on corresponding War Room pages existing. Rollback note: revert the roster commit to restore the previous 34-product data file, and revert the lint-fix commit separately if needed. Next command: `/metrics`.
+
 ## 2026-06-11 — Fix: Text selection during mouse drag-to-swipe
 
 - Root cause: `PhoneSwipeContext.tsx` `onMouseDown` handler tracked mouseup for swipe detection but never suppressed browser text selection during the drag.
