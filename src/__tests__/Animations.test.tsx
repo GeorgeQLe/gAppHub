@@ -98,14 +98,14 @@ describe("PageContent rendering (4 variants)", () => {
   it("boot splash stacks the intro text in the center", () => {
     renderPageContent("boot");
 
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByText("EXPLe Corp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(800); });
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByText("EXPLe Corp")).toBeInTheDocument();
     expect(screen.getByText("made with ♥")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(800); });
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByText("EXPLe Corp")).toBeInTheDocument();
     expect(screen.getByText("made with ♥")).toBeInTheDocument();
     expect(screen.getByText('by George "G" Le')).toBeInTheDocument();
   });
@@ -113,10 +113,10 @@ describe("PageContent rendering (4 variants)", () => {
   it("starts rotating intro text through the Dynamic Island after the splash", () => {
     renderPageContent("boot");
 
-    expect(screen.queryByLabelText("Lexcorp")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("EXPLe Corp")).not.toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(5400); });
-    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByLabelText("EXPLe Corp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
     expect(screen.getByLabelText("made with ♥")).toBeInTheDocument();
@@ -125,7 +125,7 @@ describe("PageContent rendering (4 variants)", () => {
     expect(screen.getByLabelText('by George "G" Le')).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
-    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByLabelText("EXPLe Corp")).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
     expect(screen.getByLabelText("made with ♥")).toBeInTheDocument();
@@ -134,7 +134,7 @@ describe("PageContent rendering (4 variants)", () => {
     expect(screen.getByLabelText('by George "G" Le')).toBeInTheDocument();
 
     act(() => { vi.advanceTimersByTime(BOOT_ISLAND_MESSAGE_DELAY); });
-    expect(screen.getByLabelText("Lexcorp")).toBeInTheDocument();
+    expect(screen.getByLabelText("EXPLe Corp")).toBeInTheDocument();
   });
 
 });

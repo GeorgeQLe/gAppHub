@@ -2,15 +2,15 @@
 
 > Based on: `research/icp.md`, `research/positioning.md`, `research/concept-brief.md`, `specs/ui-gapphub.md`, `public/data/products.json`
 > Date: 2026-05-22
-> Scope: anonymous visitor discovery through product click-through for GappHub, a branded Lexcorp portfolio launcher
+> Scope: anonymous visitor discovery through product click-through for GappHub, a branded EXPLe Corp portfolio launcher
 
 ## Summary
 
-GappHub's core journey is short, self-serve, and click-oriented. A visitor arrives from a social bio, shared URL, search result, pitch deck, or another Lexcorp product surface; recognizes the polished phone-frame portfolio metaphor; scans the app grid; optionally searches or swipes; opens one or more app-style drawers; then clicks through to the product that matches their intent.
+GappHub's core journey is short, self-serve, and click-oriented. A visitor arrives from a social bio, shared URL, search result, pitch deck, or another EXPLe Corp product surface; recognizes the polished phone-frame portfolio metaphor; scans the app grid; optionally searches or swipes; opens one or more app-style drawers; then clicks through to the product that matches their intent.
 
 The journey should optimize for three outcomes:
 
-1. Help the visitor understand Lexcorp's portfolio breadth within seconds.
+1. Help the visitor understand EXPLe Corp's portfolio breadth within seconds.
 2. Give enough context to choose a relevant product without turning GappHub into a full product website.
 3. Transfer the visitor to the right product with confidence and minimal friction.
 
@@ -18,8 +18,8 @@ The journey should optimize for three outcomes:
 
 | Stage | Visitor Goal | Visitor Actions | GappHub Touchpoints | Desired Feeling | Success Signal |
 |---|---|---|---|---|---|
-| 1. Trigger | Decide whether the shared Lexcorp link is worth opening | Clicks from a social bio, shared URL, pitch deck, search result, QR code, or product cross-link | Single route `/`; fast-loading phone-frame experience | "This looks intentional and credible." | Page loads quickly and the visitor stays long enough to scan |
-| 2. Orientation | Understand what GappHub is | Watches the boot transition or lands directly on the populated phone frame | Boot splash, Dynamic Island brand copy, app grid, status badges, badge legend | "Lexcorp has a real portfolio, not just a link list." | Visitor sees multiple products and understands the app-icon metaphor |
+| 1. Trigger | Decide whether the shared EXPLe Corp link is worth opening | Clicks from a social bio, shared URL, pitch deck, search result, QR code, or product cross-link | Single route `/`; fast-loading phone-frame experience | "This looks intentional and credible." | Page loads quickly and the visitor stays long enough to scan |
+| 2. Orientation | Understand what GappHub is | Watches the boot transition or lands directly on the populated phone frame | Boot splash, Dynamic Island brand copy, app grid, status badges, badge legend | "EXPLe Corp has a real portfolio, not just a link list." | Visitor sees multiple products and understands the app-icon metaphor |
 | 3. Scan | Find a potentially relevant product | Reads icon names, notices featured apps, scans badge states, uses visual hierarchy | Prioritized grid, dock, page dots, badges, product names | "I can quickly tell what might matter to me." | Visitor hovers, taps, searches, swipes, or focuses an icon |
 | 4. Narrow | Confirm whether a product is relevant | Opens an icon drawer, reads short and long descriptions, reviews status/category cues | App Store-style drawer with product icon, title, description, and Open CTA | "This product has enough context for me to decide." | Visitor opens at least one drawer and does not need a separate explanation page |
 | 5. Click-through | Leave GappHub for the selected product | Clicks the drawer's Open CTA | Explicit outbound CTA to the product URL | "I know where I am going next." | Product link click |
@@ -29,7 +29,7 @@ The journey should optimize for three outcomes:
 
 ### Portfolio Browser
 
-This is the highest-volume visitor described in the ICP. They want a fast answer to "what does Lexcorp build?"
+This is the highest-volume visitor described in the ICP. They want a fast answer to "what does EXPLe Corp build?"
 
 - Entry channels: social bio, search, shared URL, product cross-link.
 - Likely behavior: brief scan, one drawer open, one click-through.
@@ -47,7 +47,7 @@ These visitors need a broader credibility read before a meeting, diligence revie
 
 ### Job Candidates And Talent
 
-These visitors use the portfolio as evidence of what Lexcorp ships and how polished the company is.
+These visitors use the portfolio as evidence of what EXPLe Corp ships and how polished the company is.
 
 - Entry channels: job posts, recruiter messages, LinkedIn, company research.
 - Likely behavior: exploratory browsing across many products.
@@ -58,7 +58,7 @@ These visitors use the portfolio as evidence of what Lexcorp ships and how polis
 
 ### First Three Seconds
 
-The page must communicate that GappHub is the polished Lexcorp portfolio front door before the visitor decides to bounce. The phone frame, app grid, and brand copy carry this moment more than explanatory text.
+The page must communicate that GappHub is the polished EXPLe Corp portfolio front door before the visitor decides to bounce. The phone frame, app grid, and brand copy carry this moment more than explanatory text.
 
 ### First Icon Decision
 

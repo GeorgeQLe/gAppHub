@@ -6,9 +6,9 @@
 
 ## Customer Profile
 
-Visitors discovering Lexcorp's product portfolio through social media bio links, shared URLs, organic search, or referrals from individual product sites. No buyer persona in the traditional sense — these are information-seeking visitors, not purchasers.
+Visitors discovering EXPLe Corp's product portfolio through social media bio links, shared URLs, organic search, or referrals from individual product sites. No buyer persona in the traditional sense — these are information-seeking visitors, not purchasers.
 
-**Discovery channels:** Social media bio links (Instagram, Twitter/X, LinkedIn, TikTok), shared URLs in pitch decks or emails, organic search for "Lexcorp products", cross-links from individual Lexcorp product sites, QR codes on physical materials.
+**Discovery channels:** Social media bio links (Instagram, Twitter/X, LinkedIn, TikTok), shared URLs in pitch decks or emails, organic search for "EXPLe Corp products", cross-links from individual EXPLe Corp product sites, QR codes on physical materials.
 
 **Volume expectation:** Highest-volume segment. Bio-link click-through rates average ~4.7% of profile visitors (2026 industry benchmark), and 80% of web visitors arrive with informational intent.
 
@@ -16,8 +16,8 @@ Visitors discovering Lexcorp's product portfolio through social media bio links,
 
 A single user type: the **portfolio browser**.
 
-- **Technical sophistication:** Varies widely — from non-technical potential customers to developers evaluating Lexcorp's tools.
-- **Goals:** Quickly understand what Lexcorp offers, find the product relevant to their need, and navigate to it.
+- **Technical sophistication:** Varies widely — from non-technical potential customers to developers evaluating EXPLe Corp's tools.
+- **Goals:** Quickly understand what EXPLe Corp offers, find the product relevant to their need, and navigate to it.
 - **Frustrations:** Slow-loading pages, unclear product descriptions, too many clicks to reach the actual product. 53% of mobile users abandon pages that take longer than 3 seconds to load.
 - **Session behavior:** Short, task-oriented visits. Expect to arrive, scan the grid, tap 1–2 icons, and either navigate to a product or leave.
 
@@ -25,28 +25,28 @@ A single user type: the **portfolio browser**.
 
 Ranked by expected frequency:
 
-1. **Sees a Lexcorp product elsewhere** — encounters one product and wants to explore the full portfolio
+1. **Sees an EXPLe Corp product elsewhere** — encounters one product and wants to explore the full portfolio
 2. **Clicks bio link** — follows a social media bio link expecting a landing page or hub
 3. **Receives a shared URL** — gets the GappHub link from a colleague, partner, or in a pitch deck
-4. **Searches for Lexcorp** — looks up the company and lands on the hub via search
+4. **Searches for EXPLe Corp** — looks up the company and lands on the hub via search
 
 ## Current State Journey
 
-Without GappHub, a visitor who wants to explore Lexcorp's full product lineup:
+Without GappHub, a visitor who wants to explore EXPLe Corp's full product lineup:
 
-1. Discovers one Lexcorp product (via social, search, or referral)
-2. Wants to see what else Lexcorp builds
+1. Discovers one EXPLe Corp product (via social, search, or referral)
+2. Wants to see what else EXPLe Corp builds
 3. Looks for a "Products" page or company site — finds scattered landing pages or nothing
 4. Must manually search for or navigate to each product individually
 5. Loses context, misses products, and gets no sense of portfolio breadth
-6. Forms a fragmented impression of Lexcorp's capabilities
+6. Forms a fragmented impression of EXPLe Corp's capabilities
 
 ## Pain Map
 
 | Pain Point | Severity | Frequency |
 |---|---|---|
-| No single place to see all Lexcorp products | High | Every visit |
-| Scattered landing pages don't convey portfolio breadth | Medium | When evaluating Lexcorp |
+| No single place to see all EXPLe Corp products | High | Every visit |
+| Scattered landing pages don't convey portfolio breadth | Medium | When evaluating EXPLe Corp |
 | Plain link lists (Linktree-style) feel generic, don't signal product quality | Medium | When comparing to competitors |
 | Hard to navigate between products without a hub | Medium | When exploring multiple products |
 | No visual hierarchy to guide discovery | Low | First visit |
@@ -63,7 +63,7 @@ Without GappHub, a visitor who wants to explore Lexcorp's full product lineup:
 
 ## Value Proposition
 
-GappHub replaces scattered links with a single, shareable URL that presents Lexcorp's entire product portfolio as app icons inside a realistic iPhone frame. The experience itself is the value proposition — the polish and the metaphor signal that Lexcorp builds premium digital products. Visitors get one-click access to any product, and the phone-frame UI makes the portfolio browsable, memorable, and on-brand.
+GappHub replaces scattered links with a single, shareable URL that presents EXPLe Corp's entire product portfolio as app icons inside a realistic iPhone frame. The experience itself is the value proposition — the polish and the metaphor signal that EXPLe Corp builds premium digital products. Visitors get one-click access to any product, and the phone-frame UI makes the portfolio browsable, memorable, and on-brand.
 
 **The "aha moment":** The first time a visitor sees the phone frame load with the icon grid — it immediately communicates "this company ships polished products" in a way a link list never could.
 
@@ -79,7 +79,7 @@ No buyer-user split. The visitor is both the "customer" (the person the hub is d
 
 #### Customer Profile
 
-Business development contacts, potential partners, and investors evaluating Lexcorp. Arrive via pitch decks, LinkedIn, direct URL shares, or warm introductions.
+Business development contacts, potential partners, and investors evaluating EXPLe Corp. Arrive via pitch decks, LinkedIn, direct URL shares, or warm introductions.
 
 #### User Profile(s)
 
@@ -89,9 +89,9 @@ Business development contacts, potential partners, and investors evaluating Lexc
 
 #### Trigger Events
 
-1. Evaluating a partnership or integration opportunity with Lexcorp
-2. Reviewing Lexcorp as part of investment due diligence
-3. Preparing for a meeting with Lexcorp team
+1. Evaluating a partnership or integration opportunity with EXPLe Corp
+2. Reviewing EXPLe Corp as part of investment due diligence
+3. Preparing for a meeting with EXPLe Corp team
 
 #### Pain Map
 
@@ -103,24 +103,24 @@ Business development contacts, potential partners, and investors evaluating Lexc
 
 #### Value Proposition
 
-A single URL that demonstrates both portfolio breadth and product polish. The hub itself is a proof point — it shows Lexcorp can ship a premium experience, which reduces evaluation friction for partners and investors.
+A single URL that demonstrates both portfolio breadth and product polish. The hub itself is a proof point — it shows EXPLe Corp can ship a premium experience, which reduces evaluation friction for partners and investors.
 
 ### Job Candidates & Talent
 
 #### Customer Profile
 
-Prospective employees researching Lexcorp before applying or preparing for interviews. Arrive via job postings, Glassdoor, LinkedIn, or company mentions on social media.
+Prospective employees researching EXPLe Corp before applying or preparing for interviews. Arrive via job postings, Glassdoor, LinkedIn, or company mentions on social media.
 
 #### User Profile(s)
 
-- **Technical sophistication:** Often high — developers, designers, and product people evaluating Lexcorp's output
-- **Goals:** Understand what Lexcorp builds, assess product quality, decide whether to apply
+- **Technical sophistication:** Often high — developers, designers, and product people evaluating EXPLe Corp's output
+- **Goals:** Understand what EXPLe Corp builds, assess product quality, decide whether to apply
 - **Session behavior:** Exploratory — may tap every icon to get a full picture of the portfolio
 
 #### Trigger Events
 
-1. Considering applying to a Lexcorp job posting
-2. Preparing for an interview at Lexcorp
+1. Considering applying to an EXPLe Corp job posting
+2. Preparing for an interview at EXPLe Corp
 3. Researching the company after a recruiter reach-out
 
 #### Pain Map
@@ -132,7 +132,7 @@ Prospective employees researching Lexcorp before applying or preparing for inter
 
 #### Value Proposition
 
-Instant credibility and transparency. 86% of hiring decision-makers visit portfolios when available, and 71% say portfolio quality influences hiring decisions. GappHub gives candidates a fast, impressive read on what Lexcorp ships.
+Instant credibility and transparency. 86% of hiring decision-makers visit portfolios when available, and 71% say portfolio quality influences hiring decisions. GappHub gives candidates a fast, impressive read on what EXPLe Corp ships.
 
 ---
 

@@ -24,9 +24,9 @@ interface PageContentProps {
 }
 
 type BootPhase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-type BootIslandMessage = "Lexcorp" | "made with ♥" | 'by George "G" Le';
+type BootIslandMessage = "EXPLe Corp" | "made with ♥" | 'by George "G" Le';
 const BOOT_ISLAND_MESSAGES: BootIslandMessage[] = [
-  "Lexcorp",
+  "EXPLe Corp",
   "made with ♥",
   'by George "G" Le',
 ];
@@ -293,7 +293,7 @@ function BootPhoneContent({
                 animate={{ opacity: phase >= 1 ? 1 : 0, scale: phase >= 1 ? 1 : 0.94, y: phase >= 1 ? 0 : 8 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
               >
-                Lexcorp
+                EXPLe Corp
               </motion.div>
               <motion.div
                 className="shimmer-text text-[18px] font-medium leading-tight tracking-[0.02em] text-white/90"

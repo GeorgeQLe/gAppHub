@@ -6,7 +6,7 @@
 
 ## Summary
 
-GappHub is built in six serial phases, each layering new capability onto the previous. Phase 1 establishes the project scaffold and renders the static phone frame. Phases 2–4 progressively add content (icons, data), interactivity (hover, press, badges, search, pagination, dock), and Phase 5 delivers the three entrance animation variants. Phase 6 handles responsive adaptation, accessibility, and final polish. Placeholder assets are used until real Lexcorp logo and product icons are provided.
+GappHub is built in six serial phases, each layering new capability onto the previous. Phase 1 establishes the project scaffold and renders the static phone frame. Phases 2–4 progressively add content (icons, data), interactivity (hover, press, badges, search, pagination, dock), and Phase 5 delivers the three entrance animation variants. Phase 6 handles responsive adaptation, accessibility, and final polish. Placeholder assets are used until real EXPLe Corp logo and product icons are provided.
 
 ## Phase Overview
 
@@ -24,7 +24,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 ## Phase 1: Project Scaffold & Phone Frame
 
-**Goal**: Establish the Next.js project, deploy a blank shell to Vercel, and render the realistic iPhone 15 frame with Dynamic Island, status bar (live easter eggs), wallpaper, home indicator, Lexcorp logo, and tagline. This is the visual foundation everything else layers onto.
+**Goal**: Establish the Next.js project, deploy a blank shell to Vercel, and render the realistic iPhone 15 frame with Dynamic Island, status bar (live easter eggs), wallpaper, home indicator, EXPLe Corp logo, and tagline. This is the visual foundation everything else layers onto.
 
 **Scope**:
 - Next.js project initialization with TypeScript, Tailwind CSS (or CSS modules), and system font stack
@@ -34,7 +34,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 - Status bar: real-world time (left), signal bars tied to product data (right), battery % tied to shipped ratio (right)
 - Wallpaper: subtle blue-gray to lavender gradient inside the screen area
 - Home indicator: dark gray capsule at bottom
-- Lexcorp logo/wordmark above the phone (placeholder SVG)
+- EXPLe Corp logo/wordmark above the phone (placeholder SVG)
 - Tagline: "Made in Boston, Building in Public" below the logo
 - Vercel deployment pipeline (manual project setup required first)
 
@@ -44,7 +44,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 - [ ] Status bar displays current real-world time on the left
 - [ ] Wallpaper gradient is visible behind the (empty) screen area
 - [ ] Home indicator renders at the bottom of the screen area
-- [ ] Lexcorp placeholder logo and tagline are visible above the phone
+- [ ] EXPLe Corp placeholder logo and tagline are visible above the phone
 - [ ] Page background is the specified silver-to-white gradient
 - [ ] App deploys to Vercel successfully
 
@@ -70,13 +70,13 @@ GappHub is built in six serial phases, each layering new capability onto the pre
   - Files: create `package.json`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.mjs`, `next.config.ts`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`, `.gitignore`
   - Initialize with `npx create-next-app@latest` using App Router, TypeScript, Tailwind CSS, ESLint
   - Configure system font stack in Tailwind config and globals
-  - Set page metadata (title: "GappHub — Lexcorp Products", description)
+  - Set page metadata (title: "GappHub — EXPLe Corp Products", description)
 
 - Step 1.2: Build page layout with background gradient and logo/tagline
   - Files: modify `src/app/page.tsx`, modify `src/app/globals.css`
   - Full-viewport layout with silver-to-white gradient background (`#f5f5f7` → `#ffffff`)
   - Flexbox column: logo → tagline → phone frame → (legend placeholder)
-  - Lexcorp placeholder logo (inline SVG or text wordmark, ~120–160px wide, charcoal color)
+  - EXPLe Corp placeholder logo (inline SVG or text wordmark, ~120–160px wide, charcoal color)
   - Tagline "Made in Boston, Building in Public" below logo (13px, uppercase tracking, medium gray `#86868b`)
 
 - Step 1.3: Build the phone frame shell component
@@ -127,7 +127,7 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 - [x] Status bar displays current real-world time on the left
 - [x] Wallpaper gradient is visible behind the (empty) screen area
 - [x] Home indicator renders at the bottom of the screen area
-- [x] Lexcorp placeholder logo and tagline are visible above the phone
+- [x] EXPLe Corp placeholder logo and tagline are visible above the phone
 - [x] Page background is the specified silver-to-white gradient
 - [x] App deploys to Vercel successfully
 - [x] All phase tests pass
@@ -668,9 +668,9 @@ GappHub is built in six serial phases, each layering new capability onto the pre
 
 ## Deferred / Future Work
 
-- Replace placeholder Lexcorp logo with final SVG asset
+- Replace placeholder EXPLe Corp logo with final SVG asset
 - Replace placeholder product icons with real artwork
-- Fill remaining 3 dock slots with confirmed Lexcorp/George Le apps
+- Fill remaining 3 dock slots with confirmed EXPLe Corp/George Le apps
 - Choose winning animation variant and promote to main `/` route; remove losing variant routes
 - Connect dynamic data fetch to the lexcorp-war-room API or shared DB (once API contract is defined)
 - Category/tag taxonomy definition

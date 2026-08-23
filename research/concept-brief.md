@@ -2,18 +2,18 @@
 
 ## Summary
 
-GappHub is a single-page web app that showcases all shipped and live Lexcorp products as app icons rendered inside a realistic iPhone frame. Visitors tap an icon to navigate to that product's live website. The aesthetic is light, aspirational, and Apple-inspired — sleek silver tones, polished surfaces, generous whitespace. A loading animation plays when the phone frame first appears on screen. Product data is fetched dynamically from the lexcorp-war-room repo or shared database, with a committed static JSON file as fallback.
+GappHub is a single-page web app that showcases all shipped and live EXPLe Corp products as app icons rendered inside a realistic iPhone frame. Visitors tap an icon to navigate to that product's live website. The aesthetic is light, aspirational, and Apple-inspired — sleek silver tones, polished surfaces, generous whitespace. A loading animation plays when the phone frame first appears on screen. Product data is fetched dynamically from the lexcorp-war-room repo or shared database, with a committed static JSON file as fallback.
 
 Think of it as a branded Linktree, but presented as an elegant phone home screen instead of a plain link list.
 
 ## Problem Hypothesis
 
-Lexcorp ships multiple products but lacks a single, visually cohesive hub that lets visitors discover and navigate the full portfolio. Existing options (plain link lists, scattered landing pages) don't convey the polish or product-company identity that Lexcorp wants to project.
+EXPLe Corp ships multiple products but lacks a single, visually cohesive hub that lets visitors discover and navigate the full portfolio. Existing options (plain link lists, scattered landing pages) don't convey the polish or product-company identity that EXPLe Corp wants to project.
 
 ## Beneficiary Hypothesis
 
-- **Primary:** Visitors, potential customers, and partners who want a quick overview of Lexcorp's product portfolio and one-click access to each product.
-- **Secondary:** The Lexcorp team, who gets a single shareable URL that represents the entire product suite.
+- **Primary:** Visitors, potential customers, and partners who want a quick overview of EXPLe Corp's product portfolio and one-click access to each product.
+- **Secondary:** The EXPLe Corp team, who gets a single shareable URL that represents the entire product suite.
 
 ## Product Category Guess
 
@@ -21,7 +21,7 @@ Branded link hub / portfolio launcher. Comparable to Linktree, Bento, or bio-lin
 
 ## Value Wedge
 
-The realistic iPhone frame with a smooth loading animation turns a utilitarian link list into a memorable, on-brand experience. It signals that Lexcorp builds polished digital products — the hub itself is a product showcase.
+The realistic iPhone frame with a smooth loading animation turns a utilitarian link list into a memorable, on-brand experience. It signals that EXPLe Corp builds polished digital products — the hub itself is a product showcase.
 
 ## Constraints
 
@@ -66,7 +66,7 @@ Each product entry includes:
 |---|---|---|
 | Product data lives in the lexcorp-war-room repo or a shared DB | `[from user]` | Low — confirmed by user |
 | A fetch API or raw content URL exists to pull product data | `[inferred]` | Medium — exact API contract TBD |
-| Lexcorp has fewer than ~30 products (fits a single phone screen or scrollable grid) | `[inferred]` | Low — can paginate or scroll if more |
+| EXPLe Corp has fewer than ~30 products (fits a single phone screen or scrollable grid) | `[inferred]` | Low — can paginate or scroll if more |
 | Each product already has icon artwork available | `[inferred]` | Medium — may need to create icons |
 | The loading animation is CSS/JS-based, not a video | `[inferred]` | Low — standard approach |
 | No brand guidelines document exists yet; design direction is "Apple-like" | `[inferred]` | Low — user confirmed direction |
@@ -75,7 +75,7 @@ Each product entry includes:
 
 The concept is **ready for ICP** with the following inputs:
 
-- **Beneficiary hypotheses:** external visitors/partners discovering Lexcorp's portfolio; internal team sharing a single portfolio URL.
+- **Beneficiary hypotheses:** external visitors/partners discovering EXPLe Corp's portfolio; internal team sharing a single portfolio URL.
 - **Assumptions to test first:** Whether visitors actually need a hub (vs. finding products through other channels), and whether the phone-screen metaphor resonates or confuses the target audience.
 
 However, given this is a lightweight portfolio/link hub rather than a revenue-generating product, a full ICP process may be heavier than needed. The user should decide whether to run ICP or jump straight to UI/UX design.

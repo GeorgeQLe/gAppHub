@@ -1,6 +1,6 @@
 # GappHub — Current Phase
 
-> Project: GappHub (Lexcorp product portfolio launcher)
+> Project: GappHub (EXPLe Corp product portfolio launcher)
 > All 8 phases complete (2026-05-21).
 > Total Phases: 8
 
@@ -17,7 +17,7 @@
 - [x] `/icp` - `research/icp.md` exists; shipped alignment summary page at `alignment/icp.html` (2026-05-21).
 - [x] `/competitive-analysis` - `research/competitive-analysis.md` exists; shipped alignment summary page at `alignment/icp.html` (2026-05-21).
 - [x] `/positioning` - create `research/positioning.md` because it is missing; after `/icp` and `/competitive-analysis`. Completed 2026-05-22.
-  - Goal: define GappHub's strategic positioning as a polished Lexcorp portfolio launcher, using existing `research/icp.md`, `research/competitive-analysis.md`, `research/concept-brief.md`, `specs/ui-gapphub.md`, and product data as source material.
+  - Goal: define GappHub's strategic positioning as a polished EXPLe Corp portfolio launcher, using existing `research/icp.md`, `research/competitive-analysis.md`, `research/concept-brief.md`, `specs/ui-gapphub.md`, and product data as source material.
   - Output file: `research/positioning.md`.
   - Recommended structure: competitive alternatives, unique attributes, value themes, best-fit audience, market category, positioning statement, and implications for the current UI/landing experience.
   - Constraints: do not reposition GappHub as a marketplace, app store, or standalone revenue product; keep the app's role as a branded portfolio/navigation surface.

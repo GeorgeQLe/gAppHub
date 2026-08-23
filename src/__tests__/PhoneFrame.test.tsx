@@ -46,8 +46,8 @@ describe("DynamicIsland", () => {
   });
 
   it("renders optional rotating label copy", () => {
-    render(<DynamicIsland label="Lexcorp" />);
-    expect(screen.getByText("Lexcorp")).toBeInTheDocument();
+    render(<DynamicIsland label="EXPLe Corp" />);
+    expect(screen.getByText("EXPLe Corp")).toBeInTheDocument();
   });
 });
 
@@ -74,7 +74,7 @@ describe("Home page", () => {
     const jsx = await Home();
     render(jsx);
     expect(
-      screen.getByRole("region", { name: "Lexcorp product launcher" }),
+      screen.getByRole("region", { name: "EXPLe Corp product launcher" }),
     ).toBeInTheDocument();
   });
 });

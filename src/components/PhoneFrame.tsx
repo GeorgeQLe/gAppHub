@@ -27,7 +27,7 @@ export default function PhoneFrame({ children }: { children?: React.ReactNode })
           <div
             ref={regionRef}
             role="region"
-            aria-label="Lexcorp product launcher"
+            aria-label="EXPLe Corp product launcher"
             className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-3xl md:w-full md:flex-1 md:rounded-[38px]"
             style={{
               aspectRatio: "375 / 812",

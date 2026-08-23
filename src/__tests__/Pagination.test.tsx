@@ -110,7 +110,7 @@ describe("IconGrid swipe navigation", () => {
         </PhoneFrame>
       </PhoneSwipeProvider>
     );
-    const phoneRegion = screen.getByRole("region", { name: "Lexcorp product launcher" });
+    const phoneRegion = screen.getByRole("region", { name: "EXPLe Corp product launcher" });
 
     fireEvent.mouseDown(phoneRegion, { clientX: 200 });
     fireEvent.mouseUp(phoneRegion, { clientX: 100 });

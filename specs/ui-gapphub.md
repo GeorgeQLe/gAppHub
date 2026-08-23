@@ -167,8 +167,8 @@ The grid fills in this priority order:
 | Position | App | Notes |
 |---|---|---|
 | 1 | War Room | Links to the lexcorp-war-room app |
-| 2 | TBD | Key Lexcorp product |
-| 3 | TBD | Key Lexcorp product |
+| 2 | TBD | Key EXPLe Corp product |
+| 3 | TBD | Key EXPLe Corp product |
 | 4 | George "G" Le | Personal site or portfolio |
 
 Dock apps follow the same icon design as grid icons but may omit badges.
@@ -239,11 +239,11 @@ The primary route `/` starts with the boot screen and ends at the fully rendered
 
 ### Boot Screen (`/`)
 
-1. **Phase 1 (~0–1.1s):** Black screen fills the phone frame. `Lexcorp` fades and pops into view at the center of the splash screen.
+1. **Phase 1 (~0–1.1s):** Black screen fills the phone frame. `EXPLe Corp` fades and pops into view at the center of the splash screen.
 2. **Phase 2 (~1.1–2.2s):** `made with ♥` fades in underneath while the first line remains visible.
 3. **Phase 3 (~2.2–3.3s):** `by George "G" Le` fades in underneath the existing lines.
 4. **Phase 4 (~3.3–3.7s):** Screen transitions to the wallpaper gradient. Status bar and icons fade in.
-5. **Post-boot:** Dock slides up. Dynamic Island cycles through brand copy text (`Lexcorp`, `made with ♥`, `by George "G" Le`) using `popLayout` mode with `will-change: transform` for flicker-free text transitions.
+5. **Post-boot:** Dock slides up. Dynamic Island cycles through brand copy text (`EXPLe Corp`, `made with ♥`, `by George "G" Le`) using `popLayout` mode with `will-change: transform` for flicker-free text transitions.
 
 ### Reduced Motion
 
@@ -334,7 +334,7 @@ When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped an
 
 ### Screen Reader
 
-- Phone frame: `role="region"` with `aria-label="Lexcorp product launcher"`
+- Phone frame: `role="region"` with `aria-label="EXPLe Corp product launcher"`
 - Icon grid: `role="grid"` with `aria-label="Product apps"`
 - Each icon: `role="gridcell"` containing an `<a>` with `aria-label="{Product Name}, {badge state}"` (e.g. "Alpha, Live"). Description conveyed via `aria-describedby` referencing the tooltip when visible.
 - Badge: `aria-hidden="true"` (info conveyed via parent aria-label)
@@ -379,7 +379,7 @@ When `prefers-reduced-motion: reduce` is active, the boot sequence is skipped an
       "name": "War Room",
       "url": "https://...",
       "icon": "/icons/war-room.png",
-      "description": "Lexcorp command center",
+      "description": "EXPLe Corp command center",
       "badge": "L",
       "category": ["internal", "tools"],
       "featured": true,
@@ -464,7 +464,7 @@ When `screenshots` and `testimonials` are absent, the drawer shows only the head
 
 1. Which 3 apps fill the remaining dock slots alongside War Room?
 2. What category/tag taxonomy should products use?
-3. Exact Lexcorp logo asset (SVG preferred)
+3. Exact EXPLe Corp logo asset (SVG preferred)
 4. Whether the chosen animation variant should be configurable or hard-coded after selection
 5. Product icon artwork source — does each product already have an iOS-style icon?
 

@@ -27,7 +27,7 @@ describe("PhoneFrame — mobile", () => {
   it("has region role and aria-label", () => {
     render(<PhoneFrame />);
     const region = screen.getByRole("region");
-    expect(region).toHaveAttribute("aria-label", "Lexcorp product launcher");
+    expect(region).toHaveAttribute("aria-label", "EXPLe Corp product launcher");
   });
 });
 
@@ -59,6 +59,6 @@ describe("PhoneFrame — desktop", () => {
   it("has region role and aria-label", () => {
     render(<PhoneFrame />);
     const region = screen.getByRole("region");
-    expect(region).toHaveAttribute("aria-label", "Lexcorp product launcher");
+    expect(region).toHaveAttribute("aria-label", "EXPLe Corp product launcher");
   });
 });

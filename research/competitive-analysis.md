@@ -1,6 +1,6 @@
 # Competitive Analysis
 
-> Product: GappHub — branded portfolio hub presenting Lexcorp's product suite as app icons inside a realistic iPhone frame
+> Product: GappHub — branded portfolio hub presenting EXPLe Corp's product suite as app icons inside a realistic iPhone frame
 > Category: Bio-link / portfolio launcher
 > Date: 2026-05-21
 > Sources: 15 competitors analysed across 18 web searches
@@ -160,7 +160,7 @@ The bio-link market is crowded and growing ($60M+ ARR from Linktree alone), but 
 
 ## Market Gaps
 
-- **No company-portfolio-specific tool** — Every bio-link tool targets individual creators. No tool is purpose-built for "showcase your company's product suite." GappHub fills this gap for Lexcorp specifically, though it's not a platform play.
+- **No company-portfolio-specific tool** — Every bio-link tool targets individual creators. No tool is purpose-built for "showcase your company's product suite." GappHub fills this gap for EXPLe Corp specifically, though it's not a platform play.
 
 - **Visual memorability** — Linktree pages all look alike. Bento's grid layout was the most differentiated visual approach, but it shut down (Feb 2026). No active tool offers a unique visual metaphor like GappHub's phone frame. The market is converging on generic templates while the demand for visual differentiation persists.
 
@@ -178,7 +178,7 @@ GappHub isn't competing for the same users as Linktree or Beacons (individual cr
 
 | Dimension | Generic Bio-Link Tools | GappHub |
 |---|---|---|
-| Target user | Individual creators | Company (Lexcorp) |
+| Target user | Individual creators | Company (EXPLe Corp) |
 | Visual identity | Template-based, generic | Unique phone-frame metaphor |
 | Performance | 1.2–3s load | Sub-second (Next.js on Vercel) |
 | Platform risk | Vendor-dependent (cf. Bento shutdown) | Self-hosted, zero platform risk |
@@ -188,7 +188,7 @@ GappHub isn't competing for the same users as Linktree or Beacons (individual cr
 
 ### Recommended Positioning
 
-GappHub should position as a **premium brand artifact**, not a "bio-link alternative." The competitive frame is not "which link-in-bio tool should I use?" but rather "how should Lexcorp present its product portfolio to the world?" In that frame, GappHub has no direct competitor — it's a bespoke creation that signals product quality through its own execution.
+GappHub should position as a **premium brand artifact**, not a "bio-link alternative." The competitive frame is not "which link-in-bio tool should I use?" but rather "how should EXPLe Corp present its product portfolio to the world?" In that frame, GappHub has no direct competitor — it's a bespoke creation that signals product quality through its own execution.
 
 ### Lessons from Competitors
 
